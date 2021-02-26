@@ -1,10 +1,10 @@
 Package: noradstats
 Type: Package
-Title: Add columns to a dataframe of Norwegian development aid statistics
+Title: Norwegian development aid statistics
 Version: 0.1.0
 Author: Einar Tornes
 Maintainer: Einar Tornes <einartornes@outlook.com>
-Description: This package provides functions to add columns to the Norwegian development aid statistics, including basic helper columns and climate columns.
+Description: This package provides functions to find, download and import Norwegian development aid statistics, and provides functions to ease data manipulation and presentation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
