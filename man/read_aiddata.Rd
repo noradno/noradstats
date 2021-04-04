@@ -4,13 +4,15 @@
 \alias{read_aiddata}
 \title{Read delimited Norwegian Development Aid dataset (Statsys format and column names) into a tibble}
 \usage{
-read_aiddata(file = "statsys_10yr.csv")
+read_aiddata(file = "statsys_10yr.csv", subdir = FALSE)
 }
 \arguments{
 \item{file}{Path to local csv-file of Norwegian Development Aid (Statsys format and column names). Default: \emph{statsys_10yr.csv}}
+
+\item{subdir}{If TRUE, look for file in sub folder \emph{data}. If FALSE, look in current directory as specified in \emph{file} argument.}
 }
 \value{
-Returns a tibble using the vroom package, using delim = ";", comma as decimal, and num_threads = 1.
+Returns a tibble using the vroom package, using delim = ";" and num_threads = 1 (to avoid splitting strings into new rows)
 }
 \description{
 Read delimited Norwegian Development Aid dataset (Statsys format and column names) into a tibble

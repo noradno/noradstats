@@ -6,13 +6,16 @@
 \usage{
 download_aiddata(
   file = "statsys_10yr.csv",
-  gmail_account = "noradstats@gmail.com"
+  gmail_account = "noradstats@gmail.com",
+  subdir = FALSE
 )
 }
 \arguments{
 \item{file}{Character string of desired file to download. Default: \emph{statsys_10yr.csv}. Use noradstats::find_file() to find available files.}
 
 \item{gmail_account}{Google Drive account. Default: noradstats@gmail.com}
+
+\item{subdir}{If TRUE, the file is stored in a sub folder \emph{data}. If FALSE, the file is stored in the current directory.}
 }
 \value{
 Downloads and saves file in working directory.
