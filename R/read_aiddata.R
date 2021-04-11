@@ -15,7 +15,8 @@ read_aiddata <- function(file = "statsys_10yr.csv", subdir = FALSE) {
   if (subdir == FALSE) {
     data <- vroom::vroom(file,
                          delim = ";", # Semi-column separated
-                         num_threads = 1) # Avoid special characters make new rows
+                         num_threads = 1, # Avoid special characters make new rows
+                         col_types = cols(`SDG description` = col_character())) # Fix data type for column SDG description
     
     # Read file from sub folder "data"
   } else {
