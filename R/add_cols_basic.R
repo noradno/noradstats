@@ -15,7 +15,7 @@
 #' @examples
 #' ?add_cols_basic()
 add_cols_basic <- function(data) {
-  data %>%
+  data |>
 
     # column target_area_no
     dplyr::mutate(
@@ -32,7 +32,7 @@ add_cols_basic <- function(data) {
         `Target area` == "Production sectors and trade" ~ "Produksjon og handel",
         TRUE ~ "NA"
       )
-    ) %>%
+    ) |>
 
     # column partner_group_visual_no
     dplyr::mutate(
@@ -56,7 +56,7 @@ add_cols_basic <- function(data) {
         `Group of Agreement Partner` == "Unknown" ~ "Uspesifisert",
         TRUE ~ "NA"
       )
-    ) %>%
+    ) |>
 
     # column partner_group_visual
    dplyr::mutate(
@@ -80,7 +80,7 @@ add_cols_basic <- function(data) {
         `Group of Agreement Partner` == "Unknown" ~ "Unspecified",
         TRUE ~ "NA"
       )
-    ) %>%
+    ) |>
 
     # column main_region_no
     dplyr::mutate(
