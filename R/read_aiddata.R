@@ -13,14 +13,18 @@ read_aiddata <- function(file = "statsys_10yr.csv", subdir = FALSE) {
   
   # Read file from current directory
   if (subdir == FALSE) {
-    data <- vroom::vroom(file,
+    data <- readr::read_delim(file,
                          delim = ";", # Semi-column separated
-                         num_threads = 1) # Avoid special characters make new rows
+                         col_types = readr::cols(`SDG description` = readr::col_character()), # Specifying SDG description as type character
+                         locale = readr::locale(decimal_mark = ",")
+                         ) 
     
     # Read file from sub folder "data"
   } else {
-    data <- vroom::vroom(paste0("data/", file),
-                         delim = ";",
-                         num_threads = 1)
+    data <- readr::read_delim(paste0("data/", file),
+                         delim = ";", # Semi-column separated
+                         col_types = readr::cols(`SDG description` = readr::col_character()), # Specifying SDG description as type character
+                         locale = readr::locale(decimal_mark = ",")
+                         )
   }
 }

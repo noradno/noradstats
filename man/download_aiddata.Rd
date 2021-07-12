@@ -5,7 +5,7 @@
 \title{Download file from (noradstats) Google Drive}
 \usage{
 download_aiddata(
-  file = "statsys_10yr.csv",
+  file = "oda_ten.csv",
   gmail_account = "noradstats@gmail.com",
   subdir = FALSE
 )

@@ -10,7 +10,7 @@
 #' @examples
 #' ?download_aiddata()
 #'
-download_aiddata <- function(file = "statsys_10yr.csv",
+download_aiddata <- function(file = "oda_ten.csv",
                              gmail_account = "noradstats@gmail.com",
                              subdir = FALSE) {
   
