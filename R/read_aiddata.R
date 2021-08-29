@@ -9,7 +9,7 @@
 #' @examples
 #' ?read_aiddata()
 #'
-read_aiddata <- function(file = "statsys_10yr.csv", subdir = FALSE) {
+read_aiddata <- function(file = "oda_ten.csv", subdir = FALSE) {
   
   # Read file from current directory
   if (subdir == FALSE) {
