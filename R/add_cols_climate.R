@@ -20,52 +20,52 @@
 #'
 add_cols_climate <- function(data) {
 
-  data <- data %>%
+  data %>%
 
     # column climate_aid_type
 
-    dplyr::mutate("climate_aid_type" = dplyr::case_when(
-      `PM - Climate change adaptation`!='None' & `PM - Climate change mitigation`=='None' ~ 'Adaptation',
-      `PM - Climate change mitigation`!='None' & `PM - Climate change adaptation`=='None' ~ 'Mitigation',
-      `PM - Climate change adaptation`!='None' & `PM - Climate change mitigation`!='None' ~ 'Cross-cutting',
+    dplyr::mutate(climate_aid_type = dplyr::case_when(
+      .data$`PM - Climate change adaptation`!='None' & .data$`PM - Climate change mitigation`=='None' ~ 'Adaptation',
+      .data$`PM - Climate change mitigation`!='None' & .data$`PM - Climate change adaptation`=='None' ~ 'Mitigation',
+      .data$`PM - Climate change adaptation`!='None' & .data$`PM - Climate change mitigation`!='None' ~ 'Cross-cutting',
       TRUE ~ 'None')) %>%
 
-    dplyr::mutate("climate_aid_type" = forcats::fct_relevel(.data$climate_aid_type,"Adaptation", "Mitigation", "Cross-cutting", "None")) %>%
+    dplyr::mutate(climate_aid_type = forcats::fct_relevel(.data$climate_aid_type,"Adaptation", "Mitigation", "Cross-cutting", "None")) %>%
 
     # column climate_aid_nok_mill
 
-    dplyr::mutate("climate_aid_nok_mill" = dplyr::case_when(
-      `PM - Climate change adaptation` == "Main objective" | `PM - Climate change mitigation` == "Main objective" ~ `Disbursed (mill NOK)`,
-      `PM - Climate change adaptation` == "Significant objective" | `PM - Climate change mitigation` == 'Significant objective' ~ `Disbursed (mill NOK)` * 0.4,
+    dplyr::mutate(climate_aid_nok_mill = dplyr::case_when(
+      .data$`PM - Climate change adaptation` == "Main objective" | .data$`PM - Climate change mitigation` == "Main objective" ~ .data$`Disbursed (mill NOK)`,
+      .data$`PM - Climate change adaptation` == "Significant objective" | .data$`PM - Climate change mitigation` == 'Significant objective' ~ .data$`Disbursed (mill NOK)` * 0.4,
       TRUE ~ as.numeric(0))) %>%
 
     # column climate_adaptation_aid_nok_mill
 
-    dplyr::mutate("climate_adaptation_nok_mill" = dplyr::case_when(
-      `PM - Climate change adaptation` == "Main objective" ~ `Disbursed (mill NOK)`,
-      `PM - Climate change adaptation` == "Significant objective" ~ `Disbursed (mill NOK)` * 0.4,
+    dplyr::mutate(climate_adaptation_nok_mill = dplyr::case_when(
+      .data$`PM - Climate change adaptation` == "Main objective" ~ .data$`Disbursed (mill NOK)`,
+      .data$`PM - Climate change adaptation` == "Significant objective" ~ .data$`Disbursed (mill NOK)` * 0.4,
       TRUE ~ as.numeric(0))) %>%
 
     # column climate_mitigation_nok_mill
 
-    dplyr::mutate("climate_mitigation_nok_mill" = dplyr::case_when(
-      `PM - Climate change mitigation` == "Main objective" ~ `Disbursed (mill NOK)`,
-      `PM - Climate change mitigation` == "Significant objective" ~ `Disbursed (mill NOK)` * 0.4,
+    dplyr::mutate(climate_mitigation_nok_mill = dplyr::case_when(
+      .data$`PM - Climate change mitigation` == "Main objective" ~ .data$`Disbursed (mill NOK)`,
+      .data$`PM - Climate change mitigation` == "Significant objective" ~ .data$`Disbursed (mill NOK)` * 0.4,
       TRUE ~ as.numeric(0))) %>%
 
     # column climate_mitigation_nok_mill_gross_fix
 
-    dplyr::mutate("climate_mitigation_nok_mill_gross_fix" = dplyr::case_when(
-      `PM - Climate change mitigation` == "Main objective" ~
-        dplyr::if_else(`Amounts extended (1000 NOK)` < 0, 0, `Amounts extended (1000 NOK)` / 1000),
-      `PM - Climate change mitigation` == "Significant objective" ~
-        dplyr::if_else(`Amounts extended (1000 NOK)` < 0, 0, `Amounts extended (1000 NOK)` / 1000) * 0.4,
+    dplyr::mutate(climate_mitigation_nok_mill_gross_fix = dplyr::case_when(
+      .data$`PM - Climate change mitigation` == "Main objective" ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` / 1000),
+      .data$`PM - Climate change mitigation` == "Significant objective" ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` / 1000) * 0.4,
       TRUE ~ as.numeric(0))) %>%
     
-    dplyr::mutate("climate_aid_nok_gross_fix" = dplyr::case_when(
-      `PM - Climate change adaptation` == "Main objective" | `PM - Climate change mitigation` == "Main objective" ~
-        dplyr::if_else(`Amounts extended (1000 NOK)` < 0, 0, `Amounts extended (1000 NOK)` * 1000),
-      `PM - Climate change adaptation` == "Significant objective" | `PM - Climate change mitigation` == 'Significant objective' ~
-        dplyr::if_else(`Amounts extended (1000 NOK)` < 0, 0, `Amounts extended (1000 NOK)` * 1000) * 0.4,
+    dplyr::mutate(climate_aid_nok_gross_fix = dplyr::case_when(
+      .data$`PM - Climate change adaptation` == "Main objective" | .data$`PM - Climate change mitigation` == "Main objective" ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` * 1000),
+      .data$`PM - Climate change adaptation` == "Significant objective" | .data$`PM - Climate change mitigation` == 'Significant objective' ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` * 1000) * 0.4,
       TRUE ~ as.numeric(0)))
 }
