@@ -4,7 +4,7 @@
 \alias{read_aiddata}
 \title{Read delimited Norwegian Development Aid dataset (Statsys format and column names) into a tibble}
 \usage{
-read_aiddata(file = "statsys_10yr.csv", subdir = FALSE)
+read_aiddata(file = "oda_ten.csv", subdir = FALSE)
 }
 \arguments{
 \item{file}{Path to local csv-file of Norwegian Development Aid (Statsys format and column names). Default: \emph{statsys_10yr.csv}}
