@@ -18,9 +18,9 @@ add_cols_education <- function(data) {
 
     # column education_incl_emergencies
     dplyr::mutate(
-      "education_incl_emergencies" = dplyr::case_when(
-        `Target area` == "Education" ~ "Education",
-        `DAC Sub sector (code+name)` == "12 - Education in Emergencies" ~ "Education in Emergencies",
+      education_incl_emergencies = dplyr::case_when(
+        .data$`Target area` == "Education" ~ "Education",
+        .data$`DAC Sub sector (code+name)` == "12 - Education in Emergencies" ~ "Education in Emergencies",
         TRUE ~ "None")) %>%
 
     dplyr::mutate(
