@@ -2,20 +2,18 @@
 % Please edit documentation in R/read_aiddata.R
 \name{read_aiddata}
 \alias{read_aiddata}
-\title{Read delimited Norwegian Development Aid dataset (Statsys format and column names) into a tibble}
+\title{Read Norwegian Aid data (Statsys csv) to a tibble}
 \usage{
-read_aiddata(file = "oda_ten.csv", subdir = FALSE)
+read_aiddata(file = "statsys_ten.csv")
 }
 \arguments{
-\item{file}{Path to local csv-file of Norwegian Development Aid (Statsys format and column names). Default: \emph{statsys_10yr.csv}}
-
-\item{subdir}{If TRUE, look for file in sub folder \emph{data}. If FALSE, look in current directory as specified in \emph{file} argument.}
+\item{file}{csv file of Statsys data. Default is \emph{statsys_ten.csv}}
 }
 \value{
-Returns a tibble using the vroom package, using delim = ";" and num_threads = 1 (to avoid splitting strings into new rows)
+Returns a tibble using the readr::read_delim function. Using delim = ";", specifying type of specific columns and decimal mark.
 }
 \description{
-Read delimited Norwegian Development Aid dataset (Statsys format and column names) into a tibble
+Read Norwegian Aid data (Statsys csv) to a tibble
 }
 \examples{
 ?read_aiddata()

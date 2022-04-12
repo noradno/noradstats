@@ -2,18 +2,18 @@
 % Please edit documentation in R/find_aiddata.R
 \name{find_aiddata}
 \alias{find_aiddata}
-\title{Find available files on (noradstats) Google Drive}
+\title{Find files on noradstats google drive}
 \usage{
 find_aiddata(gmail_account = "noradstats@gmail.com")
 }
 \arguments{
-\item{gmail_account}{Google drive account. Default: \emph{noradstats@gmail.com}}
+\item{gmail_account}{Google drive account. Default is \emph{noradstats@gmail.com}}
 }
 \value{
-Returns a tibble of available files on Noradstats Google Drive
+Returns a tibble of files on noradstats google drive
 }
 \description{
-Find available files on (noradstats) Google Drive
+Find files on noradstats google drive
 }
 \examples{
 ?find_aiddata()
