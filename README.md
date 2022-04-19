@@ -30,7 +30,5 @@ library(noradstats)
 
 ## df <- noradstats::add_cols_climate(df)
 
-## df <- noradstats::add_cols_basic(df)
-
 ```
 
