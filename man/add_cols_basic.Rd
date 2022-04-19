@@ -16,6 +16,7 @@ Returns dataframe with additional columns:
   \item partner_group_visual_no: Visual grouping and Norwegian translation of column \emph{Group of agreement partner}.
   \item partner_group_visual: Visual grouping of column \emph{Group of agreement partner}.
   \item main_region_no: Norwegian translation of column \emph{Main region}.
+  \item income_category_no: Norwegain translation of column \emph{Income category}.
 }
 }
 \description{
