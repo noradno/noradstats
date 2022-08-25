@@ -4,7 +4,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of the R package noradstats is to access, download and read Norwegian aid data into R. In addition the package provides some useful helper functions.
+The goal of the R package noradstats is to access Norwegian aid data for internal use in Norad
 
 ## Installation
 
@@ -29,6 +29,8 @@ library(noradstats)
 ## df <- noradstats::add_cols_basic(df)
 
 ## df <- noradstats::add_cols_climate(df)
+
+## df_imputed <- noradstats::get_imputed()
 
 ```
 
