@@ -18,6 +18,6 @@ Returns a dataframe (tibble) on OECD DAC donors ODA to countries and regions (DA
 Get data on OECD DAC donors ODA to countries and regions (DAC2a), using the OECD SDMX API. Amounts in USD million
 }
 \examples{
-?df_imputed <- get_imputed()
+?df_donors <- get_donors()
 
 }

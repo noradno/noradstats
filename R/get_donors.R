@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' ?df_imputed <- get_imputed()
+#' ?df_donors <- get_donors()
 #'
 
 get_donors <- function(startyear = 2020, endyear = 2020) {

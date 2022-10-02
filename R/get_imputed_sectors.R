@@ -18,7 +18,7 @@ get_imputed_sectors <- function(startyear = 2020, endyear = 2020) {
   # AIDTYPE: 599 (imputed)
   # DATATYPE A (Current prices)
   # TIME (specified in arugment startyear and endyear)
-
+  
   # Include metadata by specifying dsd = TRUE
   sdmx_imputed_sectors <- rsdmx::readSDMX(
     providerId = "OECD",
@@ -29,20 +29,20 @@ get_imputed_sectors <- function(startyear = 2020, endyear = 2020) {
     start = startyear,
     end = endyear,
     dsd = TRUE
-    )
+  )
   
   # Transforming sdmx xml data to dataframe. Inklude metadata columns by using the argument labels= TRUE
   df_imputed_sectors <- as.data.frame(sdmx_imputed_sectors, labels = TRUE) |>
     tibble::as_tibble()
-
+  
   # Select relevant columns and renaming value column
   df_imputed_sectors <- df_imputed_sectors |>
     dplyr::select(.data$AIDTYPE_label.en, .data$DONOR, .data$DONOR_label.en, .data$SECTOR, .data$SECTOR_label.en, .data$obsTime, .data$obsValue, .data$POWERCODE_label.en, .data$AMOUNT_label.en) |>
     dplyr::rename(usd_mill = .data$obsValue)
-
-
+  
+  
   # Dataframe of exchange rate NOR - USD from OECD API ----------------------------------------
-
+  
   # Use OECD table SNA_TABLE4 including metadata
   # URL from oecd.stat under  National accounts -> Annual National Accounts -> Main aggregates -> 4.PPPs and exchange rates.
   # The key argument filters the relevant dimentions in the table: NOR.EXC.CD.
@@ -56,25 +56,25 @@ get_imputed_sectors <- function(startyear = 2020, endyear = 2020) {
     start = startyear,
     end = endyear,
     dsd = TRUE
-    )
-
+  )
+  
   # Transforming sdmx xml data to dataframe. Inklude metadata columns by using the argument labels= TRUE
   df_exchangerate <- as.data.frame(sdmx_exchangerate) |>
     tibble::as_tibble()
-
+  
   # Select relevant columns and renaming value column
   df_exchangerate <- df_exchangerate |>
     dplyr::select(.data$obsTime, .data$obsValue) |>
     dplyr::rename(exchangerate = .data$obsValue)
-
+  
   # Include exchange rate column in df_imputed_sectors dataset------------------
-
+  
   # New exchange rate column by year
   df_imputed_sectors <- dplyr::left_join(df_imputed_sectors, df_exchangerate, by = "obsTime")
-
+  
   # New column nok_mill based on exchange rate and cleaning variable names
   df_imputed_sectors <- df_imputed_sectors |>
     dplyr::mutate(nok_mill = .data$usd_mill * .data$exchangerate) |>
     janitor::clean_names()
-
+  
 }
