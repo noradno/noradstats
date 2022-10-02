@@ -7,22 +7,18 @@
 #' @export
 #'
 #' @examples
-#' ?df_imputed <- get_imputed()
+#' ?df_donors <- get_donors()
 #'
 
 get_donors <- function(startyear = 2020, endyear = 2020) {
-  # For å spesifisere key-argumentet, så identifiser hvilke keys-dimensjoner som finnes i datasettet og kan spesifiseres. Punktum-tegnet skiller dimensjonene.
-  
-  # Keys-argumentet:
-  # Punktum er skilletegnet mellom de fem keys.
-  # RECIPIENT: Oppgir ingen verdi (alle mottakerland)
-  # DONOR: De 29 DAC-landene (separtert med pluss)
-  # PART: 1 (utviklingsland)
+  # Using OECD table TABLE2A including metadata (dsd=TRUE)
+  # The key arugment spesifies selected values for the available table dimentions in order, separating the dimensions by dots:
+  # RECIPIENT: No value (before a dot) includes all recipient countries and regions.
+  # DONOR: The 29 DAC-countries (separated by plus)
+  # PART: 1 (developing countries)
   # AIDTYPE: 206 (Total net ODA)
   # DATATYPE A (Current prices)
-  # TIME (tid spesifiseres separat i start og end.)
-  
-  # For å få med metadata (DSD) fyll inn dsd = TRUE
+  # TIME (specified in arugment startyear and endyear)
   
   sdmx_dac <- rsdmx::readSDMX(
     providerId = "OECD",
@@ -35,25 +31,25 @@ get_donors <- function(startyear = 2020, endyear = 2020) {
     dsd = TRUE
   )
   
-  # Strukturerer dsd til dataframe
+  # Transforming sdmx xml data to dataframe. Inklude metadata columns by using the argument labels= TRUE
   df_dac <- as.data.frame(sdmx_dac, labels = TRUE) |>
     tibble::as_tibble()
   
-  # Velger relevante kolonner og endrer navn på verdikolonnen
+  # Select relevant columns and renaming value column
   df_dac <- df_dac |>
     dplyr::select(
-      AIDTYPE_label.en,
-      DONOR,
-      DONOR_label.en,
-      RECIPIENT,
-      RECIPIENT_label.en,
-      obsTime,
-      obsValue,
-      POWERCODE_label.en,
-      DATATYPE_label.en
+      .data$AIDTYPE_label.en,
+      .data$DONOR,
+      .data$DONOR_label.en,
+      .data$RECIPIENT,
+      .data$RECIPIENT_label.en,
+      .data$obsTime,
+      .data$obsValue,
+      .data$POWERCODE_label.en,
+      .data$DATATYPE_label.en
     ) |>
-    dplyr::rename(usd_mill = obsValue)
+    dplyr::rename(usd_mill = .data$obsValue)
   
-  # Rydder navn
+  # Clean names
   df_dac <- janitor::clean_names(df_dac)
 }
