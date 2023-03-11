@@ -13,6 +13,7 @@ You can install the development version of noradstats from
 
 ``` r
 remotes::install_github("noradno/noradstats")
+=======
 ```
 
 ## Usage
@@ -32,7 +33,9 @@ library(noradstats)
 
 ## df <- noradstats::add_cols_climate(df)
 
-## df_imputed <- noradstats::get_imputed()
+## df_imputed_countries <- noradstats::get_imputed_countries()
+
+## df_imputed_sectors <- noradstats::get_imputed_sectors()
 
 ## df_donors <- noradstats::get_donors()
 ```
