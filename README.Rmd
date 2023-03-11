@@ -1,19 +1,19 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # noradstats
 
-The goal of the R package noradstats is to access Norwegian aid data for
-internal use in Norad.
+The goal of the R package noradstats is to access Norwegian aid data for internal use in Norad.
 
 ## Installation
 
-You can install the development version of noradstats from
-[GitHub](https://github.com/noradno/noradstats).
+You can install the development version of noradstats from [GitHub](https://github.com/noradno/noradstats).
 
 ``` r
 remotes::install_github("noradno/noradstats")
-=======
 ```
 
 ## Usage
@@ -33,9 +33,8 @@ library(noradstats)
 
 ## df <- noradstats::add_cols_climate(df)
 
-## df_imputed_countries <- noradstats::get_imputed_countries()
-
-## df_imputed_sectors <- noradstats::get_imputed_sectors()
+## df_imputed <- noradstats::get_imputed()
 
 ## df_donors <- noradstats::get_donors()
+
 ```
