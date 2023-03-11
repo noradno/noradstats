@@ -2,9 +2,9 @@
 % Please edit documentation in R/read_officialoda.R
 \name{read_officialoda}
 \alias{read_officialoda}
-\title{Read Official ODA statistics from aidresults.no to a tibble}
+\title{Download and read the Official ODA statistics from aidresults.no to the R environment}
 \usage{
-read_officialoda(download_folder = NULL, url = tenyears)
+read_officialoda(download_folder = "C:/Users/einar/Downloads/", url = tenyears)
 }
 \arguments{
 \item{download_folder}{The path to the default download folder in the default web browser. No default path provided.}
@@ -15,7 +15,7 @@ read_officialoda(download_folder = NULL, url = tenyears)
 The default web browser opens and generates a csv file containg the selected data and saves the file in the default download folder. The file is read as a tibble into the R environment.
 }
 \description{
-Read Official ODA statistics from aidresults.no to a tibble
+Download and read the Official ODA statistics from aidresults.no to the R environment
 }
 \examples{
 ?read_officialoda(download_folder = "path/to/downloadfolder", url = tenyears)
