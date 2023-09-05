@@ -62,6 +62,15 @@ add_cols_climate <- function(data) {
         dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` / 1000) * 0.4,
       TRUE ~ as.numeric(0))) %>%
     
+    # column climate_adaptation_nok_mill_gross_fix
+    
+    dplyr::mutate(climate_adaptation_nok_mill_gross_fix = dplyr::case_when(
+      .data$`PM - Climate change adaptation` == "Main objective" ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` / 1000),
+      .data$`PM - Climate change adaptation` == "Significant objective" ~
+        dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` / 1000) * 0.4,
+      TRUE ~ as.numeric(0))) %>%
+    
     dplyr::mutate(climate_aid_nok_gross_fix = dplyr::case_when(
       .data$`PM - Climate change adaptation` == "Main objective" | .data$`PM - Climate change mitigation` == "Main objective" ~
         dplyr::if_else(.data$`Amounts extended (1000 NOK)` < 0, 0, .data$`Amounts extended (1000 NOK)` * 1000),
