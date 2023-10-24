@@ -1,0 +1,84 @@
+---
+title: "Getting started!"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started!}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(noradstats)
+```
+
+## Nice to know
+
+-   Write comments: start comment with "\#"
+-   Insert sections: use shortcut Ctrl+Shift+R
+-   Run code in selected line(s): use shortcut Ctrl+Enter
+-   Restart R: use shortcut Ctrl+Shift+F10
+-   Save script file: use shortcut Ctrl+S
+-   Use forward pipe \|\> : Ctrl+Shift+M
+
+## Load packages
+
+An R package is a collection of functions, data sets, and documentation that extends the capabilities of the core R programming language for specific tasks or analysis.
+
+In this example, we load three packages:
+
+-   noradstats: a Norad package to load and manipulate Norwegian ODA data
+
+-   tidyverse: a collection of R packages that share a common philosophy and syntax for data manipulation and visualization, designed to make data analysis and visualization in R more consistent and user-friendly.
+
+-   janitor: a package to clean and summarise datasets
+
+```{r, eval = FALSE}
+# Load packages
+library(noradstats)
+library(tidyverse)
+library(janitor)
+```
+
+## Import data
+
+To read statsys data, the .csv data file must be located in the project folder.
+
+```{r, eval=FALSE}
+# Read statsys data into a data frame
+df_statsys_ten <- read_aiddata("statsys_ten.csv")
+
+# Clean the column names
+df_statsys_ten <- clean_names(df_statsys_ten)
+
+# Have a look at the data structure
+glimpse(df_statsys_ten)
+
+```
+
+## ODA data
+
+```{r, eval=FALSE}
+# Create a data frame including only ODA data and excluding frame agreements
+df_oda_ten <- df_statsys_ten |> 
+  filter(type_of_flow == "ODA") |> 
+  filter(type_of_agreement != "Rammeavtale")
+
+```
+
+## Data manipulation example
+
+```{r, eval=FALSE}
+# Create a data frame of ODA by target area in 2021
+df_targetarea <- df_oda_ten |> 
+  filter(year == max(year)) |> 
+  group_by(target_area) |> 
+  summarise(nok_mill = sum(disbursed_mill_nok)) |> 
+  adorn_totals("row")
+```
