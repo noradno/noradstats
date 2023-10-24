@@ -12,7 +12,7 @@ You can install the development version of noradstats from
 [GitHub](https://github.com/noradno/noradstats).
 
 ``` r
-remotes::install_github("noradno/noradstats")
+remotes::install_github("noradno/noradstats", build_vignettes = TRUE)
 ```
 
 ## Usage
