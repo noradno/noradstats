@@ -48,7 +48,7 @@ library(janitor)
 
 ## Import data
 
-To read statsys data, the .csv data file must be located in the project folder.
+Use the read_aiddata() function to import statsys data to R. Provide the path to the csv file. If only the file name is specified, the function will look for the file in the project directory. If the file is located in another folder, for example in a sharepoint folder, include the whole path to the folder. Remember to replace the backslash symbol in the path with the slash symbol.
 
 ```{r, eval=FALSE}
 # Read statsys data into a data frame
