@@ -4,7 +4,7 @@
 \alias{read_aiddata}
 \title{Read Norwegian Aid data (Statsys csv) to a tibble}
 \usage{
-read_aiddata(file = "statsys_ten.csv")
+read_aiddata(file = path)
 }
 \arguments{
 \item{file}{csv file of Statsys data. Default is \emph{statsys_ten.csv}}
