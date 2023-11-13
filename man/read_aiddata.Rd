@@ -2,9 +2,9 @@
 % Please edit documentation in R/read_aiddata.R
 \name{read_aiddata}
 \alias{read_aiddata}
-\title{Read Norwegian Aid data (Statsys csv) to a tibble}
+\title{Read Norwegian Aid data (Statsys csv) into R}
 \usage{
-read_aiddata(file = path)
+read_aiddata(file = NULL)
 }
 \arguments{
 \item{file}{csv file of Statsys data. Default is \emph{statsys_ten.csv}}
@@ -13,7 +13,7 @@ read_aiddata(file = path)
 Returns a tibble using the readr::read_delim function. Using delim = ";", specifying type of specific columns and decimal mark.
 }
 \description{
-Read Norwegian Aid data (Statsys csv) to a tibble
+Read Norwegian Aid data (Statsys csv) into R
 }
 \examples{
 ?read_aiddata()

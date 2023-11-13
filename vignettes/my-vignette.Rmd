@@ -46,11 +46,11 @@ library(janitor)
 
 ## Import data
 
-Use the read_aiddata() function to import statsys data to R. The default path is to read the following path: "Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/4. CSV/statsys_ten.csv"
+Use the read_aiddata() function to import statsys data to R. The default path is to read the following path: "Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/4. CSV/statsys_total.csv"
 
 ```{r, eval=FALSE}
 # Read statsys data into a data frame
-df_statsys_ten <- read_aiddata()
+df_statsys_total <- read_aiddata()
 
 ```
 
@@ -66,7 +66,7 @@ The function add_cols_basic adds the following columns:
 
 ```{r, eval = FALSE}
 # Add basic columns
-df_statsys_ten <- add_cols_basic(df_statsys_ten)
+df_statsys_total <- add_cols_basic(df_statsys_total)
 
 ```
 
@@ -76,10 +76,10 @@ Clean column names to make it easier to refer to the column names.
 
 ```{r, eval = FALSE}
 # Clean the column names
-df_statsys_ten <- clean_names(df_statsys_ten)
+df_statsys_total <- clean_names(df_statsys_total)
 
 # Have a look at the data structure
-glimpse(df_statsys_ten)
+glimpse(df_statsys_total)
 ```
 
 ## ODA data only
@@ -88,7 +88,7 @@ Filter statsys data to include only ODA and removing frame agreements
 
 ```{r, eval=FALSE}
 # Create a data frame including only ODA data and excluding frame agreements
-df_oda_ten <- df_statsys_ten |> 
+df_oda_total <- df_statsys_total |> 
   filter(type_of_flow == "ODA") |> 
   filter(type_of_agreement != "Rammeavtale")
 
@@ -98,7 +98,7 @@ df_oda_ten <- df_statsys_ten |>
 
 ```{r, eval=FALSE}
 # Create a data frame of ODA by target area in 2021
-df_targetarea <- df_oda_ten |> 
+df_targetarea <- df_oda_total |> 
   filter(year == max(year)) |> 
   group_by(target_area) |> 
   summarise(nok_mill = sum(disbursed_mill_nok)) |> 
