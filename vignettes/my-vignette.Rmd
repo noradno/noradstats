@@ -1,8 +1,10 @@
 ---
-title: "Getting started!"
-output: rmarkdown::html_vignette
+title: "Access Norwegian and international ODA data"
+output:
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
-  %\VignetteIndexEntry{Getting started!}
+  %\VignetteIndexEntry{Access Norwegian and international ODA data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +20,7 @@ knitr::opts_chunk$set(
 library(noradstats)
 ```
 
-## Nice to know
+## Tips and tricks
 
 -   Write comments: start comment with "\#"
 -   Insert sections: use shortcut Ctrl+Shift+R
@@ -27,15 +29,15 @@ library(noradstats)
 -   Save script file: use shortcut Ctrl+S
 -   Use forward pipe \|\> : Ctrl+Shift+M
 
-## Load packages
+## First, load packages
 
 An R package is a collection of functions that extends the capabilities of the core R programming language for specific tasks or analysis. In this example, we load three packages:
 
--   noradstats: a Norad package to load and manipulate Norwegian ODA data
+-   `noradstats`: a Norad package to load and manipulate Norwegian ODA data
 
--   tidyverse: a collection of R packages that share a common philosophy and syntax for data manipulation and visualization, designed to make data analysis and visualization in R more consistent and user-friendly.
+-   `tidyverse`: a collection of R packages that share a common philosophy and syntax for data manipulation and visualization, designed to make data analysis and visualization in R more consistent and user-friendly.
 
--   janitor: a package to clean and summarise datasets
+-   `janitor`: a package to clean and summarise datasets
 
 ```{r, eval = FALSE}
 # Load packages
@@ -44,9 +46,12 @@ library(tidyverse)
 library(janitor)
 ```
 
-## Import data
+## Norwegian development aid statistics
+Import current official development assistance data from statsys, inluding columns not publised on bistandsresultater.no
 
-Use the read_aiddata() function to import statsys data to R. The default path is to read the following path: "Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/4. CSV/statsys_total.csv"
+### Import data
+
+Use the `read_aiddata()` function to import statsys data to R. The default path is "Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/4. CSV/statsys_total.csv". You can specify the path argument in the function.
 
 ```{r, eval=FALSE}
 # Read statsys data into a data frame
@@ -54,7 +59,7 @@ df_statsys_total <- read_aiddata()
 
 ```
 
-## Add basic columns: Norwegian target areas, regions and income categories
+### Add basic columns: Norwegian target areas, regions and income categories
 
 The function add_cols_basic adds the following columns:
 
@@ -70,9 +75,9 @@ df_statsys_total <- add_cols_basic(df_statsys_total)
 
 ```
 
-## Clean column names
+### Clean column names
 
-Clean column names to make it easier to refer to the column names.
+Clean column names using the `clean_names` funtion from the `janitor` package to make it easier to refer to the column names. Use the `glimpse` function to get an overview of the dataset.
 
 ```{r, eval = FALSE}
 # Clean the column names
@@ -82,9 +87,9 @@ df_statsys_total <- clean_names(df_statsys_total)
 glimpse(df_statsys_total)
 ```
 
-## ODA data only
+### ODA data only
 
-Filter statsys data to include only ODA and removing frame agreements
+Filter statsys data to include only ODA and removing frame agreements. The `filter` function is a core function in the `dplyr` package in metapackage `tidyverse`.
 
 ```{r, eval=FALSE}
 # Create a data frame including only ODA data and excluding frame agreements
@@ -94,13 +99,54 @@ df_oda_total <- df_statsys_total |>
 
 ```
 
-## Data manipulation example
-
+### Data manipulation example
+A summarised table of the ODA by target area in 2021. Using the functions `group_by` and `summarise` in combination to create grouped summaries.
 ```{r, eval=FALSE}
 # Create a data frame of ODA by target area in 2021
 df_targetarea <- df_oda_total |> 
   filter(year == max(year)) |> 
   group_by(target_area) |> 
   summarise(nok_mill = sum(disbursed_mill_nok)) |> 
-  adorn_totals("row")
+  adorn_totals("row") |> 
+  ungroup()
+```
+
+## Norwegian imputed multilateral ODA to countries 
+Use the `noradstats` function get_imputed_countries to import Norwegian imputed multilateral ODA to countries. You can specify the startyear and endyear arguments in the function. Run `?get_imputed_countries()` to read the function documentation.
+
+A NOK column is included in the dataset using the OECD exchange rate.
+
+```{r, eval=FALSE}
+df_imputed_countries <- noradstats::get_imputed_countries()
+glimpse(df_imputed_countries)
+
+```
+
+### Data manipulation example
+A table of the top fifty recipient countries of Norwegian imputed multilateral ODA in 2020. Exluding non-countries. Use the `slice_max` function sort and keep only the selected number of observations.
+```{r, eval=FALSE}
+df_imputed_countries |> 
+  filter(obs_time == 2020) |> 
+  filter(!str_detect(recipient_label_en, "Total|regional|WB-LM|WB-L|WB-UM|Developing countries, unspecified|Part I Unallocated by income")) |> 
+  select(recipient_label_en, nok_mill) |> 
+  slice_max(nok_mill, n = 10)
+```
+
+
+## International developmentaid statistics (OECD)
+Use the `noradstats` function get_donors to import OECD DAC donor data of ODA to countries and regions. You can specify the startyear and endyear arguments in the function. Run `?get_donors()` to read the function documentation.
+
+```{r, eval = FALSE}
+df_donors <- get_donors(startyear = 2020, endyear = 2020)
+glimpse(df_donors)
+```
+
+### Data manipulation example
+A table of the top ten DAC donors of ODA to Uganda in 2020.
+```{r, eval=FALSE}
+
+df_donors |> 
+  filter(recipient_label_en == "Uganda") |> 
+  select(donor_label_en, usd_mill) |> 
+  slice_max(usd_mill, n = 10)
 ```
