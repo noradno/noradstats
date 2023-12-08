@@ -4,7 +4,7 @@ Title: Norwegian development aid statistics
 Version: 0.1.0
 Author: Einar Tornes
 Maintainer: Einar Tornes <einar.tornes@norad.no>
-Description: A package to access Norwegian development aid statistics and helper functions.
+Description: A package to access Norwegian and international development aid statistics and helper functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
