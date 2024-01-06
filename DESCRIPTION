@@ -20,7 +20,8 @@ Imports:
     rsdmx,
     tibble,
     janitor,
-    utils
+    utils,
+    countrycode
 Suggests: 
     knitr,
     rmarkdown
