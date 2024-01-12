@@ -20,9 +20,9 @@ add_cols_countrycode <- function(data) {
     dplyr::arrange(`Recipient country`) |> 
     unique()
   
-  # Add column ISO3 character code to the data frame of unique countries. Non-matches are given NA values and are returned in a warning message. 
+  # Add column iso3 character code to the data frame of unique countries. Non-matches are given NA values and are returned in a warning message. 
   df_unique_countries <- df_unique_countries |> 
-    dplyr::mutate(ISO3 = countrycode::countrycode(`Recipient country`, origin = "country.name", destination = "iso3c",
+    dplyr::mutate(iso3 = countrycode::countrycode(`Recipient country`, origin = "country.name", destination = "iso3c",
                                                   custom_match = c("Kosovo" = "XKX")))
   
   # Include column ISO3 in the original data frame
