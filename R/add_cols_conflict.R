@@ -10,6 +10,7 @@
 #'   \item *_count: Number of conflicts/organised violence IDs in country-year. Numerical variable. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
 #'   \item *_intensity: Intensity of the largest conflict in country-year. Categorical variable. Major/war (>1 000 fatalities) vs minor (<1 000 fatalities).
 #'   \item *_intensity_sum: Intensity of the sum of conflicts in country-year. Categorical variable. Major/war (>1 000 fatalities) vs minor (<1 000 fatalities).
+#'   \item statebased_intensity_lag2years: Intensity of the largest statebased conflict in country-year including a two year lag based on the statebased_intensity variable. Categorical variable. War (>1 000 fatalities) vs minor (<1 000 fatalities).
 #' }
 #'
 #' @export
@@ -93,7 +94,7 @@ add_cols_conflict <- function(data, type = "statebased") {
       dplyr::ungroup()
   }
   
-  # Statebased conflict variables: type of violence == 2
+  # Statebased conflict variables: type of violence == 1
   if(any(type %in% "statebased")) {
     df_country_statebased <- ged_raw |>
       dplyr::filter(.data$type_of_violence == 1) |>
@@ -141,8 +142,8 @@ add_cols_conflict <- function(data, type = "statebased") {
       dplyr::ungroup()
   }
   
+  # Onesided violence variables: type of violence == 3
   if(any(type %in% "onesided")) {
-    # Onesided violence variables: type of violence == 3
     df_country_onesided <- ged_raw |>
       dplyr::filter(.data$type_of_violence == 3) |>
       dplyr::group_by(.data$country_id, .data$year) |>
@@ -247,27 +248,28 @@ add_cols_conflict <- function(data, type = "statebased") {
   # Include a lagged statebased_intensity variable (consider to include for other conflict types also)
   # The variable must be created after the merge with the ODA data frame to have all relevant years, to avoid year gaps in the GED data
   
-  # if(any(type %in% "statebased")) {
-  #   df_temp_statebased_intensity_lag2years <- data |> 
-  #     dplyr::distinct(.data$iso3, .data$Year, .data$statebased_intensity) |>
-  #     dplyr::group_by(.data$iso3) |>
-  #     dplyr::arrange(.data$iso3, .data$Year) |>
-  #     dplyr::mutate(
-  #       statebased_intensity_lag2years = dplyr::case_when(
-  #         statebased_intensity == "war" |
-  #           dplyr::lag(.data$statebased_intensity, 1) == "war" |
-  #           dplyr::lag(.data$statebased_intensity, 2) == "war" ~ "war",
-  #         statebased_intensity == "minor" |
-  #           dplyr::lag(.data$statebased_intensity, 1) == "minor" |
-  #           dplyr::lag(.data$statebased_intensity, 2) == "minor" ~ "minor",
-  #         .default = .data$statebased_intensity
-  #       )
-  #     ) |> 
-  #     dplyr::ungroup() |> 
-  #     dplyr::select(-statebased_intensity)
-  #   
-  #   data <- dplyr::left_join(data, df_temp_statebased_intensity_lag2years, by = c("Year" = "Year", "iso3" = "iso3"))
-  #}
+  if(any(type %in% "statebased")) {
+    df_temp_statebased_intensity_lag2years <- data |>
+      dplyr::filter(.data$statebased_conflict == TRUE) |> 
+      dplyr::distinct(.data$iso3, .data$Year, .data$statebased_intensity) |>
+      dplyr::group_by(.data$iso3) |>
+      dplyr::arrange(.data$iso3, .data$Year) |>
+      dplyr::mutate(
+        statebased_intensity_lag2years = dplyr::case_when(
+          statebased_intensity == "war" |
+            dplyr::lag(.data$statebased_intensity, 1) == "war" |
+            dplyr::lag(.data$statebased_intensity, 2) == "war" ~ "war",
+          statebased_intensity == "minor" |
+            dplyr::lag(.data$statebased_intensity, 1) == "minor" |
+            dplyr::lag(.data$statebased_intensity, 2) == "minor" ~ "minor",
+          .default = .data$statebased_intensity
+        )
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::select(-statebased_intensity)
+
+    data <- dplyr::left_join(data, df_temp_statebased_intensity_lag2years, by = c("Year" = "Year", "iso3" = "iso3"))
+  }
   
   # Return the ODA data frame including the selected conflict variables. The data frame is filtered by year > 1989 
   return(data)
