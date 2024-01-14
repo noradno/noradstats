@@ -225,35 +225,49 @@ add_cols_conflict <- function(data, type = "statebased") {
   data <- dplyr::left_join(data, df_selected, by = c("Year" = "year", "iso3" = "iso3"))
   
   # Mutate the present logical conflict columns so that the NA is changed to FALSE
+  # First, find the present logical conflict columns
   vec_conflict_variables <- c("statebased_conflict", "nonstate_conflict", "onesided_violence", "violence")
   vec_conflict_variables <- vec_conflict_variables[vec_conflict_variables %in% colnames(data)]
+  
+  # Change NA values in these logical conflict columns to FALSE
   data <- data |>
     dplyr::mutate(dplyr::across(dplyr::all_of(vec_conflict_variables), ~dplyr::if_else(is.na(.x), FALSE, .x)))
+  
+  # Mutate the present conflict intensity columns so that NA is "none" if it is country-specific observations. Other NAs are still NA.
+  # First, find the present conflict intensity columns
+  vec_conflict_intesity_variables <- c("statebased_intensity", "nonstate_intensity", "onesided_intensity", "violence_intensity")
+  vec_conflict_intesity_variables <- vec_conflict_intesity_variables[vec_conflict_intesity_variables %in% colnames(data)]
+  
+  # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.
+  data <- data |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(vec_conflict_intesity_variables), ~dplyr::if_else(
+      is.na(.x) & !stringr::str_detect(.data$`Recipient country`, "Regional|regional|Multilateral|Global|Administration"),
+      "None", .x)))
   
   # Include a lagged statebased_intensity variable (consider to include for other conflict types also)
   # The variable must be created after the merge with the ODA data frame to have all relevant years, to avoid year gaps in the GED data
   
-  if(any(type %in% "statebased")) {
-    df_temp_statebased_intensity_lag2years <- data |> 
-      dplyr::distinct(.data$iso3, .data$Year, .data$statebased_intensity) |>
-      dplyr::group_by(.data$iso3) |>
-      dplyr::arrange(.data$iso3, .data$Year) |>
-      dplyr::mutate(
-        statebased_intensity_lag2years = dplyr::case_when(
-          statebased_intensity == "war" |
-            dplyr::lag(.data$statebased_intensity, 1) == "war" |
-            dplyr::lag(.data$statebased_intensity, 2) == "war" ~ "war",
-          statebased_intensity == "minor" |
-            dplyr::lag(.data$statebased_intensity, 1) == "minor" |
-            dplyr::lag(.data$statebased_intensity, 2) == "minor" ~ "minor",
-          .default = .data$statebased_intensity
-        )
-      ) |> 
-      dplyr::ungroup() |> 
-      dplyr::select(-statebased_intensity)
-    
-    data <- dplyr::left_join(data, df_temp_statebased_intensity_lag2years, by = c("Year" = "Year", "iso3" = "iso3"))
-  }
+  # if(any(type %in% "statebased")) {
+  #   df_temp_statebased_intensity_lag2years <- data |> 
+  #     dplyr::distinct(.data$iso3, .data$Year, .data$statebased_intensity) |>
+  #     dplyr::group_by(.data$iso3) |>
+  #     dplyr::arrange(.data$iso3, .data$Year) |>
+  #     dplyr::mutate(
+  #       statebased_intensity_lag2years = dplyr::case_when(
+  #         statebased_intensity == "war" |
+  #           dplyr::lag(.data$statebased_intensity, 1) == "war" |
+  #           dplyr::lag(.data$statebased_intensity, 2) == "war" ~ "war",
+  #         statebased_intensity == "minor" |
+  #           dplyr::lag(.data$statebased_intensity, 1) == "minor" |
+  #           dplyr::lag(.data$statebased_intensity, 2) == "minor" ~ "minor",
+  #         .default = .data$statebased_intensity
+  #       )
+  #     ) |> 
+  #     dplyr::ungroup() |> 
+  #     dplyr::select(-statebased_intensity)
+  #   
+  #   data <- dplyr::left_join(data, df_temp_statebased_intensity_lag2years, by = c("Year" = "Year", "iso3" = "iso3"))
+  #}
   
   # Return the ODA data frame including the selected conflict variables. The data frame is filtered by year > 1989 
   return(data)
