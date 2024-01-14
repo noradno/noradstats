@@ -19,6 +19,7 @@ Returns filtered data frame (Year >= 1989) with additional conflict columns base
   \item *_count: Number of conflicts/organised violence IDs in country-year. Numerical variable. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
   \item *_intensity: Intensity of the largest conflict in country-year. Categorical variable. Major/war (>1 000 fatalities) vs minor (<1 000 fatalities).
   \item *_intensity_sum: Intensity of the sum of conflicts in country-year. Categorical variable. Major/war (>1 000 fatalities) vs minor (<1 000 fatalities).
+  \item statebased_intensity_lag2years: Intensity of the largest statebased conflict in country-year including a two year lag based on the statebased_intensity variable. Categorical variable. War (>1 000 fatalities) vs minor (<1 000 fatalities).
 }
 }
 \description{
