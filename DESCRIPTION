@@ -21,7 +21,8 @@ Imports:
     tibble,
     janitor,
     utils,
-    countrycode
+    countrycode,
+    stringr
 Suggests: 
     knitr,
     rmarkdown
