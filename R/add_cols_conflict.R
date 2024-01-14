@@ -267,7 +267,7 @@ add_cols_conflict <- function(data, type = "statebased") {
   
   # Mutate the present conflict intensity columns so that NA is "none" if it is country-specific observations. Other NAs are still NA.
   # First, find the present conflict intensity columns
-  vec_conflict_intesity_variables <- c("statebased_intensity", "nonstate_intensity", "onesided_intensity", "violence_intensity")
+  vec_conflict_intesity_variables <- c("statebased_intensity", "nonstate_intensity", "onesided_intensity", "violence_intensity", "statebased_intensity_lag2years")
   vec_conflict_intesity_variables <- vec_conflict_intesity_variables[vec_conflict_intesity_variables %in% colnames(data)]
   
   # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.
