@@ -211,8 +211,8 @@ add_cols_conflict <- function(data, type = "statebased") {
   
   # Relocate columns and remove country_id
   df_selected <- df_selected |>
-    dplyr::select(-.data$country_id) |>
-    dplyr::relocate(.data$iso3, .before = 1)
+    dplyr::select(-country_id) |>
+    dplyr::relocate(iso3, .before = 1)
   
   
   # Include the selected country level conflict columns into the agreement level ODA data frame -----------
@@ -229,6 +229,31 @@ add_cols_conflict <- function(data, type = "statebased") {
   vec_conflict_variables <- vec_conflict_variables[vec_conflict_variables %in% colnames(data)]
   data <- data |>
     dplyr::mutate(dplyr::across(dplyr::all_of(vec_conflict_variables), ~dplyr::if_else(is.na(.x), FALSE, .x)))
+  
+  # Include a lagged statebased_intensity variable (consider to include for other conflict types also)
+  # The variable must be created after the merge with the ODA data frame to have all relevant years, to avoid year gaps in the GED data
+  
+  if(any(type %in% "statebased")) {
+    df_temp_statebased_intensity_lag2years <- data |> 
+      dplyr::distinct(.data$iso3, .data$Year, .data$statebased_intensity) |>
+      dplyr::group_by(.data$iso3) |>
+      dplyr::arrange(.data$iso3, .data$Year) |>
+      dplyr::mutate(
+        statebased_intensity_lag2years = dplyr::case_when(
+          statebased_intensity == "war" |
+            dplyr::lag(.data$statebased_intensity, 1) == "war" |
+            dplyr::lag(.data$statebased_intensity, 2) == "war" ~ "war",
+          statebased_intensity == "minor" |
+            dplyr::lag(.data$statebased_intensity, 1) == "minor" |
+            dplyr::lag(.data$statebased_intensity, 2) == "minor" ~ "minor",
+          .default = .data$statebased_intensity
+        )
+      ) |> 
+      dplyr::ungroup() |> 
+      dplyr::select(-statebased_intensity)
+    
+    data <- dplyr::left_join(data, df_temp_statebased_intensity_lag2years, by = c("Year" = "Year", "iso3" = "iso3"))
+  }
   
   # Return the ODA data frame including the selected conflict variables. The data frame is filtered by year > 1989 
   return(data)
