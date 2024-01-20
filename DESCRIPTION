@@ -22,7 +22,9 @@ Imports:
     janitor,
     utils,
     countrycode,
-    stringr
+    stringr,
+    duckdb,
+    DBI
 Suggests: 
     knitr,
     rmarkdown
