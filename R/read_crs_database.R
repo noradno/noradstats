@@ -1,6 +1,6 @@
-#' Connecting to CRS database file and create a remote tibble linked to the crs_ten table in the database: International activity level CRS data (2013-2022)
+#' Read international activity level CRS data (1973-). Create a remote tibble connected to the crs table in the DuckDB database file stored in Sharepoint
 #'
-#' @return Returns a remote table (tibble) linked to the 'crs_ten' table in the DuckDB database. Remember to use dbplyr syntax to collect data from the remote tibble and to disconnect when done, using DBI::dbDisconnect(con, shutdown=TRUE)
+#' @return Returns a remote table (tibble) linked to the 'crs' table in the DuckDB database. Use dplyr syntax to collect data from the remote tibble and to disconnect when done, using DBI::dbDisconnect(con, shutdown=TRUE)
 #'
 #' @export
 #' @examples
@@ -36,7 +36,7 @@ read_crs_database <- function() {
   # Replace placeholder_user in path with vec_user
   default_path <- gsub("placeholder_user", vec_user, default_path_raw)
   
-  # Connecting to database and create a remote tibble linked to crs_ten --------
+  # Connecting to database and create a remote tibble linked to crs --------
   
   # Establish a connection to a DuckDB database file
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)
@@ -44,9 +44,9 @@ read_crs_database <- function() {
   # List all tables in the connected DuckDB database to verify existing tables
   DBI::dbListTables(con)
   
-  # Create a remote tibble linked to the 'crs_ten' table in the DuckDB database
+  # Create a remote tibble linked to the 'crs' table in the DuckDB database
   # This allows for using dplyr syntax on database queries
-  df_crs_remote <- dplyr::tbl(con, "crs_ten")
+  df_crs_remote <- dplyr::tbl(con, "crs")
   
   # Return remote tibble
   return(df_crs_remote)

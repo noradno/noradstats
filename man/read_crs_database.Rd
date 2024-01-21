@@ -2,15 +2,15 @@
 % Please edit documentation in R/read_crs_database.R
 \name{read_crs_database}
 \alias{read_crs_database}
-\title{Connecting to CRS database file and create a remote tibble linked to the crs_ten table in the database: International activity level CRS data (2013-2022)}
+\title{Read international activity level CRS data (1973-). Create a remote tibble connected to the crs table in the DuckDB database file stored in Sharepoint}
 \usage{
 read_crs_database()
 }
 \value{
-Returns a remote table (tibble) linked to the 'crs_ten' table in the DuckDB database. Remember to use dbplyr syntax to collect data from the remote tibble and to disconnect when done, using DBI::dbDisconnect(con, shutdown=TRUE)
+Returns a remote table (tibble) linked to the 'crs' table in the DuckDB database. Use dplyr syntax to collect data from the remote tibble and to disconnect when done, using DBI::dbDisconnect(con, shutdown=TRUE)
 }
 \description{
-Connecting to CRS database file and create a remote tibble linked to the crs_ten table in the database: International activity level CRS data (2013-2022)
+Read international activity level CRS data (1973-). Create a remote tibble connected to the crs table in the DuckDB database file stored in Sharepoint
 }
 \examples{
 ?read_crs_database()
