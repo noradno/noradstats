@@ -48,8 +48,6 @@ read_crs_database <- function() {
   # This allows for using dplyr syntax on database queries
   df_crs_remote <- dplyr::tbl(con, "crs")
   
-  DBI::dbDisconnect(con, shutdown=TRUE)
-  
   # Return remote tibble
   return(df_crs_remote)
   
