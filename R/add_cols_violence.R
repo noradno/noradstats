@@ -80,7 +80,7 @@ add_cols_violence <- function(data) {
     ) |> 
     
     # Logical variable of war/major conflict (maximum conflict-id over 150 fatalities in country-year)
-    dplyr::mutate(violence_150 = violence_intensity %in% c("war", "major")) |> 
+    dplyr::mutate(violence_150 = .data$violence_intensity %in% c("war", "major")) |> 
     
     # Logical variable of UCDP conflict (maximum conflict-id over 25 fatalities in country-year)
     dplyr::mutate(violence_25 = TRUE)
@@ -99,8 +99,8 @@ add_cols_violence <- function(data) {
   
   # Relocate columns and remove country_id
   df_country_violence <- df_country_violence |>
-    dplyr::select(-country_id) |>
-    dplyr::relocate(iso3, .before = 1)
+    dplyr::select(-.data$country_id) |>
+    dplyr::relocate(.data$iso3, .before = 1)
   
   
   # Include country-year level conflict columns to the the agreement level ODA data frame -----------
@@ -114,8 +114,8 @@ add_cols_violence <- function(data) {
   
   # Change NA values in logical violence-variables to FALSE and the categorical violence_intensity variable to "none"
   data <- data |>
-    dplyr::mutate(dplyr::across(c(violence_25, violence_150), ~ dplyr::if_else(is.na(.x), FALSE, .x))) |> 
-    dplyr::mutate(violence_intensity = dplyr::if_else(is.na(violence_intensity), "none", violence_intensity))
+    dplyr::mutate(dplyr::across(c(.data$violence_25, .data$violence_150), ~ dplyr::if_else(is.na(.x), FALSE, .x))) |> 
+    dplyr::mutate(violence_intensity = dplyr::if_else(is.na(.data$violence_intensity), "none", .data$violence_intensity))
   
   
   # # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.

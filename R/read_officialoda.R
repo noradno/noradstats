@@ -53,7 +53,7 @@ read_officialoda <- function(download_folder = "C:/Users/einar/Downloads/", url 
           ))
         
         sort_available_csvs <-
-          available_csvs |> dplyr::arrange(dplyr::desc(as.POSIXct(mtime)))
+          available_csvs |> dplyr::arrange(dplyr::desc(as.POSIXct(.data$mtime)))
         
         newest_csv <- rownames(sort_available_csvs)[1]
         

@@ -15,14 +15,14 @@ add_cols_countrycode <- function(data) {
   
   # Data frame of unique countries, by removing global, regional, adm. Not using Income category to filtering as the variable was introduced in 1999.
   df_unique_countries <- data |> 
-    dplyr::filter(!stringr::str_detect(`Recipient country`, "Regional|regional|Multilateral|Global|Administration")) |> 
-    dplyr::select(`Recipient country`) |> 
-    dplyr::arrange(`Recipient country`) |> 
+    dplyr::filter(!stringr::str_detect(.data$`Recipient country`, "Regional|regional|Multilateral|Global|Administration")) |> 
+    dplyr::select(.data$`Recipient country`) |> 
+    dplyr::arrange(.data$`Recipient country`) |> 
     unique()
   
   # Add column iso3 character code to the data frame of unique countries. Non-matches are given NA values and are returned in a warning message. 
   df_unique_countries <- df_unique_countries |> 
-    dplyr::mutate(iso3 = countrycode::countrycode(`Recipient country`, origin = "country.name", destination = "iso3c",
+    dplyr::mutate(iso3 = countrycode::countrycode(.data$`Recipient country`, origin = "country.name", destination = "iso3c",
                                                   custom_match = c("Kosovo" = "XKX",
                                                                    "Yemen Dem. Rep." = "YEM")))
   
