@@ -12,7 +12,6 @@ add_cols_violence(data)
 \value{
 Returns filtered data frame (Year >= 1989) with additional conflict columns:
 \itemize{
-  \item violence: Logical Variable where all observations are TRUE to identify the country-years with at least 1 conflict ID of statebased/nonstate/onesided violence.
   \item violence_fatality_max: Numerical variable of number of fatalities from the larges conflict-id in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
   \item violence_fatality_sum: Numerical variable of number of fatalities from all conflict-ids in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
   \item violence_intensity: Categorical variable of intensity in fatalities of the largest conflict-id in country-year. "war" >= 1000, "major" > 150 & <= 1000, "minor" <= 150. Non-conflicts are NA. The 150 fatality treshold is based on the World bank methodology: https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
