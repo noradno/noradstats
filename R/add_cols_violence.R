@@ -7,6 +7,8 @@
 #'   \item violence_fatality_max: Numerical variable of number of fatalities from the larges conflict-id in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
 #'   \item violence_fatality_sum: Numerical variable of number of fatalities from all conflict-ids in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
 #'   \item violence_intensity: Categorical variable of intensity in fatalities of the largest conflict-id in country-year. "war" >= 1000, "major" > 150 & <= 999, "minor" <= 150. Non-conflicts are NA. The 150 fatality treshold is based on the World bank methodology, but also includes non-state violence and the 150 treshold is applied to the largest (not the sum) of conflict-ids in a country-year, and the WB methodology is not clear on that issue. https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
+#'   \item violence_150: Logical variable of war/major conflict (maximum conflict-id over 150 fatalities in country-year). Based on the violence_intensity variable.
+#'   \item violence_25: Logical variable of UCDP conflict (maximum conflict-id over 25 fatalities in country-year)
 #' }
 #'
 #' @export
@@ -17,7 +19,7 @@ add_cols_violence <- function(data) {
   
   # Check if the ODA data frame has the iso3 country code -------------------
   if(!"iso3" %in% colnames(data)) {
-    stop("Error: The data frame must have the column iso3. Use noradstats::add_cols_countrycode to add countrycode column.")
+    stop("Error: The data frame must have the column iso3 to run add_cols_violence. Use noradstats::add_cols_countrycode to add the iso3 column.")
   }
   
   # Import GED conflict data from local rds file -----------------------------
@@ -75,7 +77,13 @@ add_cols_violence <- function(data) {
       .data$violence_fatality_max > 150 & .data$violence_fatality_max <= 999 ~ "major",
       TRUE ~ "minor"
       )
-    )
+    ) |> 
+    
+    # Logical variable of war/major conflict (maximum conflict-id over 150 fatalities in country-year)
+    dplyr::mutate(violence_150 = violence_intensity %in% c("war", "major")) |> 
+    
+    # Logical variable of UCDP conflict (maximum conflict-id over 25 fatalities in country-year)
+    dplyr::mutate(violence_25 = TRUE)
   
   # Include iso3 country code and name in the conflict dataset. Custom codes for Yugoslavia (Serbia) and Yemen --------
   df_country_violence <- df_country_violence |>
@@ -104,9 +112,10 @@ add_cols_violence <- function(data) {
   # Merge the selected conflict columns into the ODA data frame
   data <- dplyr::left_join(data, df_country_violence, by = c("Year" = "year", "iso3" = "iso3"))
   
-  # Change NA values in the categorical violence_intensity variable to "none"
+  # Change NA values in logical violence-variables to FALSE and the categorical violence_intensity variable to "none"
   data <- data |>
-    dplyr::mutate(violence_intensity = if_else(is.na(violence_intensity), "none", violence_intensity))
+    dplyr::mutate(dplyr::across(c(violence_25, violence_150), ~ dplyr::if_else(is.na(.x), FALSE, .x))) |> 
+    dplyr::mutate(violence_intensity = dplyr::if_else(is.na(violence_intensity), "none", violence_intensity))
   
   
   # # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.
