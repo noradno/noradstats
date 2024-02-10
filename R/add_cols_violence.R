@@ -1,14 +1,13 @@
-#' Add UCDP conflict variables (country-year level) to ODA data frame from 1989 and later. From UCDP Georeferenced Event Dataset (GED)
+#' Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED)
 #'
 #' @param data Input dataframe of Norwegian development assistance
 #'
 #' @return Returns filtered data frame (Year >= 1989) with additional conflict columns:
 #' \itemize{
 #'   \item violence: Logical Variable where all observations are TRUE to identify the country-years with at least 1 conflict ID of statebased/nonstate/onesided violence.
-#'   \item violence_fatality_count_max: Numerical variable of number of fatalities from the larges conflict in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
-#'   \item violence_fatality_count_sum: Numerical variable of number of fatalities from all conflicts in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
-#'   \item violence_intensity_max: Categorical variable of intensity in fatalities of the largest conflict in country-year. "war" >= 1000, "major" > 150 < 1000, "minor" < 150. Non-conflicts are NA. The 150 fatality treshold is based on the World bank methodology: https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
-#'   \item violence_intensity_sum: Categorical variable of intensity in fatalities from all conflicts in country-year. "war" >= 1000, "major" > 150 < 1000, "minor" < 150. Non-conflicts are NA. The 150 fatality treshold is based on the World bank methodology: https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
+#'   \item violence_fatality_max: Numerical variable of number of fatalities from the larges conflict-id in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
+#'   \item violence_fatality_sum: Numerical variable of number of fatalities from all conflict-ids in country-year. Should not be used for summarisation in the agreement-level ODA data frame as the number is at country-level.
+#'   \item violence_intensity: Categorical variable of intensity in fatalities of the largest conflict-id in country-year. "war" >= 1000, "major" > 150 & <= 1000, "minor" <= 150. Non-conflicts are NA. The 150 fatality treshold is based on the World bank methodology: https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
 #' }
 #'
 #' @export
@@ -55,37 +54,31 @@ add_cols_violence <- function(data) {
   ged_raw <- readRDS(default_path)
   
   
-  # Create an aggregated dataframe conflict dataset of country-years observations and violence variables ----------
-  
-  df_country_violence <- ged_raw |>
-    dplyr::group_by(.data$country_id, .data$year) |>
+  # Create an aggregated country-year dataset of violence variables --------
+  df_country_violence <- ged_raw |> 
+    
+    # First, a temporary numerical variable to summarise the number of fatalities in each conflict-id in each country-year
+    dplyr::group_by(.data$country_id, .data$conflict_new_id, .data$year) |> 
+    dplyr::summarise(country_conflictid_year_sum = sum(.data$best)) |> 
+    dplyr::ungroup() |> 
+    
+    # Create two fatality variables for each country-year
+    # Numerical variable of the number of fatalities in the largest conflict-id in each country-year
+    dplyr::group_by(.data$country_id, .data$year) |> 
     dplyr::summarise(
-      
-      # Logical Variable where all observations are TRUE to identify the country-years with at least 1 conflict (statebased/nonstate/onesided)
-      violence = TRUE,
-      
-      # Numerical variable of number of fatalities from the larges conflict in country-year
-      violence_fatality_count_max = max(.data$best),
-      
-      # Numerical variable of number of fatalities from all conflicts in country-year
-      violence_fatality_count_sum = sum(.data$best),
-      
-      # Numerical variable of number of conflicts in country-year
-      violence_count_sum = dplyr::n_distinct(.data$conflict_new_id),
-      
-      # Categorical variable of intensity of the largest conflict in country-year
-      violence_intensity_max = dplyr::case_when(
-        max(.data$best) >= 1000 ~ "war",
-        max(.data$best) > 150 & max(.data$best) <= 999 ~ "major",
-        .default = "minor"),
-      
-      # Categorical variable of intensity of the sum of conflicts in country-year
-      violence_intensity_sum = dplyr::case_when(
-        sum(.data$best) >= 1000 ~ "war",
-        sum(.data$best) > 150 & sum(.data$best) <= 999 ~ "major",
-        .default = "minor")
-    ) |>
-    dplyr::ungroup()
+      violence_fatality_max = max(.data$country_conflictid_year_sum),
+      violence_fatality_sum = sum(.data$country_conflictid_year_sum)) |> 
+    dplyr::ungroup() |>
+    
+    # Categorical variable of the intensity of the largest conflict-id in each country-year
+    dplyr::mutate(violence_intensity = dplyr::case_when(
+      .data$violence_fatality_max >= 1000 ~ "war",
+      .data$violence_fatality_max > 150 & .data$violence_fatality_max <= 999 ~ "major",
+      TRUE ~ "minor"
+    )) |> 
+    
+    # Logical variable of violence
+    dplyr::mutate(violence = TRUE)
   
   
   # Include iso3 country code and name in the conflict dataset. Custom codes for Yugoslavia (Serbia) and Yemen --------
@@ -115,10 +108,10 @@ add_cols_violence <- function(data) {
   # Merge the selected conflict columns into the ODA data frame
   data <- dplyr::left_join(data, df_country_violence, by = c("Year" = "year", "iso3" = "iso3"))
   
-  # Change NA values the logical violence variable to FALSE and NA values in the categorical character variables to "none"
+  # Change NA values the logical violence variable to FALSE and NA values in the categorical violence_intensity variables to "none"
   data <- data |>
     dplyr::mutate(violence = dplyr::if_else(is.na(violence), FALSE, violence)) |> 
-    dplyr::mutate(dplyr::across(c(violence_intensity_max, violence_intensity_sum), ~ dplyr::if_else(is.na(.x), "none", .x)))
+    dplyr::mutate(violence_intensity = if_else(is.na(violence_intensity), "none", violence_intensity))
   
   
   # # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.
