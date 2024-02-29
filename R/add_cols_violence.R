@@ -1,4 +1,4 @@
-#' Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED)
+#' Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED) and UCDP Candidates dataset (for 2023)
 #'
 #' @param data Input dataframe of Norwegian development assistance
 #'
@@ -46,7 +46,7 @@ add_cols_violence <- function(data) {
   
   # Path to GED conflict data (rds). The user id is replaced by the general "placeholder_user" text
   default_path_raw <-
-    "C:/Users/placeholder_user/UD Office 365 AD/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v23_1.rds."
+    "C:/Users/placeholder_user/UD Office 365 AD/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v23_1_incl_candidates.rds."
   
   # Replace placeholder_user in path with vec_user
   default_path <- gsub("placeholder_user", vec_user, default_path_raw)

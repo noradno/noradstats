@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_cols_violence.R
 \name{add_cols_violence}
 \alias{add_cols_violence}
-\title{Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED)}
+\title{Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED) and UCDP Candidates dataset (for 2023)}
 \usage{
 add_cols_violence(data)
 }
@@ -20,7 +20,7 @@ Returns filtered data frame (Year >= 1989) with additional conflict columns:
 }
 }
 \description{
-Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED)
+Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED) and UCDP Candidates dataset (for 2023)
 }
 \examples{
 ?add_cols_violence()
