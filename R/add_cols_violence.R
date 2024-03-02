@@ -102,6 +102,10 @@ add_cols_violence <- function(data) {
     dplyr::select(-.data$country_id) |>
     dplyr::relocate(.data$iso3, .before = 1)
   
+  # Change country code of Israel (ISR) to Palestine (PSE) to match the ODA data frame, as in the UCDP data the Israel-Palesine war is coded as country Israel
+  df_country_violence <- df_country_violence |> 
+    mutate(iso3c = if_else(iso3 == "ISR", "PSE", iso3))
+  
   
   # Include country-year level conflict columns to the the agreement level ODA data frame -----------
   
