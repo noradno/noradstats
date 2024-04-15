@@ -25,7 +25,13 @@ read_aiddata <- function(file = NULL) {
     
     # Find the user id to input in the path
     docs <- path.expand("~")
-    home <- dirname(docs)
+    
+    # Check if system is Windows
+    if (Sys.info()["sysname"] == "Windows") {
+      home <- dirname(docs)
+    } else if (Sys.info()["sysname"] == "Darwin") {
+      home <- docs
+    }
     
     # Path to PTA agreement totals report (csv).
     default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/4. CSV/statsys_total.csv"
