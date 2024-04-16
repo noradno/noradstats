@@ -24,37 +24,23 @@ add_cols_violence <- function(data) {
   
   # Import GED conflict data from local rds file -----------------------------
   
-  # Find the user id to input in the file path
-  wd <- getwd()
+  # Find the user id to input in the path
+  docs <- path.expand("~")
   
-  # Check if the second character of the Userid is a digit (new style) or not (old style)
-  # Use regexpr to find the position of "Users/"
-  pos <- regexpr("Users/", wd)
-  
-  # Find the second character after "Users/"
-  second_char <- substr(wd, pos + 7, pos + 7)
-  
-  # Check if the second character is a digit (new user id format) or not (old user id format)
-  is_digit <- grepl("\\d", second_char)
-  
-  # Extract the user id from the wd dependent on it is a new or old user id format
-  if (is_digit) {
-    vec_user <- substr(wd, pos + 6, pos + 11)
-  } else {
-    vec_user <- substr(wd, pos + 6, pos + 9)
+  # Check if system is Windows or Mac to set the home directory
+  if (Sys.info()["sysname"] == "Windows") {
+    home <- dirname(docs)
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    home <- docs
   }
   
-  # Path to GED conflict data (rds). The user id is replaced by the general "placeholder_user" text
-  default_path_raw <-
-    "C:/Users/placeholder_user/UD Office 365 AD/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v23_1_incl_candidates.rds."
-  
-  # Replace placeholder_user in path with vec_user
-  default_path <- gsub("placeholder_user", vec_user, default_path_raw)
+  # Path to GED conflict data (rds).
+  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v23_1_incl_candidates.rds"
+  default_path <- paste0(home, default_path_end)
   
   # Load UCDP Georeferenced Event Dataset (GED) of idividual events of organised violence (statebased, nonstate and onesided violence)
   ged_raw <- readRDS(default_path)
-  
-  
+
   # Create an aggregated country-year dataset of violence variables --------
   df_country_violence <- ged_raw |> 
     
