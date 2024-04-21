@@ -9,32 +9,19 @@
 read_crs_database <- function() {
   # Find user-specific path to database file --------------------------------
   
-  # Find the user id to input in the file path
-  wd <- getwd()
+  # Find the user id to input in the path
+  docs <- path.expand("~")
   
-  # Check if the second character of the Userid is a digit (new style) or not (old style)
-  # Use regexpr to find the position of "Users/"
-  pos <- regexpr("Users/", wd)
-  
-  # Find the second character after "Users/"
-  second_char <- substr(wd, pos + 7, pos + 7)
-  
-  # Check if the second character is a digit (new user id format) or not (old user id format)
-  is_digit <- grepl("\\d", second_char)
-  
-  # Extract the user id from the wd dependent on it is a new or old user id format
-  if (is_digit) {
-    vec_user <- substr(wd, pos + 6, pos + 11)
-  } else {
-    vec_user <- substr(wd, pos + 6, pos + 9)
+  # Check if system is Windows
+  if (Sys.info()["sysname"] == "Windows") {
+    home <- dirname(docs)
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    home <- docs
   }
   
-  # Path to database file. Notice that the user id is replaced by the general "placeholder_user" text
-  default_path_raw <-
-    "C:/Users/placeholder_user/UD Office 365 AD/Norad-Avd-Kunnskap - Statistikk og analyse/13. Annen data/CRS bulk files/crs_database.duckdb"
-  
-  # Replace placeholder_user in path with vec_user
-  default_path <- gsub("placeholder_user", vec_user, default_path_raw)
+  # Path to duckdb database file
+  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/13. Annen data/CRS bulk files/crs_database.duckdb"
+  default_path <- paste0(home, default_path_end)
   
   # Connecting to database and create a remote tibble linked to crs --------
   
