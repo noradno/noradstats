@@ -1,5 +1,6 @@
-#' Get data on OECD DAC donors ODA to countries and regions (DAC2a), using the OECD SDMX API. Amounts in USD million
-#'
+#' Read international ODA data from OECD/DAC donors to countries and regions into R
+#' 
+#' This function connects to the OECD SDMX API and extracts data DAC-members' ODA to countries and regions by year (DAC2a), including metadata. Amounts in USD million
 #' @param startyear Specify a numeric value of the first year in time period. Default value is \emph{2020}.
 #' @param endyear Specity a numeric value of the last year in time period. Default value is \emph{2020}.
 #'
@@ -7,10 +8,10 @@
 #' @export
 #'
 #' @examples
-#' ?df_donors <- get_donors()
+#' ?df_donors <- read_donors()
 #'
 
-get_donors <- function(startyear = 2020, endyear = 2020) {
+read_donors <- function(startyear = 2020, endyear = 2020) {
   # Using OECD table TABLE2A including metadata (dsd=TRUE)
   # The key arugment spesifies selected values for the available table dimentions in order, separating the dimensions by dots:
   # RECIPIENT: No value (before a dot) includes all recipient countries and regions.

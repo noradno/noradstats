@@ -1,7 +1,7 @@
 Package: noradstats
 Type: Package
-Title: Norwegian development aid statistics
-Version: 0.1.0
+Title: Access Norwegian development aid statistics
+Version: 0.1
 Author: Einar Tornes
 Maintainer: Einar Tornes <einar.tornes@norad.no>
 Description: A package to access Norwegian and international development aid statistics and helper functions.

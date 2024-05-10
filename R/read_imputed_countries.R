@@ -1,4 +1,7 @@
-#' Get data on Norwegian imputed multilateral ODA to countries and regions by year, using the OECD SDMX API. Amounts in USD million and NOK million.
+#' Read Norwegian imputed multilateral ODA to countries and regions data into R
+#' 
+#' This function connects to the OECD SDMX API and extracts Norwegian imputed multilateral ODA to countries and regions data by year, including metadata.
+#' The amounts are USD million and caclulates NOK million using the exchange rate data from the OECD API.
 #'
 #' @param startyear Specify a numeric value of the first year in time period. Default value is \emph{2011}.
 #' @param endyear Specity a numeric value of the last year in time period. Default value is \emph{2020}.
@@ -7,10 +10,10 @@
 #' @export
 #'
 #' @examples
-#' ?df_imputed_countries <- get_imputed_countries()
+#' ?df_imputed_countries <- read_imputed_countries()
 #'
 
-get_imputed_countries <- function(startyear = 2011, endyear = 2020) {
+read_imputed_countries <- function(startyear = 2011, endyear = 2020) {
   # Using OECD table TABLE2A including metadata (dsd=TRUE)
   # The key arugment spesifies selected values for the available table dimentions in order, separating the dimensions by dots:
   # RECIPIENT: No value (before a dot) includes all recipient countries and regions.

@@ -1,16 +1,19 @@
-#' Get data on Norwegian imputed multilateral ODA to sectors by year, using the OECD SDMX API. Amounts in USD million and NOK million.
+#' Read Norwegian imputed multilateral ODA to sectors data into R
+#' 
+#' This function connects to the OECD SDMX API and extracts Norwegian imputed multilateral ODA to sectors data by year, including metadata.
+#' The amounts are USD million and caclulates NOK million using the exchange rate data from the OECD API.
 #'
 #' @param startyear Specify a numeric value of the first year in time period. Default value is \emph{2011}.
 #' @param endyear Specity a numeric value of the last year in time period. Default value is \emph{2020}.
 #'
-#' @return Returns a dataframe (tibble) of Norwegian imputed multilateral ODA to sectors
+#' @return Returns a tibble dataframe of Norwegian imputed multilateral ODA to sectors
 #' @export
 #'
 #' @examples
-#' ?df_imputed_sectors <- get_imputed_sectors()
+#' ?df_imputed_sectors <- read_imputed_sectors()
 #'
 
-get_imputed_sectors <- function(startyear = 2020, endyear = 2020) {
+read_imputed_sectors <- function(startyear = 2020, endyear = 2020) {
   # Using OECD table TABLE2A including metadata (dsd=TRUE)
   # The key arugment spesifies selected values for the available table dimentions in order, separating the dimensions by dots:
   # DONOR: Norway
