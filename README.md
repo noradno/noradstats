@@ -21,44 +21,61 @@ remotes::install_github("noradno/noradstats", build_vignettes = TRUE)
 
 ## Usage
 
-Loading libraries for these examples.
+In addition to `noradstats`, for the examples below we use the packages
+`dplyr`, `DBI` and `duckplyr`. `dplyr` provides a wide range of data
+manipulation functions for data frames, `DBI` helps connecting R to
+databases, and the `duckplyr` package handles the under-the-hood
+translation of dplyr operations to SQL queries, optimized for DuckDB
+databases (compared to the more general `dbplyr` package). The packages
+`DBI` and `duckplyr` are only necessary when using the `access_*`
+functions, as these functions retrieve data from a database.
 
 ``` r
 library(noradstats)
 library(dplyr)
+library(DBI)
+library(duckplyr)
 ```
 
 ### Norwegian ODA data
 
-Read Norwegian ODA data into R, returning a tibble data frame.
+#### Read Norwegian ODA data into R, returning a tibble data frame.
+
+In the example below we find the sum of Norwegian ODA in the most recent
+year.
 
 ``` r
-df_oda <- noradstats::read_oda()
+df_oda <- read_oda()
 
 df_oda |> 
-  filter(year == max(year))
-```
-
-Add climate-specific columns to Norwegian ODA data frame
-
-``` r
-df_oda |> 
-  add_cols_climate_clean()
-```
-
-Access database of Norwegian ODA data from R, returning a tibble data
-frame linked to the DuckDB database table. Allows for dplyr queries, and
-use collect() to return data as tibble data frame. Use
-DBI::dbDisconnect(con, shutdown=TRUE) to close connection to database.
-
-``` r
-df_remote_oda <- noradstats::access_oda()
-
-df_remote_oda |> 
   filter(year == max(year)) |> 
-  collect()
+  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T))
+```
 
-DBI::dbDisconnect(con, shutdown=TRUE)
+#### Access database of Norwegian ODA
+
+Instead of loading all the data of Norwegian ODA data into the R
+environment (in-memory), we can use the `access_oda()` function to
+create a proxy data frame linked to the DuckDB database table containing
+the Norwegian ODA data. The proxy data frame can be manipulated using
+`dplyr` operations (through `duckplyr` translation to SQL queries),
+executed directly on the database. Use `collect()` to return the query
+results in the R environment. This approach is more efficient for
+handling large datasets by reducing memory usage and faster data
+processing than loading all data into memory. However, the Norwegian ODA
+data is relatively small, so the difference in performance is not as
+noticeable as with larger datasets.
+
+In the example below we find the sum of Norwegian ODA in the most recent
+year.
+
+``` r
+df_proxy_oda <- access_oda()
+
+df_proxy_oda |> 
+  filter(year == max(year)) |> 
+  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T)) |> 
+  collect()
 ```
 
 ### Norwegian imputed multilateral data
@@ -91,19 +108,22 @@ df_crs |>
   filter(year == max(year))
 ```
 
-Access database of international ODA data from R, returning a remote
-tibble linked to the crs DuckDB database file. Allows for dplyr queries,
-and use collect() to return data as tibble data frame. Use
-DBI::dbDisconnect(con, shutdown=TRUE) to close connection to database.
+Instead of loading all the data of international CRS data into the R
+environment (in-memory), we can use the `access_international_crs()`
+function to create a proxy data frame linked to the DuckDB database
+table containing the international CRS data. The proxy data frame can be
+manipulated using `dplyr` operations (through `duckplyr` translation to
+SQL queries), executed directly on the database. Use `collect()` to
+return the query results in the R environment. This approach is more
+efficient for handling large datasets by reducing memory usage and
+faster data processing than loading all data into memory.
 
 ``` r
-df_remote_crs <- access_international_crs()
+df_proxy_crs <- access_international_crs()
 
-df_remote_crs |> 
+df_proxy_crs |> 
   filter(year == max(year)) |> 
     collect()
-
-DBI::dbDisconnect(con, shutdown=TRUE)
 ```
 
 ### International ODA data from DAC-countries to countries and regions

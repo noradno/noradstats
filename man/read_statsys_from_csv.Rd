@@ -19,6 +19,6 @@ and returns a tibble containing the data. Make sure the path is correctly specif
 The function checks for file existence and valid path input before attempting to read the file.
 }
 \examples{
-statsys_data <- read_statsys_from_csv("path/to/your/statsys_file.csv")
+df_statsys <- read_statsys_from_csv("path/to/your/statsys_file.csv")
 
 }

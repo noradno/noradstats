@@ -3,19 +3,17 @@
 #' This function reads a Statsys CSV file, which should be delimited by semicolons (;)
 #' and have commas (,) as decimal marks. It expects the CSV file to be at the specified path
 #' and returns a tibble containing the data. Make sure the path is correctly specified to avoid errors.
-#' The function checks for file existence and valid path input before attempting to read the file.
+#' The function checks for valid path input before attempting to read the file.
 #'
 #' @param path Required path to CSV file of Statsys data.
 #' @return Returns a tibble of Statsys data.
 #' @export
 #' @examples
-#' statsys_data <- read_statsys_from_csv("path/to/your/statsys_file.csv")
+#' df_statsys <- read_statsys_from_csv("path/to/your/statsys_file.csv")
 #'
+
 read_statsys_from_csv <- function(path) {
-  if (is.null(path)) {
-    stop("Path to CSV file is required. Please specify a valid file path.")
-  }
-  
+
   if (!file.exists(path)) {
     stop("File does not exist at the specified path: ", path)
   }
