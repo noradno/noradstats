@@ -21,6 +21,17 @@ remotes::install_github("noradno/noradstats", build_vignettes = TRUE)
 
 ## Usage
 
+### Prerequisites
+
+A number of functions in the noradstats package retrieve data from a
+database file located in the users local directory:
+C:\Users\[userid\]\Norad\Norad-Avd-Kunnskap - Statistikk og analyse\06.
+Statistikkdatabaser\3. Databasefiler. Make sure the file path exists
+locally by synchronizing the Teams channel *Norad-Avd-Kunnskap -
+Statistikk og analyse.*
+
+### Loading packages
+
 In addition to `noradstats`, for the examples below we use the packages
 `dplyr`, `DBI` and `duckplyr`. `dplyr` provides a wide range of data
 manipulation functions for data frames, `DBI` helps connecting R to
