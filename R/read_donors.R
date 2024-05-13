@@ -12,6 +12,10 @@
 #'
 
 read_donors <- function(startyear = 2020, endyear = 2020) {
+  
+  # Set locale to UTF-8 within the function
+  Sys.setlocale("LC_ALL", "en_US.UTF-8")
+  
   # Using OECD table TABLE2A including metadata (dsd=TRUE)
   # The key arugment spesifies selected values for the available table dimentions in order, separating the dimensions by dots:
   # RECIPIENT: No value (before a dot) includes all recipient countries and regions.
