@@ -6,13 +6,45 @@ editor: visual
 
 ## Overview
 
-Access Norwegian and international development aid data for internal use in Norad.
+Easily import Norwegian and international development finance data into R.
 
--   read\_\* functions for importing data into R as a tibble data frame
+-   Use the `read_*()` functions for importing all data from a specific database table or CSV into the R environment.
 
--   access\_\* functions for using a remote tibble data frame linked to a database table
+    -   `read_oda()` to import all Norwegian ODA data from Norad database
 
--   add_cols\_\* functions for add columns to tibble data frames
+    -   `read_statsys()` to import all Norwegian ODA, OOF and PF data from Norad database
+
+    -   `read_international_crs()` to import all international CRS data from Norad database
+
+    -   `read_donors()` to import DAC donors ODA by recipient countries and regions from an OECD database
+
+    -   `read_imputed_countries()` to import Norwegian imputed multilateral ODA by recipient countries and regions from an OECD database
+
+    -   `read_imputed_sectors()` to import Norwegian imputed multilateral ODA by sectors from an OECD database
+
+    -   `read_statsys_from_csv()` to import all Norwegian ODA, OOF and PF data from CSV
+
+    -   `read_aidresults_from_csv()` to import data from an aidresults.no-produced CSV
+
+-   Use the `access_*()` functions for creating a proxy data frame linked to a specific Norad database table.
+
+    -   `access_oda()` to access Norwegian ODA data in a Norad database
+
+    -   `access_statsys()` to access Norwegian ODA, OOF and PF data in Norad database
+
+    -   `access_international_crs()` to access all international CRS data in Norad database
+
+-   \[Under development\] Use the `add_cols_*` functions to add extra column to an existing data of produced by `read_oda()`, `read_statsys()`, `read_statsys_from_csv()` and the `access_*()`-equivalents. `add_cols_basic()` columns are already included as columns in the data frames produced by `read_oda()`, `read_statsys()` and `access_*()`-equvalents.
+
+    -   `add_cols_basic()` adds columns of
+
+    -   `add_cols_climate()` add climate relevant columns
+
+    -   `add_cols_climate_clean()` add climate relevant columns
+
+    -   `add_cols_countrycode()` add iso3c country codes using the countrycodes package
+
+    -   `add_cols_violence()` add conflict relevant columns using UCDP conflict data
 
 ## Installation
 
@@ -24,7 +56,7 @@ remotes::install_github("noradno/noradstats", build_vignettes = TRUE)
 
 ### Prerequisites
 
-A number of functions in the noradstats package retrieve data from a database file located in the users local directory: C:\\Users\[userid\]\\Norad\\Norad-Avd-Kunnskap - Statistikk og analyse\\06. Statistikkdatabaser\\3. Databasefiler. Make sure the file path exists locally by synchronizing the Teams channel *Norad-Avd-Kunnskap - Statistikk og analyse.*
+A number of functions in the noradstats package retrieve data from a database file located in the users local directory: *C:\\Users\[userid\]\\Norad\\Norad-Avd-Kunnskap - Statistikk og analyse\\06. Statistikkdatabaser\\3. Databasefiler.* Make sure the file path exists locally by synchronizing the Teams channel *Norad-Avd-Kunnskap - Statistikk og analyse.*
 
 ### Loading packages
 
@@ -40,6 +72,8 @@ library(duckplyr)
 ### Norwegian ODA data
 
 #### Read Norwegian ODA data into R, returning a tibble data frame.
+
+The function read_oda() reads all Norwegian ODA data from the DuckDB database into R.
 
 In the example below we find the sum of Norwegian ODA in the most recent year.
 

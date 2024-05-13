@@ -16,7 +16,7 @@ Returns a tibble of Norwegian ODA data
 This function reads a CSV file of ODA statistics downloaded from aidresults.no: https://resultater.norad.no/microdata
 The function excepcts the CSV to be delimited by semicolons (;) commas (,) as decimal marks and UTF-16LE encoding.
 It expects the CSV file to be at the specified path and returns a tibble containing the data. Make sure the path is correctly specified to avoid errors.
-The function checks for file existence and valid path input before attempting to read the file.
+The function checks for valid path input before attempting to read the file.
 }
 \examples{
 ?read_aidresults_from_csv
