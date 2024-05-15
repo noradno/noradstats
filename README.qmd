@@ -134,13 +134,17 @@ Instead of loading all the data of international CRS data into the R environment
 
 As mentioned above, the proxy data frame can be manipulated using `dplyr` operations (through `duckplyr` translation to SQL queries), executed directly on the database. Use `collect()` to return the query results in the R environment. This approach is more efficient for handling large datasets by reducing memory usage and faster data processing than loading all data into memory.
 
+In this example we find the topten ODA donors (bilateral donors or multilateral institutions) in 2022.
+
 ```{r, eval=FALSE}
 df_proxy_crs <- access_international_crs()
 
 df_proxy_crs |> 
-  filter(year == max(year)) |> 
-    collect()
-
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10) |> 
+  collect()
 ```
 
 ### International ODA data from DAC-countries to countries and regions
