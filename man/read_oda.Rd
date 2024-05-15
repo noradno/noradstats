@@ -7,12 +7,12 @@
 read_oda()
 }
 \value{
-A tibble containing Norwegian ODA data.
+Returns a tibble of Norwegian ODA data from 1960 to the recent year. Frame agreement level data is excluded.
 }
 \description{
-This function connects to a specified DuckDB database table to retrieve Norwegian Official Development
-Assistance (ODA) activity level data, starting from 1960 to the recent year. It returns all the data in the database table as a tibble.
-The database file is expected to be located in a synchronized SharePoint directory on the user's local computer.
+This function imports all Norwegian Official Development (ODA) from the Statsys table in the DuckDB database.
+This include ODA data from 1960 to the recent year. Frame agreement level data is excluded.
+The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 }
 \examples{
 ?read_oda()

@@ -7,13 +7,12 @@
 access_international_crs()
 }
 \value{
-Returns a remote tibble data frame linked to the international CRS database table.
+Returns a proxy tibble connected to the CRS table in the DuckDB database.
 }
 \description{
-This function connects to a specified DuckDB database table to retrieve CRS (Creditor Reporting System) activity level data of 
-Official Development Finance (ODA/OOF) from official donors (DAC, non-DAC, multilaterals) and private philantropy, starting from 1960 to the recent year. 
-It returns a remote tibble linked to the crs database file, and allows for using dplyr syntax in database queries.
-The database file is expected to be located in a synchronized SharePoint directory on the user's local computer.
+This function creates a proxy tibble connected to the CRS table in the DuckDB database.
+This data includes CRS (Creditor Reporting System) activity level data of Official Development Finance (ODA/OOF) from official donors (DAC, non-DAC, multilaterals) and private philantropy, starting from 1973 to the recent year.
+The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 Use DBI::dbDisconnect(con, shutdown=TRUE) to close connection to database.
 Data source: https://stats.oecd.org/DownloadFiles.aspx?DatasetCode=CRS1
 }
