@@ -108,15 +108,16 @@ library(duckplyr)
 The function `read_oda()` imports all Norwegian ODA data from the DuckDB
 database into R.
 
-In the example below we find the sum of Norwegian ODA in the most recent
-year.
+In the example below we find the sector allocation of Norwegian ODA in
+the most recent year.
 
 ``` r
 df_oda <- read_oda()
 
 df_oda |> 
   filter(year == max(year)) |> 
-  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T))
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok))
 ```
 
 #### Access database of Norwegian ODA
@@ -139,15 +140,16 @@ data into memory. However, the Norwegian ODA data is relatively small,
 so the difference in performance is not as noticeable as with larger
 datasets.
 
-In the example below we find the sum of Norwegian ODA in the most recent
-year.
+In the example below we find the sector allocation of Norwegian ODA in
+the most recent year.
 
 ``` r
 df_proxy_oda <- access_oda()
 
 df_proxy_oda |> 
   filter(year == max(year)) |> 
-  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T)) |> 
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok)) |> 
   collect()
 ```
 
@@ -193,12 +195,18 @@ results in the R environment. This approach is more efficient for
 handling large datasets by reducing memory usage and faster data
 processing than loading all data into memory.
 
+In this example we find the topten ODA donors (bilateral donors or
+multilateral donors) in the most recent year.
+
 ``` r
 df_proxy_crs <- access_international_crs()
 
 df_proxy_crs |> 
-  filter(year == max(year)) |> 
-    collect()
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10) |> 
+  collect()
 ```
 
 ### International ODA data from DAC-countries to countries and regions

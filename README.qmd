@@ -75,14 +75,15 @@ library(duckplyr)
 
 The function `read_oda()` imports all Norwegian ODA data from the DuckDB database into R.
 
-In the example below we find the sum of Norwegian ODA in the most recent year.
+In the example below we find the sector allocation of Norwegian ODA in the most recent year.
 
 ```{r, eval=FALSE}
 df_oda <- read_oda()
 
 df_oda |> 
   filter(year == max(year)) |> 
-  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T))
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok))
 ```
 
 #### Access database of Norwegian ODA
@@ -93,14 +94,15 @@ The functiokn `access_oda()` creates a proxy tibble connected to the Statsys tab
 
 The proxy data frame can be manipulated using `dplyr` operations (through `duckplyr` translation to SQL queries), executed directly on the database. Use `collect()` to return the query results in the R environment. This approach is more efficient for handling large datasets by reducing memory usage and faster data processing than loading all data into memory. However, the Norwegian ODA data is relatively small, so the difference in performance is not as noticeable as with larger datasets.
 
-In the example below we find the sum of Norwegian ODA in the most recent year.
+In the example below we find the sector allocation of Norwegian ODA in the most recent year.
 
 ```{r, eval=FALSE}
 df_proxy_oda <- access_oda()
 
 df_proxy_oda |> 
   filter(year == max(year)) |> 
-  summarise(nok_mrd = sum(disbursed_mrd_nok, na.rm = T)) |> 
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok)) |> 
   collect()
 
 ```
@@ -121,20 +123,23 @@ df_imputed_sectors <- read_imputed_sectors(startyear = 2015, endyear = 2022)
 
 ### International CRS data
 
-Read international ODA data into R, returning a tibble data frame. This can take a while, but should be less than a minute.
+Read international ODA data into R, returning a tibble data frame. It is over 5 million rows. This can take a while, but should be less than a minute.
 
 ```{r, eval=FALSE}
 df_crs <- read_international_crs()
 
 df_crs |> 
-  filter(year == max(year))
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10)
 ```
 
 Instead of loading all the data of international CRS data into the R environment (in-memory), we can use the `access_international_crs()` function to create a proxy data frame linked to the DuckDB database table containing the international CRS data.
 
 As mentioned above, the proxy data frame can be manipulated using `dplyr` operations (through `duckplyr` translation to SQL queries), executed directly on the database. Use `collect()` to return the query results in the R environment. This approach is more efficient for handling large datasets by reducing memory usage and faster data processing than loading all data into memory.
 
-In this example we find the topten ODA donors (bilateral donors or multilateral institutions) in 2022.
+In this example we find the topten ODA donors (bilateral donors or multilateral donors) in the most recent year. This is much faster than in the example above where we started by importing all the 5 million rows.
 
 ```{r, eval=FALSE}
 df_proxy_crs <- access_international_crs()
