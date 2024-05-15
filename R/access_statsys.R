@@ -1,11 +1,12 @@
 #' Access database of Statsys data from R
 #'
-#' This function connects to a specified DuckDB database table to retrieve Statsys data. This includes official development assistance (ODA), frame agreement level data, Other official flows(OOF), export credits and private flows.
-#' The data is available from 1960 to the recent year.
-#' The database file is expected to be located in a synchronized SharePoint directory on the user's local computer.
+#' This function creates a proxy tibble connected to the Statsys data table in the DuckDB database.
+#' This data includes Norwegian official development assistance (ODA), ODA frame agreement level data, Other official flows(OOF), export credits and private flows.
+#' The data covers 1960 to recent year.
+#' The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 #' Use DBI::dbDisconnect(con, shutdown=TRUE) to close connection to database.
 #'
-#' @return Returns a remote tibble data frame linked to the Statsys database table.
+#' @return Returns a proxy tibble connected to a Statsys database table in the DuckDB database.
 #' @export
 #' @examples
 #' ?access_statsys()
@@ -28,7 +29,7 @@ access_statsys <- function() {
   # Connect to the database table
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)
   
-  # Create a remote tibble linked to the crs database table. This allows for using dplyr syntax in database queries
+  # Create a proxy tibble connected to the Statsys table in the DuckDB database.
   df_remote_statsys <- dplyr::tbl(con, "statsys")
   
   return(df_remote_statsys)

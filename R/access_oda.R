@@ -1,10 +1,11 @@
 #' Access database of Norwegian ODA data from R
 #'
-#' This function connects to a specified DuckDB database table to retrieve Norwegian Official Development (ODA) data from 1960 to the recent year.
-#' The database file is expected to be located in a synchronized SharePoint directory on the user's local computer.
+#' This function creates a proxy tibble connected to the Statsys table in the DuckDB database, and filters the proxy tibble to only include Norwegian Official Development (ODA). Frame agreement level data is excluded.
+#' The data covers 1960 to recent year.
+#' The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 #' Use DBI::dbDisconnect(con, shutdown=TRUE) to close connection to database.
 #'
-#' @return Returns a remote tibble data frame linked to the Statsys database table.
+#' @return Returns a remote tibble connected to the the Statsys table in the DuckDB database. The remote tibble is filtered to include ODA data. Frame agreement level data is excluded.
 #' @export
 #' @examples
 #' ?access_oda()
@@ -12,23 +13,15 @@
 
 access_oda <- function() {
   
-  # Specify user specific path to database file
-  docs <- path.expand("~")
+  # Create a proxy tibble connected to the Statsys table in the DuckDB database
+  df_proxy_statsys <- noradstats::access_statsys()
   
-  if (Sys.info()["sysname"] == "Windows") {
-    home <- dirname(docs)
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    home <- docs
-  }
+  # Filter the proxy tibble to include ODA data. Frame agreement level data is excluded.
+  df_proxy_oda <- df_proxy_statsys |> 
+    dplyr::filter(
+      type_of_flow == "ODA",
+      type_of_agreement != "Rammeavtale"
+    )
   
-  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/3. Databasefiler/statsys.duckdb"
-  default_path <- paste0(home, default_path_end)
-  
-  # Connect to the database table
-  con <- DBI::dbConnect(duckdb::duckdb(), default_path)
-  
-  # Create a remote tibble linked to the crs database table. This allows for using dplyr syntax in database queries
-  df_remote_oda <- dplyr::tbl(con, "oda")
-  
-  return(df_remote_oda)
+  return(df_proxy_oda)
 }

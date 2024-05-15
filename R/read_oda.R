@@ -1,10 +1,10 @@
 #' Read Norwegian ODA data into R
 #'
-#' This function connects to a specified DuckDB database table to retrieve Norwegian Official Development
-#' Assistance (ODA) activity level data, starting from 1960 to the recent year. It returns all the data in the database table as a tibble.
-#' The database file is expected to be located in a synchronized SharePoint directory on the user's local computer.
+#' This function imports all Norwegian Official Development (ODA) from the Statsys table in the DuckDB database.
+#' This include ODA data from 1960 to the recent year. Frame agreement level data is excluded.
+#' The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 #'
-#' @return A tibble containing Norwegian ODA data.
+#' @return Returns a tibble of Norwegian ODA data from 1960 to the recent year. Frame agreement level data is excluded.
 #' @export
 #' @examples
 #' ?read_oda()
@@ -12,28 +12,15 @@
 
 read_oda <- function() {
   
-  # Specify user specific path to database file
-  docs <- path.expand("~")
+  # Read all data from the statsys table in DuckDB database
+  df_statsys <- read_statsys()
   
-  if (Sys.info()["sysname"] == "Windows") {
-    home <- dirname(docs)
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    home <- docs
-  }
-  
-  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/3. Databasefiler/statsys.duckdb"
-  default_path <- paste0(home, default_path_end)
-  
-  # Connect to the database table
-  con <- DBI::dbConnect(duckdb::duckdb(), default_path)
-  
-  # Return oda database table as tibble
-  df_oda <- con |>
-    DBI::dbReadTable("oda") |>
-    tibble::as_tibble()
-  
-  # Disconnect database
-  DBI::dbDisconnect(con, shutdown = TRUE)
-  
+  # Filter the data to include only ODA data and exclude frame agreement level data
+  df_oda <- df_statsys |> 
+    dplyr::filter(
+      type_of_flow == "ODA",
+      type_of_agreement != "Rammeavtale"
+      )
+
   return(df_oda)
 }
