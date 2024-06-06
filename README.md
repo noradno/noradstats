@@ -173,14 +173,18 @@ df_imputed_sectors <- read_imputed_sectors(startyear = 2015, endyear = 2022)
 
 ### International CRS data
 
-Read international ODA data into R, returning a tibble data frame. This
-can take a while, but should be less than a minute.
+Read international ODA data into R, returning a tibble data frame. It is
+over 5 million rows. This can take a while, but should be less than a
+minute.
 
 ``` r
 df_crs <- read_international_crs()
 
 df_crs |> 
-  filter(year == max(year))
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10)
 ```
 
 Instead of loading all the data of international CRS data into the R
@@ -196,7 +200,9 @@ handling large datasets by reducing memory usage and faster data
 processing than loading all data into memory.
 
 In this example we find the topten ODA donors (bilateral donors or
-multilateral donors) in the most recent year.
+multilateral donors) in the most recent year. This is much faster than
+in the example above where we started by importing all the 5 million
+rows.
 
 ``` r
 df_proxy_crs <- access_international_crs()
