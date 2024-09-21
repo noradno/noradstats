@@ -26,6 +26,4 @@ Imports:
     duckdb,
     DBI
 Suggests: 
-    knitr,
     rmarkdown
-VignetteBuilder: knitr
