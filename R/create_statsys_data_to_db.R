@@ -1,4 +1,4 @@
-#' Save and overwrite Statsys Data to DuckDB Database
+#' Function to import, save and overwrite Statsys Data to DuckDB Database
 #'
 #' Reads Statsys data from a CSV file, processes it by adding basic and country 
 #' columns, cleans the column names, and then saves the data to a DuckDB database.
@@ -24,7 +24,7 @@
 #' input_csv <- "path/to/your_statsys_data.csv"
 #'
 #' # Call the function to save and overwrite the Statsys data
-#' save_statsys_data_to_db(input_csv)
+#' create_statsys_data_to_db(input_csv)
 #' }
 
 #'
@@ -32,7 +32,7 @@
 #' @importFrom DBI dbConnect dbWriteTable dbDisconnect
 #' @importFrom duckdb duckdb
 #' @export
-save_statsys_data_to_db <- function(input_csv) {
+create_statsys_data_to_db <- function(input_csv) {
   
   # Check if the input file exists
   if (!file.exists(input_csv)) {

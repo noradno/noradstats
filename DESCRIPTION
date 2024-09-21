@@ -24,6 +24,7 @@ Imports:
     countrycode,
     stringr,
     duckdb,
-    DBI
+    DBI,
+    readxl
 Suggests: 
     rmarkdown
