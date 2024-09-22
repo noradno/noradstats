@@ -1,6 +1,6 @@
 # ========== Exported Function ==========
 
-#' Create a table of the Norfund DIM Climate Ratio and store it in the DuckDB database
+#' Create a table of the Norfund DIM Portfolio Climate Ratio and store it in the DuckDB database
 #'
 #' This function calculates the annual climate mitigation ratio (2 year averages) of the Norfund DIM (development mandate) portfolio and saves the year-ratio data frame in the DuckDB database.
 #' The user must provide an Excel file containing the Norfund CIM (Climate Investment Mandate) agreements to be excluded.
@@ -8,7 +8,7 @@
 #' @details 
 #' After running this function, the 'norfund_dim_climate_ratio' table will be created or overwritten in 
 #' the DuckDB database, and a success message will be displayed.
-#' The `create_table_norfund_climate_ratio_to_db()` function performs the following steps using internal helper functions:
+#' The `create_norfund_dim_portfolio_climate_ratio_to_db()` function performs the following steps using internal helper functions:
 #' \itemize{
 #'   \item `import_cim_data()`: Imports the CIM agreements data from an Excel file.
 #'   \item `prepare_norfund_dim_data()`: Prepares the Norfund DIM data by importing statsys data, filtering out CIM agreements, 
@@ -27,13 +27,13 @@
 #' @examples
 #' \dontrun{
 #' # Use default CIM file path
-#' create_table_norfund_climate_ratio_to_db()
+#' create_norfund_dim_portfolio_climate_ratio_to_db()
 #'
 #' # Specify a different CIM file path
-#' create_table_norfund_climate_ratio_to_db("path/to/cim_file.xlsx")
+#' create_norfund_dim_portfolio_climate_ratio_to_db("path/to/cim_file.xlsx")
 #' }
 #' @export
-create_table_norfund_climate_ratio_to_db <- function(cim_filepath = "avtalenr_cim.xlsx") {
+create_norfund_dim_portfolio_climate_ratio_to_db <- function(cim_filepath = "agreement_number_norfund_cim.xlsx") {
   # Imports CIM agreements data from an Excel file.
   df_cim <- import_cim_data(cim_filepath)
   # Prepares the Norfund DIM data by filtering out CIM etc, and processing.
@@ -42,6 +42,8 @@ create_table_norfund_climate_ratio_to_db <- function(cim_filepath = "avtalenr_ci
   df_norfund_dim_climate_ratio <- calculate_climate_ratio(df_norfund_dim)
   # Saves the climate ratio data to the DuckDB database.
   save_climate_ratio_to_db(df_norfund_dim_climate_ratio)
+
+  return(df_norfund_dim_climate_ratio)
 }
 
 # ========== Internal Helper Functions ==========
@@ -54,11 +56,19 @@ create_table_norfund_climate_ratio_to_db <- function(cim_filepath = "avtalenr_ci
 #' The Excel file must contain two columns: `agreement_number` and `cim_dim`.
 #' 
 #' @return A data frame containing the CIM agreements.
-import_cim_data <- function(filepath = "avtalenr_cim.xlsx") {
+import_cim_data <- function(filepath = "agreement_number_norfund_cim.xlsx") {
   if (!file.exists(filepath)) {
     stop("The CIM Excel file does not exist: ", filepath)
   }
-  read_xlsx(filepath)
+  
+  df_cim <- read_xlsx(filepath)
+
+  # Check if the 'agreement_number' column exists
+  if (!"agreement_number" %in% colnames(df_cim)) {
+     stop("The Excel file must contain a column named 'agreement_number'.")
+   }
+  
+  return(df_cim)
 }
 
 #' Prepare Norfund DIM Data (internal function)
@@ -74,8 +84,11 @@ prepare_norfund_dim_data <- function(cim_data) {
     filter(type_of_flow == "OOF") |>  
     filter(year >= 2014) |>  
     anti_join(cim_data, by = "agreement_number") |>  
-    mutate(total_finance_nok = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3)) |> 
-    rename(mitigation_finance_nok = climate_mitigation_nok_mill_gross_fix)  
+    mutate(
+      total_finance_nok = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3),
+      mitigation_finance_nok = climate_mitigation_nok_mill_gross_fix * 1e6
+    )
+  
   return(df_norfund_dim)
 }
 
@@ -110,7 +123,7 @@ save_climate_ratio_to_db <- function(df_climate_ratio) {
     stop("The DuckDB database file does not exist or is inaccessible: ", db_path)
   }
   con <- dbConnect(duckdb(), db_path)
-  dbWriteTable(con, "norfund_dim_climate_ratio", df_climate_ratio, overwrite = TRUE)
+  dbWriteTable(con, "norfund_dim_portfolio_climate_ratio", df_climate_ratio, overwrite = TRUE)
   dbDisconnect(con, shutdown = TRUE)
-  message("🎉 Success! The 'norfund_dim_climate_ratio' table has been successfully updated in the DuckDB database.")
+  message("🎉 Success! The 'norfund_dim_portfolio_climate_ratio' table has been successfully updated in the DuckDB database.")
 }
