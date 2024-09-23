@@ -11,7 +11,7 @@
 #' The `create_norfund_dim_portfolio_climate_ratio_to_db()` function performs the following steps using internal helper functions:
 #' \itemize{
 #'   \item `import_cim_data()`: Imports the CIM agreements data from an Excel file.
-#'   \item `prepare_norfund_dim_data()`: Prepares the Norfund DIM data by importing statsys data, filtering out CIM agreements, 
+#'   \item `prepare_norfund_dim_data()`: Prepares the Norfund DIM data by importing statsys data, filtering out CIM agreements from 2022 onwards, 
 #'   and performing necessary data processing.
 #'   \item `calculate_climate_ratio()`: Calculates the two-year climate mitigation ratio.
 #'   \item `save_climate_ratio_to_db()`: Saves the calculated climate ratio data to the DuckDB database.
@@ -75,15 +75,16 @@ import_cim_data <- function(filepath = "agreement_number_norfund_cim.xlsx") {
 #'
 #' This is an **internal helper function** and is not exported for direct use. It imports statsys data and
 #' process the data to include only relevant Norfund DIM data (Development Investment Mandate (DIM).
+#' Excludes CIF agreements from 2022 and onwards (keeping old agreements before CIM was created - as there are old agreements also transfered from DIM to CIM in 2022)
 #' @return A data frame of the Norfund DIM data.
-prepare_norfund_dim_data <- function(cim_data) {
+prepare_norfund_dim_data <- function(df_cim) {
   df_norfund_dim <- read_statsys() |> 
     add_cols_climate_clean() |> 
     filter(extending_agency == "Norfund") |> 
     filter(type_of_assistance != "Administration") |>  
     filter(type_of_flow == "OOF") |>  
     filter(year >= 2014) |>  
-    anti_join(cim_data, by = "agreement_number") |>  
+    filter(!(year >= 2022 & agreement_number %in% df_cim$agreement_number)) |> 
     mutate(
       total_finance_nok = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3),
       mitigation_finance_nok = climate_mitigation_nok_mill_gross_fix * 1e6
@@ -97,8 +98,8 @@ prepare_norfund_dim_data <- function(cim_data) {
 #' This is an **internal helper function** and is not exported for direct use. It calculates
 #' the two-year climate mitigation ratio for the Norfund DIM data.
 #' @return A data frame containing the climate mitigation ratios.
-calculate_climate_ratio <- function(df_dim) {
-  df_dim_climate_ratio <- df_dim |> 
+calculate_climate_ratio <- function(df_norfund_dim) {
+  df_norfund_dim_climate_ratio <- df_norfund_dim |> 
     group_by(year) |> 
     summarize(
       mitigation_finance_nok = sum(mitigation_finance_nok, na.rm = TRUE),
@@ -110,20 +111,20 @@ calculate_climate_ratio <- function(df_dim) {
                               (lag(total_finance_nok) + total_finance_nok)
     ) |> 
     ungroup()
-  return(df_dim_climate_ratio)
+  return(df_norfund_dim_climate_ratio)
 }
 
 #' Save Climate Mitigation Ratio Data to DuckDB (internal function)
 #'
 #' This is an **internal helper function** and is not exported for direct use. It saves
 #' the calculated Norfund DIM climate ratio data to the DuckDB database and diconnects.
-save_climate_ratio_to_db <- function(df_climate_ratio) {
+save_climate_ratio_to_db <- function(df_norfund_dim_climate_ratio) {
   db_path <- get_duckdb_path()
   if (!file.exists(db_path)) {
     stop("The DuckDB database file does not exist or is inaccessible: ", db_path)
   }
   con <- dbConnect(duckdb(), db_path)
-  dbWriteTable(con, "norfund_dim_portfolio_climate_ratio", df_climate_ratio, overwrite = TRUE)
+  dbWriteTable(con, "norfund_dim_portfolio_climate_ratio", df_norfund_dim_climate_ratio, overwrite = TRUE)
   dbDisconnect(con, shutdown = TRUE)
   message("🎉 Success! The 'norfund_dim_portfolio_climate_ratio' table has been successfully updated in the DuckDB database.")
 }

@@ -26,7 +26,7 @@ the DuckDB database, and a success message will be displayed.
 The `create_norfund_dim_portfolio_climate_ratio_to_db()` function performs the following steps using internal helper functions:
 \itemize{
   \item `import_cim_data()`: Imports the CIM agreements data from an Excel file.
-  \item `prepare_norfund_dim_data()`: Prepares the Norfund DIM data by importing statsys data, filtering out CIM agreements, 
+  \item `prepare_norfund_dim_data()`: Prepares the Norfund DIM data by importing statsys data, filtering out CIM agreements from 2022 onwards, 
   and performing necessary data processing.
   \item `calculate_climate_ratio()`: Calculates the two-year climate mitigation ratio.
   \item `save_climate_ratio_to_db()`: Saves the calculated climate ratio data to the DuckDB database.

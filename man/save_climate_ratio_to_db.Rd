@@ -5,7 +5,7 @@
 \alias{save_climate_ratio_to_db}
 \title{Save Climate Mitigation Ratio Data to DuckDB (internal function)}
 \usage{
-save_climate_ratio_to_db(df_climate_ratio)
+save_climate_ratio_to_db(df_norfund_dim_climate_ratio)
 }
 \description{
 This is an **internal helper function** and is not exported for direct use. It saves

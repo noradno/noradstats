@@ -5,7 +5,7 @@
 \alias{calculate_climate_ratio}
 \title{Calculate Climate Mitigation Ratio for Norfund DIM (internal function)}
 \usage{
-calculate_climate_ratio(df_dim)
+calculate_climate_ratio(df_norfund_dim)
 }
 \value{
 A data frame containing the climate mitigation ratios.
