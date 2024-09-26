@@ -24,6 +24,7 @@
 #' @importFrom dplyr filter mutate rename summarize group_by ungroup arrange anti_join if_else
 #' @importFrom DBI dbConnect dbWriteTable dbDisconnect
 #' @importFrom duckdb duckdb
+#' @importFrom stringr str_trim
 #' @examples
 #' \dontrun{
 #' # Use default CIM file path
@@ -36,10 +37,16 @@
 create_norfund_dim_portfolio_climate_ratio_to_db <- function(cim_filepath = "agreement_number_norfund_cim.xlsx") {
   # Imports CIM agreements data from an Excel file.
   df_cim <- import_cim_data(cim_filepath)
+  print(df_cim)
+
   # Prepares the Norfund DIM data by filtering out CIM etc, and processing.
   df_norfund_dim <- prepare_norfund_dim_data(df_cim)
+  print(df_norfund_dim)
+  
   # Calculates the two-year climate mitigation ratios
   df_norfund_dim_climate_ratio <- calculate_climate_ratio(df_norfund_dim)
+  print(df_norfund_dim_climate_ratio)
+  
   # Saves the climate ratio data to the DuckDB database.
   save_climate_ratio_to_db(df_norfund_dim_climate_ratio)
 
@@ -68,6 +75,9 @@ import_cim_data <- function(filepath = "agreement_number_norfund_cim.xlsx") {
      stop("The Excel file must contain a column named 'agreement_number'.")
    }
   
+  df_cim <- df_cim |> 
+    mutate(agreement_number = str_trim(agreement_number))
+  
   return(df_cim)
 }
 
@@ -82,8 +92,9 @@ prepare_norfund_dim_data <- function(df_cim) {
     add_cols_climate_clean() |> 
     filter(extending_agency == "Norfund") |> 
     filter(type_of_assistance != "Administration") |>  
-    filter(type_of_flow == "OOF") |>  
-    filter(year >= 2014) |>  
+    filter(type_of_flow == "OOF") |>
+    filter(year >= 2014) |> 
+    mutate(agreement_number = str_trim(agreement_number)) |> 
     filter(!(year >= 2022 & agreement_number %in% df_cim$agreement_number)) |> 
     mutate(
       total_finance_nok = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3),
@@ -105,12 +116,13 @@ calculate_climate_ratio <- function(df_norfund_dim) {
       mitigation_finance_nok = sum(mitigation_finance_nok, na.rm = TRUE),
       total_finance_nok = sum(total_finance_nok, na.rm = TRUE)
     ) |> 
+    ungroup() |> 
     arrange(year) |> 
     mutate(
       climate_ratio_2yr_avg = (lag(mitigation_finance_nok) + mitigation_finance_nok) / 
                               (lag(total_finance_nok) + total_finance_nok)
-    ) |> 
-    ungroup()
+    )
+  
   return(df_norfund_dim_climate_ratio)
 }
 
