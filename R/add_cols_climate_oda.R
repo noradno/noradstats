@@ -3,7 +3,7 @@
 #' This function takes an existing statsys data frame as input and adds public climate ODA columns.
 #' Earmarked climate ODA is calculated using the Rio Markers for Climate Change adaptation and mitigation, applying a 40 percent coefficient for activities with only a significant climate change objective(s).
 #' Imputed multilateral climate ODA is calculated using the OECD imputed multilateral shares, along with Norad's temporary estimates for the most recent year(s).
-#' Imputed ordinary Norfund climate ODA is calculated by Norad using the imputed multilateral shares methodology.
+#' Imputed ordinary Norfund climate ODA (2 year averages) is calculated by Norad using the imputed multilateral shares methodology.
 #' All amounts are expressed in net disbursements.
 #' The function returns the statsys data frame with the following additional columns for climate ODA:
 #' \describe{
@@ -46,16 +46,15 @@ add_cols_climate_oda <- function(df_oda) {
   # Import imputed multi shares from DuckDB and filter for climate shares
   df_multi_climate <- read_imputed_multi_shares() |> 
     filter(marker == "Climate") |> 
-    rename(multi_climate_shares = share) |> 
-    select(agreement_partner, year, multi_climate_shares)
+    rename(multi_climate_share = share) |> 
+    select(agreement_partner, year, multi_climate_share)
  
-  # Join the imputed multi climate_shares column to df_oda data
+  # Join the imputed multi climate_share column to df_oda data
   df_oda <- df_oda |> 
     left_join(df_multi_climate, join_by(agreement_partner == agreement_partner, year == year))
 
   # Import imputed norfund climate shares
-  df_imputed_norfund_climate_shares <- read_imputed_norfund_climate_shares() |> 
-    rename(norfund_climate_shares = climate_share_2yr_avg)
+  df_imputed_norfund_climate_shares <- read_imputed_norfund_climate_shares()
 
   # Join the imputed norfund climate_shares column to df_oda
   df_oda <- df_oda |> 
@@ -73,9 +72,9 @@ add_cols_climate_oda <- function(df_oda) {
         (pm_climate_change_adaptation == "Main objective" | pm_climate_change_mitigation == "Main objective") ~ disbursed_nok,
         (pm_climate_change_adaptation == "Significant objective" | pm_climate_change_mitigation == "Significant objective") ~ disbursed_nok * 0.4,
         # Imputed climate ordinary Norfund
-        agreement_number %in% df_imputed_norfund_climate_shares$agreement_number ~ disbursed_nok * coalesce(norfund_climate_shares, 0),
+        agreement_number %in% df_imputed_norfund_climate_shares$agreement_number ~ disbursed_nok * coalesce(norfund_climate_share, 0),
         # Imputed climate multilateral
-        type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner ~ disbursed_nok * coalesce(multi_climate_shares, 0),
+        type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner ~ disbursed_nok * coalesce(multi_climate_share, 0),
         .default = 0
       ),
       # Earmarked adaptation ODA
@@ -86,9 +85,9 @@ add_cols_climate_oda <- function(df_oda) {
       ),
       # Earmarked mitigation ODA (incl. imputed ordinary Norfund as a whole)
       climate_mitigation_oda_earmarked_nok = case_when(
-        pm_climate_change_mitigation == "Main objective" & is.na(norfund_climate_shares) ~ disbursed_nok,
-        pm_climate_change_mitigation == "Significant objective" & is.na(norfund_climate_shares) ~ disbursed_nok * 0.4,
-        agreement_number %in% df_imputed_norfund_climate_shares$agreement_number ~ disbursed_nok * coalesce(norfund_climate_shares, 0),
+        pm_climate_change_mitigation == "Main objective" & is.na(norfund_climate_share) ~ disbursed_nok,
+        pm_climate_change_mitigation == "Significant objective" & is.na(norfund_climate_share) ~ disbursed_nok * 0.4,
+        agreement_number %in% df_imputed_norfund_climate_shares$agreement_number ~ disbursed_nok * coalesce(norfund_climate_share, 0),
         .default = 0
       )
     )
@@ -128,9 +127,9 @@ add_cols_climate_oda <- function(df_oda) {
     )
   )
   
-  # Remove the columns climate_shares and norfund_climate_shares
+  # Remove the columns climate_shares and norfund_climate_share
   df_oda <- df_oda |> 
-    select(-c(multi_climate_shares, norfund_climate_shares))
+    select(-c(multi_climate_share, norfund_climate_share))
 
   # Return the final dataframe with the additional climate finance column
   return(df_oda)

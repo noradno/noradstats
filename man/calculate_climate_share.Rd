@@ -13,5 +13,5 @@ A data frame containing the climate mitigation shares.
 \description{
 This is an **internal helper function** and is not exported for direct use. It calculates
 the two-year climate mitigation share for the Norfund DIM data.
-Removes rows with NA climate_share_2yr_avg (2014, the first year)
+Removes rows with NA climate_share (2014, the first year)
 }

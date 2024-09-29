@@ -1,11 +1,11 @@
-#' Read Imputed Norfund Shares data into R
+#' Read Imputed Norfund Climate Shares data into R
 #'
-#' This function imports from the DuckDB database a data frame of the annual imputed Norfund climate shares.
+#' This function imports from the DuckDB database a data frame of the annual imputed Norfund climate shares (2 year averages) from 2015 and later.
 #'
 #' @importFrom DBI dbConnect dbDisconnect dbReadTable
 #' @importFrom duckdb duckdb
 #' @importFrom tibble as_tibble
-#' @return Returns a tibble with two columns: `agreement_number`, `year`, and `climate_share_2yr_avg` from the 'imputed_norfund_climate_share' table in the DuckDB database.
+#' @return Returns a tibble with two columns: `agreement_number`, `year`, and `climate_share` from the 'imputed_norfund_climate_share' table in the DuckDB database.
 #' @examples
 #' \dontrun{
 #' # Read the imputed_norfund_climate_share table from the DuckDB database:

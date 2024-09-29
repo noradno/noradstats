@@ -5,15 +5,15 @@
 \alias{import_cim_data}
 \title{Import CIM Data from Excel (internal function)}
 \usage{
-import_cim_data(filepath = "agreement_number_norfund_cim.xlsx")
+import_cim_data(cim_filepath)
+}
+\arguments{
+\item{cim_filepath}{A string. The path to the Excel file.}
 }
 \value{
 A data frame containing the CIM agreements.
 }
 \description{
-This is an **internal helper function** and is not exported for direct use. It reads a table of
+This is an **internal helper function** and is not exported for direct use. It reads a table of 
 Climate Investment Mandate (CIM) data from an Excel file.
-}
-\details{
-The Excel file must contain two columns: `agreement_number` and `cim_dim`.
 }

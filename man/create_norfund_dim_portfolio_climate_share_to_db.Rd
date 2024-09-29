@@ -6,7 +6,7 @@
 \title{Create a table of the Norfund DIM Portfolio Climate Share and store it in the DuckDB database}
 \usage{
 create_norfund_dim_portfolio_climate_share_to_db(
-  cim_filepath = "agreement_number_norfund_cim.xlsx"
+  cim_filepath = "agreement_number_norfund_cim_portfolio.xlsx"
 )
 }
 \arguments{

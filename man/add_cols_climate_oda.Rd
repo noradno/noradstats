@@ -16,7 +16,7 @@ An ODA data frame with an additional `climate_oda_nok` column.
 This function takes an existing statsys data frame as input and adds public climate ODA columns.
 Earmarked climate ODA is calculated using the Rio Markers for Climate Change adaptation and mitigation, applying a 40 percent coefficient for activities with only a significant climate change objective(s).
 Imputed multilateral climate ODA is calculated using the OECD imputed multilateral shares, along with Norad's temporary estimates for the most recent year(s).
-Imputed ordinary Norfund climate ODA is calculated by Norad using the imputed multilateral shares methodology.
+Imputed ordinary Norfund climate ODA (2 year averages) is calculated by Norad using the imputed multilateral shares methodology.
 All amounts are expressed in net disbursements.
 The function returns the statsys data frame with the following additional columns for climate ODA:
 \describe{

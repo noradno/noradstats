@@ -34,7 +34,7 @@
 #' create_norfund_dim_portfolio_climate_share_to_db("path/to/cim_file.xlsx")
 #' }
 #' @export
-create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath = "agreement_number_norfund_cim.xlsx") {
+create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath = "agreement_number_norfund_cim_portfolio.xlsx") {
   # Imports CIM agreements data from an Excel file.
   df_cim <- import_cim_data(cim_filepath)
   print(df_cim)
@@ -45,7 +45,6 @@ create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath = "agr
   
   # Calculates the two-year climate mitigation shares
   df_norfund_dim_climate_share <- calculate_climate_share(df_norfund_dim)
-  print(df_norfund_dim_climate_share)
   
   # Saves the climate share data to the DuckDB database.
   save_climate_share_to_db(df_norfund_dim_climate_share)
@@ -57,18 +56,17 @@ create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath = "agr
 
 #' Import CIM Data from Excel (internal function)
 #'
-#' This is an **internal helper function** and is not exported for direct use. It reads a table of
+#' This is an **internal helper function** and is not exported for direct use. It reads a table of 
 #' Climate Investment Mandate (CIM) data from an Excel file.
 #'
-#' The Excel file must contain two columns: `agreement_number` and `cim_dim`.
-#' 
+#' @param cim_filepath A string. The path to the Excel file.
 #' @return A data frame containing the CIM agreements.
-import_cim_data <- function(filepath = "agreement_number_norfund_cim.xlsx") {
-  if (!file.exists(filepath)) {
-    stop("The CIM Excel file does not exist: ", filepath)
+import_cim_data <- function(cim_filepath) {
+  if (!file.exists(cim_filepath)) {
+    stop("The agreement_number_norfund_cim_portfolio.xlsx file does not exist: ", cim_filepath)
   }
   
-  df_cim <- read_xlsx(filepath)
+  df_cim <- read_xlsx(cim_filepath)
 
   # Check if the 'agreement_number' column exists
   if (!"agreement_number" %in% colnames(df_cim)) {
@@ -108,7 +106,7 @@ prepare_norfund_dim_data <- function(df_cim) {
 #'
 #' This is an **internal helper function** and is not exported for direct use. It calculates
 #' the two-year climate mitigation share for the Norfund DIM data.
-#' Removes rows with NA climate_share_2yr_avg (2014, the first year)
+#' Removes rows with NA climate_share (2014, the first year)
 #' @return A data frame containing the climate mitigation shares.
 calculate_climate_share <- function(df_norfund_dim) {
   df_norfund_dim_climate_share <- df_norfund_dim |> 
@@ -120,10 +118,10 @@ calculate_climate_share <- function(df_norfund_dim) {
     ungroup() |> 
     arrange(year) |> 
     mutate(
-      climate_share_2yr_avg = (lag(mitigation_finance_nok) + mitigation_finance_nok) / 
+      climate_share = (lag(mitigation_finance_nok) + mitigation_finance_nok) / 
                               (lag(total_finance_nok) + total_finance_nok)
     ) |> 
-    filter(!is.na(climate_share_2yr_avg))
+    filter(!is.na(climate_share))
   
   return(df_norfund_dim_climate_share)
 }

@@ -6,29 +6,31 @@
 #' capitalisation of ordinary Norfund DIM and save the table in DuckDB database.
 #'
 #' Steps:
-#' 1. Imports capitalisation agreements from an Excel spreadsheet ("agreement_number_norfund_dim_capitalisation").
+#' 1. Imports capitalisation agreements from MFA to ordinary Norfund (DIM) from an Excel spreadsheet ("agreement_number_norfund_dim_capitalisation").
 #' 2. Imports the annual climate mitigation share (2-year average) for the Norfund DIM portfolio from the DuckDB database.
 #' 3. Builds a data frame of the imputed climate share of the Norfund capitalisation agreements by year.
 #' 4. Saves the data frame into the DuckDB database under the table name 'imputed_norfund_climate_share'.
 #'
-#' @param filepath A string. The path to the Excel file containing the capitalisation agreements. The file must contain a column named 'agreement_number'.
-#' @return A data frame containing 'agreement_number', 'year', and 'climate_share_2yr_avg' for the imputed climate share of Norfund capitalisation agreements.
+#' @param cap_dim_filepath A string. The path to the Excel file containing the capitalisation agreements. The file must contain a column named 'agreement_number'.
+#' @return A data frame containing 'agreement_number', 'year', and 'climate_share' for the imputed climate share of Norfund capitalisation agreements.
 #' @importFrom readxl read_xlsx
 #' @importFrom dplyr filter mutate select distinct left_join
 #' @importFrom DBI dbConnect dbWriteTable dbDisconnect
 #' @importFrom duckdb duckdb
 #' @export
-create_imputed_norfund_climate_share_to_db <- function(filepath = "agreement_number_norfund_dim_capitalisation.xlsx") {
+create_imputed_norfund_climate_share_to_db <- function(cap_dim_filepath = "agreement_number_norfund_dim_capitalisation.xlsx") {
   
   # Step 1: Import capitalisation data from Excel
-  df_capitalisation <- import_norfund_capitalisation(filepath)
+  df_capitalisation <- import_norfund_capitalisation(cap_dim_filepath)
+  print(df_capitalisation)
   
   # Step 2: Import Norfund climate share data from DuckDB
   df_norfund_dim_portfolio_climate_share <- import_norfund_dim_portfolio_climate_share()
+  print(df_norfund_dim_portfolio_climate_share)
   
   # Step 3: Build imputed Norfund climate data frame
   df_imputed_norfund_climate_share <- build_imputed_norfund_climate_share(df_capitalisation, df_norfund_dim_portfolio_climate_share)
-  
+
   # Step 4: Save the resulting data frame to the DuckDB database
   save_imputed_norfund_climate_share_to_db(df_imputed_norfund_climate_share)
 
@@ -37,15 +39,19 @@ create_imputed_norfund_climate_share_to_db <- function(filepath = "agreement_num
 
 # ========== Internal Helper Functions ==========
 
-# Internal function to read capitalisation data from Excel
-# This imports a data frame containing capitalisation agreements of Norfund DIM
-# The column in the data frame should be 'agreement_number', with rows being the unique agreement numbers.
-import_norfund_capitalisation <- function(filepath = "agreement_number_norfund_dim_capitalisation.xlsx") {
-  if (!file.exists(filepath)) {
-    stop("The capitalisation Excel file does not exist: ", filepath)
+#' Import Norfund Capitalisation Data (Internal Function)
+#'
+#' This internal function imports capitalisation agreements data for Norfund DIM 
+#' from an Excel file.
+#'
+#' @param cap_dim_filepath A string. The path to the Excel file of agreement numbers of capitalisation of ordinary Norfund DIM.
+#' @return A data frame containing the capitalisation agreements of ordinary Norfund DIM.
+import_norfund_capitalisation <- function(cap_dim_filepath) {
+  if (!file.exists(cap_dim_filepath)) {
+    stop("The capitalisation Excel file does not exist: ", cap_dim_filepath)
   }
   
-  df_capitalisation <- read_xlsx(filepath)  # Assigning the read data to a variable
+  df_capitalisation <- read_xlsx(cap_dim_filepath)
   
   # Check if the 'agreement_number' column exists
   if (!"agreement_number" %in% colnames(df_capitalisation)) {
@@ -70,7 +76,7 @@ import_norfund_dim_portfolio_climate_share <- function() {
   
   # Read Norfund climate share from DuckDB
   noradstats::read_norfund_dim_portfolio_climate_share() |> 
-    select(year, climate_share_2yr_avg)
+    select(year, climate_share)
 }
 
 # Internal function to create a data frame of imputed climate share of the capitalisation agreements per year.
@@ -87,7 +93,7 @@ build_imputed_norfund_climate_share <- function(df_capitalisation, df_norfund_di
 }
 
 # Internal function to save the resulting data frame into DuckDB
-# This saves the final data frame containing 'agreement_number', 'year', and 'climate_share_2yr_avg' 
+# This saves the final data frame containing 'agreement_number', 'year', and 'climate_share' 
 # into the DuckDB database, in a table named 'imputed_norfund_climate_share'.
 save_imputed_norfund_climate_share_to_db <- function(df_imputed_norfund_climate_share) {
   db_path <- get_duckdb_path()
