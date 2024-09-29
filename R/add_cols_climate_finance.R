@@ -1,6 +1,6 @@
 #' Add public climate finance columns to an existing statsys data frame
 #'
-#' This function takes an existing statsys data frame as input and adds public climate finance columns using the UNFCCC methodology.
+#' This function takes an existing statsys data frame as input and adds public climate finance columns using the UNFCCC methodology, including both Official Development Finance (ODA and OOF).
 #' Earmarked climate finance is calculated using the Rio Markers for Climate Change adaptation and mitigation, applying a 40 percent coefficient for activities with only a significant climate change objective(s).
 #' Imputed multilateral climate finance is calculated using the OECD imputed multilateral shares, along with Norad's temporary estimates for the most recent year(s).
 #' All amounts are expressed in gross disbursements, and any negative gross disbursements in the statsys database are set to 0.
@@ -62,15 +62,17 @@ add_cols_climate_finance <- function(df_statsys) {
   
   # Calculate climate finance using methodologies for climate-specific earmarked contributions (Rio Markers)
   # and climate-specific multilateral core contributions to multilateral organisations.
-  # Exclude Norfund to avoid double counting of the Rio-marked capitalisation of Norfund's Climate Investment Fund.
+  # Exclude the capitalisation agreement(s) of the Riomarked Climate investment mandate (CIM) to avoid double counting of capitalisations and outflows.
   # Return zeros instead of NAs for core contributions with missing climate share.
   df_statsys <- df_statsys |> 
     mutate(
-      # Climate finance (both earmarked and imputed multilateral)
+      # Climate finance (ODA and OOF from both earmarked and imputed multilateral channels)
       climate_finance_nok = case_when(
-        (pm_climate_change_adaptation == "Main objective" | pm_climate_change_mitigation == "Main objective") & agreement_partner != "Norfund" ~ amounts_extended,
+        # Earmarked support using Rio Markers. Exluding riomarked capitalisations of Norfund Climate Investment Mandate (CIM) by using general statements to avoid hardcoding agreement numbers.
+        (pm_climate_change_adaptation == "Main objective" | pm_climate_change_mitigation == "Main objective") & !(extending_agency == "UD - Oslo" & agreement_partner == "Norfund" & year >= 2022 & type_of_flow == "ODA") ~ amounts_extended,
         (pm_climate_change_adaptation == "Significant objective" | pm_climate_change_mitigation == "Significant objective") & agreement_partner != "Norfund" ~ amounts_extended * 0.4,
-        type_of_assistance == "Core contributions to multilat" & agreement_partner != "Norfund" ~ amounts_extended * coalesce(climate_share, 0),
+        # Imputed climate multilateral
+        type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner ~ amounts_extended * coalesce(climate_share, 0),
         .default = 0
       ),
       # Earmarked adaptation finance
@@ -92,7 +94,11 @@ add_cols_climate_finance <- function(df_statsys) {
   df_statsys <- df_statsys |> 
     mutate(
     # Logical variable to identify climate relevant activities qualitatively, mening Rio-marked activites (regardless of amounts extended) and positive climate shares.
-    climate_finance_tag = (pm_climate_change_adaptation != "None" | pm_climate_change_mitigation != "None" | (!is.na(climate_share) & climate_share != 0)),
+    climate_finance_tag = (
+      pm_climate_change_adaptation != "None" |
+        pm_climate_change_mitigation != "None" |
+          (type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner)
+      ),
 
     # Categorical variable for channel of climate finance: earmarked and imputed multilateral
     climate_finance_channel = case_when(

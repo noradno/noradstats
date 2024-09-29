@@ -13,7 +13,7 @@ add_cols_climate_finance(df_statsys)
 A statsys data frame with an additional `climate_finance_nok` column.
 }
 \description{
-This function takes an existing statsys data frame as input and adds public climate finance columns using the UNFCCC methodology.
+This function takes an existing statsys data frame as input and adds public climate finance columns using the UNFCCC methodology, including both Official Development Finance (ODA and OOF).
 Earmarked climate finance is calculated using the Rio Markers for Climate Change adaptation and mitigation, applying a 40 percent coefficient for activities with only a significant climate change objective(s).
 Imputed multilateral climate finance is calculated using the OECD imputed multilateral shares, along with Norad's temporary estimates for the most recent year(s).
 All amounts are expressed in gross disbursements, and any negative gross disbursements in the statsys database are set to 0.
