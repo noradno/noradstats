@@ -7,7 +7,7 @@
 #' @importFrom DBI dbConnect dbDisconnect dbReadTable
 #' @importFrom duckdb duckdb
 #' @importFrom tibble as_tibble
-#' @return Returns a tibble with two columns: `year` and `climate_ratio`, from the 'imputed_multi_shares' table in the DuckDB database.
+#' @return Returns a tibble with two columns: `aid_type`, `agreement_partner`, `marker`, `year` and `share`, from the 'imputed_multi_shares' table in the DuckDB database.
 #' @examples
 #' \dontrun{
 #' # Read the imputed_multi_shares table from the DuckDB database:

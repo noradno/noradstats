@@ -7,7 +7,7 @@
 read_imputed_multi_shares()
 }
 \value{
-Returns a tibble with two columns: `year` and `climate_ratio`, from the 'imputed_multi_shares' table in the DuckDB database.
+Returns a tibble with two columns: `aid_type`, `agreement_partner`, `marker`, `year` and `share`, from the 'imputed_multi_shares' table in the DuckDB database.
 }
 \description{
 This function imports from the DuckDB database a data frame of the annual imputed multilateral shares
