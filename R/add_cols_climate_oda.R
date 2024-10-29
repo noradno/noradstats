@@ -53,8 +53,9 @@ add_cols_climate_oda <- function(df_oda) {
   df_oda <- df_oda |> 
     left_join(df_multi_climate, join_by(agreement_partner == agreement_partner, year == year))
 
-  # Import imputed norfund climate shares
-  df_imputed_norfund_climate_shares <- read_imputed_norfund_climate_shares()
+  # Import imputed norfund climate shares. Renaming climate_share to norfund_climate_share to avoid confusion.
+  df_imputed_norfund_climate_shares <- read_imputed_norfund_climate_shares() |> 
+    rename(norfund_climate_share = climate_share)
 
   # Join the imputed norfund climate_shares column to df_oda
   df_oda <- df_oda |> 
