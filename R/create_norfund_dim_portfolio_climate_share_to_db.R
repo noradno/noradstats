@@ -95,8 +95,8 @@ prepare_norfund_dim_data <- function(df_cim) {
     mutate(agreement_number = str_trim(agreement_number)) |> 
     filter(!(year >= 2022 & agreement_number %in% df_cim$agreement_number)) |> 
     mutate(
-      total_finance_nok = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3),
-      mitigation_finance_nok = climate_mitigation_nok_mill_gross_fix * 1e6
+      total_finance_nok = amounts_extended_1000_nok * 1e3,
+      mitigation_finance_nok = climate_mitigation_nok_mill_gross * 1e6
     )
   
   return(df_norfund_dim)
