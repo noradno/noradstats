@@ -16,8 +16,9 @@ Returns dataframe with additional climate-relevant columns:
   \item climate_aid_nok_mill: Estimated earmarked climate aid in million NOK (40 percent of significant objective).
   \item climate_adaptation_nok_mill: Estimated earmarked aid targeting adaptation (40 percent of significant objective).
   \item climate_mitigation_nok_mill: Estimated earmarked aid targeting mitigation (40 percent of significant objective).
-  \item climate_mitigation_nok_mill_gross_fix: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting mitigation (negative extended amounts are excluded).
-  \item climate_aid_nok_gross_fix: For reporting of climate finance the UNFCCC. Gross disbursements (negative extended amounts are excluded).
+  \item climate_mitigation_nok_mill_gross: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting mitigation
+  \item climate_adaptation_nok_mill_gross: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting adaptation
+  \item climate_finance_nok_gross: For reporting of climate finance the UNFCCC. Gross disbursements
 }
 }
 \description{
