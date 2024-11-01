@@ -4,7 +4,7 @@
 #' Earmarked climate finance is calculated using the Rio Markers for Climate Change adaptation and mitigation, applying a 40 percent coefficient for activities with only a significant climate change objective(s).
 #' The Riomarked capitalisation(s) of Norfund Climate Investment Mandate/Climate Investment Fund is excluded to avoiding double counting, as the CIF investments are already included (OOF).
 #' Imputed multilateral climate finance is calculated using the OECD imputed multilateral shares, along with Norad's temporary estimates for the most recent year(s).
-#' All amounts are expressed in gross disbursements, and any negative gross disbursements in the statsys database are set to 0.
+#' All amounts are expressed in gross disbursements.
 #' Note: Climate finance to all developing countries is included, including countries that are not non-Annex 1 parties (such as Ukraine), and should therefore be excluded when reporting to the UNFCCC.
 #' The function returns the statsys data frame with the following additional columns for climate finance:
 #' \describe{
@@ -45,11 +45,9 @@ add_cols_climate_finance <- function(df_statsys) {
     Please ensure you have used `read_statsys()` and not `read_oda()`.")
   }
 
-  # Adjust amounts_extended in the provided statsys data frame
+  # Adjust amounts_extended from 1000 NOK to NOK
   df_statsys <- df_statsys |> 
-    mutate(
-      amounts_extended = if_else(amounts_extended_1000_nok < 0, 0, amounts_extended_1000_nok * 1e3)
-    )
+    mutate(amounts_extended = amounts_extended_1000_nok * 1e3)
   
   # Import imputed multi shares from DuckDB and filter for climate shares
   df_multi_climate <- read_imputed_multi_shares() |> 

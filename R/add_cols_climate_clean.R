@@ -8,8 +8,9 @@
 #'   \item climate_aid_nok_mill: Estimated earmarked climate aid in million NOK (40 percent of significant objective).
 #'   \item climate_adaptation_nok_mill: Estimated earmarked aid targeting adaptation (40 percent of significant objective).
 #'   \item climate_mitigation_nok_mill: Estimated earmarked aid targeting mitigation (40 percent of significant objective).
-#'   \item climate_mitigation_nok_mill_gross_fix: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting mitigation (negative extended amounts are excluded).
-#'   \item climate_aid_nok_gross_fix: For reporting of climate finance the UNFCCC. Gross disbursements (negative extended amounts are excluded).
+#'   \item climate_mitigation_nok_mill_gross: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting mitigation
+#'   \item climate_adaptation_nok_mill_gross: Handy for calculating the climate share of Norfund's investements. Estimated earmarked amounts extended targeting adaptation
+#'   \item climate_finance_nok_gross: For reporting of climate finance the UNFCCC. Gross disbursements
 #' }
 #' @export
 #
@@ -53,30 +54,24 @@ add_cols_climate_clean <- function(data) {
       .data$pm_climate_change_mitigation == "Significant objective" ~ .data$disbursed_mill_nok * 0.4,
       TRUE ~ as.numeric(0))) %>%
 
-    # column climate_mitigation_nok_mill_gross_fix
+    # column climate_mitigation_nok_mill_gross
 
-    dplyr::mutate(climate_mitigation_nok_mill_gross_fix = dplyr::case_when(
-      .data$pm_climate_change_mitigation == "Main objective" ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok / 1000),
-      .data$pm_climate_change_mitigation == "Significant objective" ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok / 1000) * 0.4,
+    dplyr::mutate(climate_mitigation_nok_mill_gross = dplyr::case_when(
+      .data$pm_climate_change_mitigation == "Main objective" ~ .data$amounts_extended_1000_nok / 1000,
+      .data$pm_climate_change_mitigation == "Significant objective" ~ (.data$amounts_extended_1000_nok / 1000) * 0.4,
       TRUE ~ as.numeric(0))) %>%
     
-    # column climate_adaptation_nok_mill_gross_fix
+    # column climate_adaptation_nok_mill_gross
     
-    dplyr::mutate(climate_adaptation_nok_mill_gross_fix = dplyr::case_when(
-      .data$pm_climate_change_adaptation == "Main objective" ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok / 1000),
-      .data$pm_climate_change_adaptation == "Significant objective" ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok / 1000) * 0.4,
+    dplyr::mutate(climate_adaptation_nok_mill_gross = dplyr::case_when(
+      .data$pm_climate_change_adaptation == "Main objective" ~ .data$amounts_extended_1000_nok / 1000,
+      .data$pm_climate_change_adaptation == "Significant objective" ~ (.data$amounts_extended_1000_nok / 1000) * 0.4,
       TRUE ~ as.numeric(0))) %>%
     
-    # column climate_finance_nok_gross_fix
+    # column climate_finance_nok_gross
     
-    dplyr::mutate(climate_finance_nok_gross_fix = dplyr::case_when(
-      .data$pm_climate_change_adaptation == "Main objective" | .data$pm_climate_change_mitigation == "Main objective" ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok * 1000),
-      .data$pm_climate_change_adaptation == "Significant objective" | .data$pm_climate_change_mitigation == 'Significant objective' ~
-        dplyr::if_else(.data$amounts_extended_1000_nok < 0, 0, .data$amounts_extended_1000_nok * 1000) * 0.4,
+    dplyr::mutate(climate_finance_nok_gross = dplyr::case_when(
+      .data$pm_climate_change_adaptation == "Main objective" | .data$pm_climate_change_mitigation == "Main objective" ~ .data$amounts_extended_1000_nok * 1000,
+      .data$pm_climate_change_adaptation == "Significant objective" | .data$pm_climate_change_mitigation == 'Significant objective' ~ (.data$amounts_extended_1000_nok * 1000) * 0.4,
       TRUE ~ as.numeric(0)))
 }
