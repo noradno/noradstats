@@ -73,43 +73,53 @@ add_cols_climate_finance <- function(df_statsys) {
       (pm_climate_change_adaptation != "None" | pm_climate_change_mitigation != "None")
     ) |>
     distinct(agreement_number)
-  
+
+# Logical variable to identify climate finance activities
+df_statsys <- df_statsys |>
+  mutate(
+    climate_finance_tag = case_when(
+      # Riomarked activities except for CIM capitalization (TRUE)
+      (pm_climate_change_adaptation != "None" | pm_climate_change_mitigation != "None") &
+        !agreement_number %in% vec_cim_capitalisation_agr ~ TRUE,
+      
+      # Climate-specific core contributions to multilateral climate partners (TRUE)
+      type_of_assistance == "Core contributions to multilat" & 
+        agreement_partner %in% df_multi_climate$agreement_partner ~ TRUE,
+      
+      # Other activities (FALSE)
+      .default = FALSE
+    )
+  )
+
+# Numeric variables of climate finance  
   df_statsys <- df_statsys |> 
     mutate(
       # Climate finance (ODA and OOF from both earmarked and imputed multilateral channels)
       climate_finance_nok = case_when(
         # Earmarked support using Rio Markers. Exluding the Riomarked capitalisation of Norfund CIM.
-        (pm_climate_change_adaptation == "Main objective" | pm_climate_change_mitigation == "Main objective") & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended,
-        (pm_climate_change_adaptation == "Significant objective" | pm_climate_change_mitigation == "Significant objective") & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended * 0.4,
+        (pm_climate_change_adaptation == "Main objective" | pm_climate_change_mitigation == "Main objective") & climate_finance_tag == TRUE ~ amounts_extended,
+        (pm_climate_change_adaptation == "Significant objective" | pm_climate_change_mitigation == "Significant objective") & climate_finance_tag == TRUE ~ amounts_extended * 0.4,
         # Imputed climate multilateral
-        type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner ~ amounts_extended * coalesce(climate_share, 0),
+        type_of_assistance == "Core contributions to multilat" & climate_finance_tag == TRUE ~ amounts_extended * coalesce(climate_share, 0),
         .default = 0
       ),
       # Earmarked adaptation finance. Exluding the Riomarked capitalisation of Norfund CIM.
       climate_adaptation_finance_earmarked_nok = case_when(
-        pm_climate_change_adaptation == "Main objective" & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended,
-        pm_climate_change_adaptation == "Significant objective" & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended * 0.4,
+        pm_climate_change_adaptation == "Main objective" & climate_finance_tag == TRUE ~ amounts_extended,
+        pm_climate_change_adaptation == "Significant objective" & climate_finance_tag == TRUE ~ amounts_extended * 0.4,
         .default = 0
       ),
       # Earmarked mitigation finance. Exluding the Riomarked capitalisation of Norfund CIM.
       climate_mitigation_finance_earmarked_nok = case_when(
-        pm_climate_change_mitigation == "Main objective" & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended,
-        pm_climate_change_mitigation == "Significant objective" & !agreement_number %in% vec_cim_capitalisation_agr ~ amounts_extended * 0.4,
+        pm_climate_change_mitigation == "Main objective" & climate_finance_tag == TRUE ~ amounts_extended,
+        pm_climate_change_mitigation == "Significant objective" & climate_finance_tag == TRUE ~ amounts_extended * 0.4,
         .default = 0
       )
     )
 
-  # Categorical variables
-  # Logical variable to identify valid years of climate finance activities
-  df_statsys <- df_statsys |> 
-    mutate(
-    # Logical variable to identify climate-relevant activities qualitatively, meaning Rio-marked activities and positive multilaeral climate shares. Exluding the Riomarked capitalisation of Norfund CIM.
-    climate_finance_tag = (
-      (pm_climate_change_adaptation != "None" & !agreement_number %in% vec_cim_capitalisation_agr) |
-      (pm_climate_change_mitigation != "None" & !agreement_number %in% vec_cim_capitalisation_agr) |
-      (type_of_assistance == "Core contributions to multilat" & agreement_partner %in% df_multi_climate$agreement_partner)
-    ),
-
+# Categorical variables
+df_statsys <- df_statsys |>
+  mutate(
     # Categorical variable for channel of climate finance: earmarked and imputed multilateral
     climate_finance_channel = case_when(
       type_of_assistance == "Core contributions to multilat" & climate_finance_tag ~ "Imputed multilateral climate finance",
@@ -133,7 +143,7 @@ add_cols_climate_finance <- function(df_statsys) {
       .default = NA
     )
   )
-  
+
   # Remove the columns amounts_extended and climate_share
   df_statsys <- df_statsys |> 
     select(-c(amounts_extended, climate_share))
