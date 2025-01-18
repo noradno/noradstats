@@ -10,17 +10,17 @@
 #' }
 #'
 #' ## Important:
-#' Before running this function, you must have already loaded the statsys data frame by using
+#' Before running this function, you must have already loaded the oda data frame by using
 #' \code{noradstats::read_oda()}.
 #' 
 #' @import dplyr
 #' @importFrom noradstats read_imputed_multi_sector_shares
-#' @param df_oda A statsys data frame, which must already be loaded into the environment.
-#' @return A statsys data frame with additional education columns.
+#' @param df_oda A oda data frame, which must already be loaded into the environment.
+#' @return A oda data frame with additional education columns.
 #' @export
 #'
 #' @examples
-#' # Load the statsys data
+#' # Load the oda data
 #' df_oda <- read_oda()
 #'
 #' # Add education column to the df_oda data
