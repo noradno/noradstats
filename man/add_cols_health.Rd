@@ -7,10 +7,10 @@
 add_cols_health(df_oda)
 }
 \arguments{
-\item{df_oda}{A statsys data frame, which must already be loaded into the environment.}
+\item{df_oda}{A oda data frame, which must already be loaded into the environment.}
 }
 \value{
-A statsys data frame with additional health columns.
+A oda data frame with additional health columns.
 }
 \description{
 This function takes an existing oda data frame as input and adds health columns.
@@ -24,11 +24,11 @@ The function returns the oda data frame with the following additional columns fo
 }
 \details{
 ## Important:
-Before running this function, you must have already loaded the statsys data frame by using
+Before running this function, you must have already loaded the oda data frame by using
 \code{noradstats::read_oda()}.
 }
 \examples{
-# Load the statsys data
+# Load the oda data
 df_oda <- read_oda()
 
 # Add health column to the df_oda data
