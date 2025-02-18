@@ -41,7 +41,7 @@ add_cols_climate_finance <- function(df_statsys) {
   # Check if the data contains any "OOF" (Other Official Flows) values, and not only "ODA" values,
   # to ensure the correct dataset is being used.
   if (!any(df_statsys$type_of_flow == "OOF")) {
-    stop("Error: The data frame must contain observations where 'type_of_flow' is 'OOF', not only 'ODA'.
+    warning("Warning: The data frame should contain observations where 'type_of_flow' is 'OOF', not only 'ODA'.
     Please ensure you have used `read_statsys()` and not `read_oda()`.")
   }
 
