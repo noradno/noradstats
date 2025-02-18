@@ -30,7 +30,7 @@ access_statsys <- function() {
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)
   
   # Create a proxy tibble connected to the Statsys table in the DuckDB database.
-  df_remote_statsys <- dplyr::tbl(con, "statsys")
+  df_remote_statsys <- dplyr::tbl(con, "statsys_official")
   
   return(df_remote_statsys)
 }

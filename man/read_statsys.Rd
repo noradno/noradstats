@@ -4,7 +4,10 @@
 \alias{read_statsys}
 \title{Read Statsys data into R}
 \usage{
-read_statsys()
+read_statsys(version = "statsys_official")
+}
+\arguments{
+\item{version}{A character string specifying which table to read from. If "official", the function reads from the "statsys" table. If "active", the function reads from the "active" table. Defaults to "official".}
 }
 \value{
 Returns a tibble of ODA, OOF and PF data from the statsys table in the DuckDB database.

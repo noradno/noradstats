@@ -5,13 +5,14 @@
 #' The data covers 1960 to recent year.
 #' The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 #'
+#' @param version A character string specifying which table to read from. If "official", the function reads from the "statsys" table. If "active", the function reads from the "active" table. Defaults to "official".
 #' @return Returns a tibble of ODA, OOF and PF data from the statsys table in the DuckDB database.
 #' @export
 #' @examples
 #' ?read_statsys()
 #'
 
-read_statsys <- function() {
+read_statsys <- function(version = "statsys_official") {
   
   # Specify user specific path to database file
   docs <- path.expand("~")
@@ -27,10 +28,19 @@ read_statsys <- function() {
   
   # Connect to the statsys table in the DuckDB database
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)
+
+  # Determine the table to read based on the version argument
+  if (version == "statsys_official") {
+    table_name <- "statsys_official"
+  } else if (version == "statsys_active") {
+    table_name <- "statsys_active"
+  } else {
+    stop("Invalid statsys version argument")
+  }
   
   # Read all data from the statsys table
   df_statsys <- con |>
-    DBI::dbReadTable("statsys") |>
+    DBI::dbReadTable(table_name) |>
     tibble::as_tibble()
   
   # Disconnect database

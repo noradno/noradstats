@@ -24,7 +24,7 @@
 #' input_csv <- "path/to/your_statsys_data.csv"
 #'
 #' # Call the function to save and overwrite the Statsys data
-#' create_statsys_data_to_db(input_csv)
+#' create_statsys_data_to_db(input_csv, version = "statsys_official")
 #' }
 
 #'
@@ -32,13 +32,18 @@
 #' @importFrom DBI dbConnect dbWriteTable dbDisconnect
 #' @importFrom duckdb duckdb
 #' @export
-create_statsys_data_to_db <- function(input_csv) {
+create_statsys_data_to_db <- function(input_csv, version = NULL) {
   
   # Check if the input file exists
   if (!file.exists(input_csv)) {
     stop("The input CSV file does not exist.")
   }
   
+  # Check if the version argument is provided and valid
+  if (is.null(version) || !(version %in% c("statsys_official", "statsys_active"))) {
+    stop("The version argument must be specified and must be either 'statsys_official' or 'statsys_active'.")
+  }
+
   # Get the user-specific DuckDB path
   db_path <- get_duckdb_path()
   
@@ -55,9 +60,12 @@ create_statsys_data_to_db <- function(input_csv) {
   
   # Connect to the database
   con <- dbConnect(duckdb(), db_path)
+
+  # Determine the table name based on the version argument
+  table_name <- version
   
   # Write the data to the database
-  dbWriteTable(con, "statsys", df_statsys, overwrite = TRUE)
+  dbWriteTable(con, table_name, df_statsys, overwrite = TRUE)
   
   # Close the connection
   dbDisconnect(con, shutdown = TRUE)

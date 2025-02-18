@@ -4,7 +4,7 @@
 \alias{create_statsys_data_to_db}
 \title{Function to import, save and overwrite Statsys Data to DuckDB Database}
 \usage{
-create_statsys_data_to_db(input_csv)
+create_statsys_data_to_db(input_csv, version = NULL)
 }
 \arguments{
 \item{input_csv}{A string. Path to the input CSV file containing the Statsys data.}
@@ -33,7 +33,7 @@ data is then written to the DuckDB database, overwriting the existing "statsys" 
 input_csv <- "path/to/your_statsys_data.csv"
 
 # Call the function to save and overwrite the Statsys data
-create_statsys_data_to_db(input_csv)
+create_statsys_data_to_db(input_csv, version = "statsys_official")
 }
 
 }
