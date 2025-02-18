@@ -45,7 +45,7 @@ df_oda <- df_oda |>
       dac_main_sector_code %in% c(311, 313) ~ "Long-term earmarked food ODA",
       dac_main_sector_code == 430 & dac_sub_sector_code %in% c(71, 72, 73) ~ "Long-term earmarked food ODA",
       dac_main_sector_code == 520 & dac_sub_sector_code == 10 ~ "Long-term earmarked food ODA",
-      agreement_partner == "Global Crop Diversity Trust" ~ "Long-term earmarked food ODA",
+      agreement_partner == "GCDT - Global Crop Diversity Trust" ~ "Long-term earmarked food ODA",
       
       # Long-term multilateral ODA
       type_of_assistance == "Core contributions to multilat" &
