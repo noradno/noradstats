@@ -25,6 +25,7 @@ Imports:
     stringr,
     duckdb,
     DBI,
-    readxl
+    readxl,
+    nanoparquet
 Suggests: 
     rmarkdown
