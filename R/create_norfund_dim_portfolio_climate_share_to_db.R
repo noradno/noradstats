@@ -87,7 +87,6 @@ import_cim_data <- function(cim_filepath) {
 #' @return A data frame of the Norfund DIM data.
 prepare_norfund_dim_data <- function(df_cim) {
   df_norfund_dim <- read_statsys() |> 
-    add_cols_climate_clean() |> 
     filter(extending_agency == "Norfund") |> 
     filter(type_of_assistance != "Administration") |>  
     filter(type_of_flow == "OOF") |>
@@ -96,7 +95,10 @@ prepare_norfund_dim_data <- function(df_cim) {
     filter(!(year >= 2022 & agreement_number %in% df_cim$agreement_number)) |> 
     mutate(
       total_finance_nok = amounts_extended_1000_nok * 1e3,
-      mitigation_finance_nok = climate_mitigation_nok_mill_gross * 1e6
+      mitigation_finance_nok = case_when(
+        pm_climate_change_mitigation == "Main objective" ~ amounts_extended_1000_nok * 1e3,
+        pm_climate_change_mitigation == "Significant objective" ~ (amounts_extended_1000_nok * 1e3) * 0.4,
+        .default = as.numeric(0))
     )
   
   return(df_norfund_dim)
