@@ -7,7 +7,7 @@
 read_statsys(version = "statsys_official")
 }
 \arguments{
-\item{version}{A character string specifying which table to read from. If "official", the function reads from the "statsys" table. If "active", the function reads from the "active" table. Defaults to "official".}
+\item{version}{A character string specifying which table to read from. If "statsys_official", the function reads from the "statsys_official" table. If "statsys_active", the function reads from the "statsys_active" table. Defaults to "statsys_official".}
 }
 \value{
 Returns a tibble of ODA, OOF and PF data from the statsys table in the DuckDB database.

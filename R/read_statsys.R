@@ -5,7 +5,7 @@
 #' The data covers 1960 to recent year.
 #' The DuckDB database file is located on Norads Microsoft Sharepoint site and is expected to be synced via Microsoft Teams to to the users local directory.
 #'
-#' @param version A character string specifying which table to read from. If "official", the function reads from the "statsys" table. If "active", the function reads from the "active" table. Defaults to "official".
+#' @param version A character string specifying which table to read from. If "statsys_official", the function reads from the "statsys_official" table. If "statsys_active", the function reads from the "statsys_active" table. Defaults to "statsys_official".
 #' @return Returns a tibble of ODA, OOF and PF data from the statsys table in the DuckDB database.
 #' @export
 #' @examples

@@ -4,7 +4,10 @@
 \alias{access_statsys}
 \title{Access database of Statsys data from R}
 \usage{
-access_statsys()
+access_statsys(version = "statsys_official")
+}
+\arguments{
+\item{version}{A character string specifying which table to connect to. If "statsys_official", the function connects to the "statsys_official" table. If "statsys_active", the function connects to the "statsys_active" table. Defaults to "statsys_official".}
 }
 \value{
 Returns a proxy tibble connected to a Statsys table in the DuckDB database.
