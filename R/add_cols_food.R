@@ -29,10 +29,9 @@
 #' # using the `read_oda()` function
 add_cols_food <- function(df_oda) {
 
-  # Check if the data contains any "OOF" (Other Official Flows) values, and not only "ODA" values,
-  # to ensure the correct dataset is being used.
-  if (!any(df_oda$type_of_flow == "ODA")) {
-    stop("Error: The data frame must contain observations where 'type_of_flow' is 'ODA' only.
+  # Check that the input data contain ODA data only and give warning if other types flows are also included.
+  if (any(df_oda$type_of_flow != "ODA")) {
+    warning("Attention: The data frame should contain observations where 'type_of_flow' is 'ODA' only.
     Please ensure you have used `read_oda()` and not `read_statsys()`.")
   }
 

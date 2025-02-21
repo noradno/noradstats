@@ -37,9 +37,9 @@
 #' # using the `read_oda()` function
 add_cols_climate_oda <- function(df_oda) {
 
-  # Check if the data contains any "OOF" (Other Official Flows) values, as only "ODA" data should be present
-  if (any(df_oda$type_of_flow == "OOF")) {
-    stop("Error: The data frame should only contain ODA data, not 'OOF'.
+  # Check that the input data contain ODA data only and give warning if other types flows are also included.
+  if (any(df_oda$type_of_flow != "ODA")) {
+    warning("Attention: The data frame should contain observations where 'type_of_flow' is 'ODA' only.
     Please ensure you have used `read_oda()` and not `read_statsys()`.")
   }
  
