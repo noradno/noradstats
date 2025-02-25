@@ -7,18 +7,15 @@
 #' @export
 get_duckdb_path <- function() {
   
-  # Specify user-specific path to database file
-  docs <- path.expand("~")  # Expands to home directory on both Windows and macOS
-  
-  # Detect the operating system and adjust the path accordingly
-  db_path_start <- switch(Sys.info()["sysname"],
-                 "Windows" = dirname(docs),  # Windows: home is the parent of "Documents"
-                 "Darwin" = docs,            # macOS: home is the same as "docs"
-                 docs)                       # Default for other systems
+  # The path start
+  db_path_start <- "C:/Users"
 
-  # Specify the relative path to the database file
+  # The user specific path
+  db_user <- sub(".*(aaw[a-zA-Z0-9]{3}).*", "\\1", path.expand("~"))
+
+  # The path end
   db_path_end <- "Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/3. Databasefiler/statsys.duckdb"
   
   # Combine the home directory with the user-specific path
-  file.path(db_path_start, db_path_end)
+  file.path(db_path_start, db_user, db_path_end)
 }
