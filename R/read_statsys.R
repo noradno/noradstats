@@ -7,6 +7,7 @@
 #'
 #' @param version A character string specifying which table to read from. If "statsys_official", the function reads from the "statsys_official" table. If "statsys_active", the function reads from the "statsys_active" table. Defaults to "statsys_official".
 #' @return Returns a tibble of ODA, OOF and PF data from the statsys table in the DuckDB database.
+#' @importFrom noradstats get_duckdb_path
 #' @export
 #' @examples
 #' ?read_statsys()
@@ -14,17 +15,8 @@
 
 read_statsys <- function(version = "statsys_official") {
   
-  # Specify user specific path to database file
-  docs <- path.expand("~")
-  
-  if (Sys.info()["sysname"] == "Windows") {
-    home <- dirname(docs)
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    home <- docs
-  }
-  
-  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/3. Databasefiler/statsys.duckdb"
-  default_path <- paste0(home, default_path_end)
+  # User specific file path
+  default_path <- get_duckdb_path()
   
   # Connect to the statsys table in the DuckDB database
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)

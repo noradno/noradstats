@@ -6,6 +6,7 @@
 #' Data source: https://stats.oecd.org/DownloadFiles.aspx?DatasetCode=CRS1
 #'
 #' @return A tibble containing international CRS data.
+#' @importFrom noradstats get_duckdb_path
 #' @export
 #' @examples
 #' ?read_oda()
@@ -13,17 +14,8 @@
 
 read_international_crs <- function() {
   
-  # Specify user specific path to database file
-  docs <- path.expand("~")
-  
-  if (Sys.info()["sysname"] == "Windows") {
-    home <- dirname(docs)
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    home <- docs
-  }
-  
-  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/06. Statistikkdatabaser/3. Databasefiler/statsys.duckdb"
-  default_path <- paste0(home, default_path_end)
+  # User specific file path
+  default_path <- get_duckdb_path()
   
   # Connect to the database table
   con <- DBI::dbConnect(duckdb::duckdb(), default_path)
