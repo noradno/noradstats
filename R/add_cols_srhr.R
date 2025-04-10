@@ -10,6 +10,7 @@
 #' }
 #'
 #' ## Important:
+#' SRHR support to GFATM and GFF is hardcoded using agreement numbers. New agreements with these partners must be hardcoded in the noradstats function noradstats::add_cols_srhr() before using this function.
 #' Before running this function, you must have already loaded the oda data frame by using
 #' \code{noradstats::read_oda()}.
 #' 
@@ -41,13 +42,19 @@ add_cols_srhr <- function(df_oda) {
   mutate(
     srhr_channel_lowlevel = case_when(
       dac_main_sector_code_name == "130 - Population policies/programmes and reproductive health" ~ "130 - Population policies/programmes and reproductive health",
-      type_of_assistance == "Core contributions to multilat" &
-        agreement_partner == "UNAIDS - UN Programme on HIV/AIDS" ~ "Core support to UNAIDS (100 pct)",
-      type_of_assistance == "Core contributions to multilat" &
-        agreement_partner == "UNFPA - UN Population Fund" ~ "Core support to UNFPA (100 pct)",
-      type_of_assistance == "Core contributions to multilat" &
-        agreement_partner == "GFATM - Global Fund to Fight AIDS, Tuberculosis and Malaria" ~ "Core support to GFATM (50 pct)",
-      agreement_number == "QZA-20/0303-1" ~ "Support to selected agreements with GEF (26 pct)",
+      type_of_assistance == "Core contributions to multilat" & agreement_partner == "UNAIDS - UN Programme on HIV/AIDS" ~ "Core support to UNAIDS (100 pct)",
+      type_of_assistance == "Core contributions to multilat" & agreement_partner == "UNFPA - UN Population Fund" ~ "Core support to UNFPA (100 pct)",
+      # GFATM regular core support
+      type_of_assistance == "Core contributions to multilat" & agreement_partner == "GFATM - Global Fund to Fight AIDS, Tuberculosis and Malaria" & agreement_number != "MUL-16/0022-1" ~ "Regular core support to GFATM (50 pct)",
+      # GFATM additional core support for COVID-19 response (different shares per year)
+      agreement_number == "MUL-16/0022-1" & year ==  2020 ~ "Additional core support to GFATM COVID-19 Response Mechanism (17 pct)",
+      agreement_number == "MUL-16/0022-1" & year ==  2021 ~ "Additional core support to GFATM COVID-19 Response Mechanism (4.07 pct)",
+      # GEF regular support up and including 2020
+      agreement_number == "QZA-15/0421" ~ "Support to selected agreement with GEF (28 pct)",
+      # GEF regular support after 2020
+      agreement_number == "QZA-20/0303-1" ~ "Support to selected agreement with GEF (26 pct)",
+      # GEF additional support for COVID-19
+      agreement_number == "QZA-20/0303-2" ~ "Support to selected agreement with GEF (18 pct)",
       .default = NA
     ),
 
@@ -69,14 +76,19 @@ add_cols_srhr <- function(df_oda) {
         "Core support to UNAIDS (100 pct)",
         "Core support to UNFPA (100 pct)"
       ) ~ disbursed_nok,
-      srhr_channel_lowlevel == "Core support to GFATM (50 pct)" ~ disbursed_nok * 0.5,
-      srhr_channel_lowlevel == "Support to selected agreements with GEF (26 pct)" ~ disbursed_nok * 0.26,
+      srhr_channel_lowlevel == "Regular core support to GFATM (50 pct)" ~ disbursed_nok * 0.5,
+      srhr_channel_lowlevel == "Additional core support to GFATM COVID-19 Response Mechanism (17 pct)" ~ disbursed_nok * 0.17,
+      srhr_channel_lowlevel == "Additional core support to GFATM COVID-19 Response Mechanism (4.07 pct)" ~ disbursed_nok * 0.0407,
+      srhr_channel_lowlevel == "Support to selected agreement with GEF (28 pct)" ~ disbursed_nok * 0.28,
+      srhr_channel_lowlevel == "Support to selected agreement with GEF (26 pct)" ~ disbursed_nok * 0.26,
+      srhr_channel_lowlevel == "Support to selected agreement with GEF (18 pct)" ~ disbursed_nok * 0.18,
       .default = as.double(0)
     )
   )
 
   # Return the final dataframe with the additional srhr columns
   return(df_oda)
+  warning("SRHR support to GFATM and GFF is hardcoded using agreement numbers. New agreements with these partners must be hardcoded in the noradstats function noradstats::add_cols_srhr() before using this function.")
 }
 
 

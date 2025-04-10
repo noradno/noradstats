@@ -24,6 +24,7 @@ The function returns the oda data frame with the following additional columns fo
 }
 \details{
 ## Important:
+SRHR support to GFATM and GFF is hardcoded using agreement numbers. New agreements with these partners must be hardcoded in the noradstats function noradstats::add_cols_srhr() before using this function.
 Before running this function, you must have already loaded the oda data frame by using
 \code{noradstats::read_oda()}.
 }
