@@ -49,12 +49,12 @@ add_cols_srhr <- function(df_oda) {
       # GFATM additional core support for COVID-19 response (different shares per year)
       agreement_number == "MUL-16/0022-1" & year ==  2020 ~ "Additional core support to GFATM COVID-19 Response Mechanism (17 pct)",
       agreement_number == "MUL-16/0022-1" & year ==  2021 ~ "Additional core support to GFATM COVID-19 Response Mechanism (4.07 pct)",
-      # GEF regular support up and including 2020
-      agreement_number == "QZA-15/0421" ~ "Support to selected agreement with GEF (28 pct)",
-      # GEF regular support after 2020
-      agreement_number == "QZA-20/0303-1" ~ "Support to selected agreement with GEF (26 pct)",
-      # GEF additional support for COVID-19
-      agreement_number == "QZA-20/0303-2" ~ "Support to selected agreement with GEF (18 pct)",
+      # GFF regular support up and including 2020
+      agreement_number == "QZA-15/0421" ~ "Support to selected agreement with GFF (28 pct)",
+      # GFF regular support after 2020
+      agreement_number == "QZA-20/0303-1" ~ "Support to selected agreement with GFF (26 pct)",
+      # GFF additional support for COVID-19
+      agreement_number == "QZA-20/0303-2" ~ "Support to selected agreement with GFF (18 pct)",
       .default = NA
     ),
 
@@ -79,9 +79,9 @@ add_cols_srhr <- function(df_oda) {
       srhr_channel_lowlevel == "Regular core support to GFATM (50 pct)" ~ disbursed_nok * 0.5,
       srhr_channel_lowlevel == "Additional core support to GFATM COVID-19 Response Mechanism (17 pct)" ~ disbursed_nok * 0.17,
       srhr_channel_lowlevel == "Additional core support to GFATM COVID-19 Response Mechanism (4.07 pct)" ~ disbursed_nok * 0.0407,
-      srhr_channel_lowlevel == "Support to selected agreement with GEF (28 pct)" ~ disbursed_nok * 0.28,
-      srhr_channel_lowlevel == "Support to selected agreement with GEF (26 pct)" ~ disbursed_nok * 0.26,
-      srhr_channel_lowlevel == "Support to selected agreement with GEF (18 pct)" ~ disbursed_nok * 0.18,
+      srhr_channel_lowlevel == "Support to selected agreement with GFF (28 pct)" ~ disbursed_nok * 0.28,
+      srhr_channel_lowlevel == "Support to selected agreement with GFF (26 pct)" ~ disbursed_nok * 0.26,
+      srhr_channel_lowlevel == "Support to selected agreement with GFF (18 pct)" ~ disbursed_nok * 0.18,
       .default = as.double(0)
     )
   )
