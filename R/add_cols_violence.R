@@ -95,25 +95,14 @@ add_cols_violence <- function(data) {
   
   # Include country-year level conflict columns to the the agreement level ODA data frame -----------
   
-  # Filter ODA dataframe from year 1989 onwards, in line with the conflict data
-  data <- data |> 
-    dplyr::filter(.data$Year >= 1989)
-  
   # Merge the selected conflict columns into the ODA data frame
-  data <- dplyr::left_join(data, df_country_violence, by = c("Year" = "year", "iso3" = "iso3"))
+  data <- dplyr::left_join(data, df_country_violence, by = c("year" = "year", "iso3" = "iso3"))
   
   # Change NA values in logical violence-variables to FALSE and the categorical violence_intensity variable to "none"
   data <- data |>
     dplyr::mutate(dplyr::across(c(.data$violence_25, .data$violence_150), ~ dplyr::if_else(is.na(.x), FALSE, .x))) |> 
     dplyr::mutate(violence_intensity = dplyr::if_else(is.na(.data$violence_intensity), "none", .data$violence_intensity))
-  
-  
-  # # Change NA values in these conflict intensity columns to "None" for country-specific observations. Other NAs are still NA.
-  # data <- data |>
-  #   dplyr::mutate(dplyr::across(dplyr::all_of(vec_conflict_intesity_variables), ~dplyr::if_else(
-  #     is.na(.x) & !stringr::str_detect(.data$`Recipient country`, "Regional|regional|Multilateral|Global|Administration"),
-  #     "none", .x)))
-  
+
   
   # Return the ODA data frame including the selected conflict variables. The data frame is filtered by year > 1989 
   return(data)
