@@ -35,7 +35,7 @@ add_cols_violence <- function(data) {
   }
   
   # Path to GED conflict data (rds).
-  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v23_1_incl_candidates.rds"
+  default_path_end <- "/Norad/Norad-Avd-Kunnskap - Statistikk og analyse/11. Analyseprosjekter/Faste arrangementer/Tall som teller/2024/ucdp/GEDEvent_v25_1.rds"
   default_path <- paste0(home, default_path_end)
   
   # Load UCDP Georeferenced Event Dataset (GED) of idividual events of organised violence (statebased, nonstate and onesided violence)
