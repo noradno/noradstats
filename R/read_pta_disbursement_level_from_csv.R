@@ -24,6 +24,12 @@ read_pta_disbursement_level_from_csv <- function(path) {
     head(-2) |> # Remove footer rows
     dplyr::filter(stringr::str_detect(cost_center_name, "^[A-ZÆØÅ]{2}")) |>  # Filter out invalid rows
     dplyr::mutate(
+      # Replace "-" values with "None" in all character variables
+      dplyr::across(
+        dplyr::where(is.character),
+        ~ dplyr::if_else(.x == "-", "None", .x)
+      ),
+      # Create Agreement type variable
       agreement_type = dplyr::if_else(
         disb_code %in% c("S", "SD", "SM"), "Subunit", "Standard", missing = "Standard"
       )
