@@ -16,8 +16,8 @@ read_pta_disbursement_level_from_csv <- function(path) {
     name_repair = janitor::make_clean_names,
     col_types = readr::cols(
       case_no = readr::col_character(),
-      agreement_period_from = readr::col_character(),
-      agreement_period_to = readr::col_character()
+      agreement_period_from = readr::col_integer(),
+      agreement_period_to = readr::col_integer()
     ),
     locale = readr::locale(decimal_mark = ",", grouping_mark = " ", encoding = "UTF-8")
   ) |>
@@ -29,7 +29,6 @@ read_pta_disbursement_level_from_csv <- function(path) {
       )
     ) |>
     dplyr::filter(
-      agr_phase != "E",
-      year < 2040
+      agr_phase != "E"
     )
 }
