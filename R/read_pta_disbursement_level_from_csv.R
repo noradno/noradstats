@@ -17,7 +17,8 @@ read_pta_disbursement_level_from_csv <- function(path) {
     col_types = readr::cols(
       case_no = readr::col_character(),
       agreement_period_from = readr::col_integer(),
-      agreement_period_to = readr::col_integer()
+      agreement_period_to = readr::col_integer(),
+      year = readr::col_integer()
     ),
     locale = readr::locale(decimal_mark = ",", grouping_mark = " ", encoding = "UTF-8")
   ) |>
