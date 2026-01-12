@@ -2,14 +2,19 @@
 % Please edit documentation in R/get_duckdb_path.R
 \name{get_duckdb_path}
 \alias{get_duckdb_path}
-\title{Get the user-specific path to the DuckDB database}
+\title{Get the local path to the DuckDB database file}
 \usage{
 get_duckdb_path()
 }
 \value{
-A string containing the full path to the DuckDB database.
+A character string containing the full local path to the DuckDB database file.
 }
 \description{
-This function determines the user-specific file path to the DuckDB database 
-based on the operating system and user home directory.
+Returns the user-specific file path to the shared DuckDB database.
+The database file is stored in a SharePoint-synced folder, but is accessed
+purely as a local file on disk (no network or API access).
+}
+\details{
+This function is used by all read_*() and create_*() functions that interact
+with the DuckDB database.
 }

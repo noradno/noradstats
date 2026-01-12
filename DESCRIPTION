@@ -11,6 +11,7 @@ LazyData: true
 RoxygenNote: 7.3.3
 Imports: 
     dplyr,
+    tidyr,
     magrittr,
     forcats,
     googledrive,
@@ -26,6 +27,8 @@ Imports:
     duckdb,
     DBI,
     readxl,
-    nanoparquet
+    nanoparquet,
+    purrr
 Suggests: 
-    rmarkdown
+    rmarkdown,
+    Microsoft365R
