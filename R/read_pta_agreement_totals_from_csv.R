@@ -1,7 +1,7 @@
 #' Read PTA Agreement totals report into R from user-specified CSV file
 #'
 #' Reads and processes the PTA Agreement totals report to produce a cleaned
-#' dataset of agreement-level metadata (title, partner, period, and expected totals).
+#' dataset of agreement-level data.
 #'
 #' @param path Path to the PTA Agreement totals CSV file
 #' @return A cleaned data frame with one row per agreement
@@ -25,13 +25,20 @@ read_pta_agreement_totals_from_csv <- function(path) {
       agreement_title,
       agreement_partner,
       agr_period,
-      expected_agreement_total
+      estimated_amount,
+      agreed_original_amount,
+      agreed_additional_grant,
+      total_agreed,
+      expected_agreement_total,
+      disbursed,
+      total_prognosis,
+      not_planned
     ) |>
     dplyr::mutate(
       # Convert thousands to NOK
-      expected_agreement_total = expected_agreement_total * 1000,
+      dplyr::across(tidyselect::where(is.numeric), \(x) x * 1e3),
       # Cleaning the agreement period variable (extract the years, allow NA years from to, and create additional from and to variable)
-      agreement_period = {
+      agr_period = {
         x <- stringr::str_squish(as.character(agr_period))
         x <- stringr::str_replace_all(x, "\\s*-\\s*", "-")
         
@@ -44,11 +51,9 @@ read_pta_agreement_totals_from_csv <- function(path) {
           NA_character_
         )
       },
-      agreement_period_from = as.integer(stringr::str_extract(agreement_period, "^\\d{4}")),
-      agreement_period_to   = as.integer(stringr::str_extract(agreement_period, "(?<=-)\\d{4}$"))
-    ) |>
-    dplyr::select(-agr_period) |> 
-    dplyr::relocate(expected_agreement_total, .after = dplyr::last_col())
+      agr_period_from = as.integer(stringr::str_extract(agr_period, "^\\d{4}")),
+      agr_period_to   = as.integer(stringr::str_extract(agr_period, "(?<=-)\\d{4}$"))
+    )
   
   return(df)
 }

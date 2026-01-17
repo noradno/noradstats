@@ -1,6 +1,6 @@
 #' Read PTA Disbursement level data table from DuckDB into R
 #'
-#' This function imports from the DuckDB database a data frame of PTA Disbursement level from 2000 and beyond
+#' This function imports from the DuckDB database a data frame of PTA Disbursement level
 #'
 #' @importFrom DBI dbConnect dbDisconnect dbReadTable
 #' @importFrom duckdb duckdb

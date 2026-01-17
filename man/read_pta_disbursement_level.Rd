@@ -10,7 +10,7 @@ read_pta_disbursement_level()
 Returns a tibble with many columns.
 }
 \description{
-This function imports from the DuckDB database a data frame of PTA Disbursement level from 2000 and beyond
+This function imports from the DuckDB database a data frame of PTA Disbursement level
 }
 \examples{
 \dontrun{
