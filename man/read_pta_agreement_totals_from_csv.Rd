@@ -14,5 +14,5 @@ A cleaned data frame with one row per agreement
 }
 \description{
 Reads and processes the PTA Agreement totals report to produce a cleaned
-dataset of agreement-level metadata (title, partner, period, and expected totals).
+dataset of agreement-level data.
 }

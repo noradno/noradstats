@@ -29,10 +29,6 @@ read_pta_disbursement_level_from_csv <- function(path) {
       dplyr::across(
         dplyr::where(is.character),
         ~ dplyr::if_else(.x == "-", "None", .x)
-      ),
-      # Create Agreement type variable
-      agreement_type = dplyr::if_else(
-        disb_code %in% c("S", "SD", "SM"), "Subunit", "Standard", missing = "Standard"
       )
     ) |>
     dplyr::filter(
