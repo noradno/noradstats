@@ -13,13 +13,15 @@ read_pta_agreement_totals_from_csv <- function(path) {
   df <- readr::read_csv2(
     file = path,
     skip = 13,
-    name_repair = janitor::make_clean_names,
     locale = readr::locale(decimal_mark = ",", grouping_mark = " ", encoding = "UTF-8")
   ) |>
-    dplyr::select(-dplyr::starts_with("x")) |>  # Drop empty columns
+    dplyr::select(-tidyselect::starts_with("...")) |>  # Drop empty columns
     head(-2)
   
   df <- df |>
+    # Snake case names
+    janitor::clean_names() |> 
+    # Selecting columns
     dplyr::select(
       agreement_no,
       agreement_title,
@@ -51,6 +53,7 @@ read_pta_agreement_totals_from_csv <- function(path) {
           NA_character_
         )
       },
+      # Creating extra variables
       agr_period_from = as.integer(stringr::str_extract(agr_period, "^\\d{4}")),
       agr_period_to   = as.integer(stringr::str_extract(agr_period, "(?<=-)\\d{4}$"))
     )

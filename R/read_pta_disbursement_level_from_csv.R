@@ -13,16 +13,23 @@ read_pta_disbursement_level_from_csv <- function(path) {
   readr::read_csv2(
     file = path,
     skip = 7,
-    name_repair = janitor::make_clean_names,
     col_types = readr::cols(
-      case_no = readr::col_character(),
-      agreement_period_from = readr::col_integer(),
-      agreement_period_to = readr::col_integer(),
-      year = readr::col_integer()
+      `Case no` = readr::col_character(),
+      `Agreement period (from)` = readr::col_integer(),
+      `Agreement period (to)` = readr::col_integer(),
+      Year = readr::col_integer(),
+      Date = readr::col_date(format = "%d.%m.%Y"),
+      Sector = readr::col_integer(),
+      `Sub sector` = readr::col_integer(),
+      `Main sector` = readr::col_integer(),
+      `Cost center` = readr::col_integer(),
+      `Programme area` = readr::col_integer()
     ),
     locale = readr::locale(decimal_mark = ",", grouping_mark = " ", encoding = "UTF-8")
   ) |>
     head(-2) |> # Remove footer rows
+    
+    janitor::clean_names() |> # Clean column names
     dplyr::filter(stringr::str_detect(cost_center_name, "^[A-ZÆØÅ]{2}")) |>  # Filter out invalid rows
     dplyr::mutate(
       # Replace "-" values with "None" in all character variables

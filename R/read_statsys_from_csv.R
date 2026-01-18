@@ -21,7 +21,19 @@ read_statsys_from_csv <- function(path) {
   data <- readr::read_delim(
     path,
     delim = ";",
-    col_types = readr::cols(`SDG description` = readr::col_character()),
+    col_types = readr::cols(
+      `Agreement signed` = readr::col_date(format = "%Y%m%d"),
+      `Agr compl date` = readr::col_date(format = "%Y%m%d"),
+      `Group of Agreement Partner code` = readr::col_integer(),
+      `Channel Code ID` = readr::col_integer(),
+      `DAC Main sector (code)` = readr::col_integer(),
+      `DAC Sub sector (code)` = readr::col_integer(),
+      `Recipient country CRS` = readr::col_integer(),
+      `Type of assistance (code)` = readr::col_integer(),
+      `SDG description` = readr::col_character(),
+      Year = readr::col_integer()
+      
+      ),
     locale = readr::locale(decimal_mark = ",")
   )
   
