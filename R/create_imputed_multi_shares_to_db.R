@@ -39,7 +39,7 @@
 #' @importFrom readxl read_xlsx
 #' @importFrom dplyr mutate
 #' @export
-create_imputed_multi_shares_to_db <- function(filepath = "C:/Users/aaw262/Documents/R/norfund_climate/imputed_multi_shares.xlsx") {
+create_imputed_multi_shares_to_db <- function(filepath) {
   
   # Step 1: Import the imputed multilateral shares data from Excel
   df_imputed_multi_shares <- import_imputed_multi_shares(filepath)
@@ -54,7 +54,7 @@ create_imputed_multi_shares_to_db <- function(filepath = "C:/Users/aaw262/Docume
 
 # Internal function to import imputed multilateral shares data from an Excel spreadsheet
 # The Excel file must contain the columns `aid_type`, `agreement_partner`, `marker`, `year`, and `share`.
-import_imputed_multi_shares <- function(filepath = "C:/Users/aaw262/Documents/R/norfund_climate/imputed_multi_shares.xlsx") {
+import_imputed_multi_shares <- function(filepath) {
   if (!file.exists(filepath)) {
     stop("The imputed_multi_shares.xlsx file does not exist: ", filepath)
   }

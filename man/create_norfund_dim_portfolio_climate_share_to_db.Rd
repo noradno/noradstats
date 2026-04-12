@@ -5,9 +5,7 @@
 \alias{create_norfund_dim_portfolio_climate_share_to_db}
 \title{Create a table of the Norfund DIM Portfolio Climate Share and store it in the DuckDB database}
 \usage{
-create_norfund_dim_portfolio_climate_share_to_db(
-  cim_filepath = "agreement_number_norfund_cim_portfolio.xlsx"
-)
+create_norfund_dim_portfolio_climate_share_to_db(cim_filepath)
 }
 \arguments{
 \item{cim_filepath}{A string. The path to the Excel file containing the CIM agreements to exclude. Default is "avtalenr_cim.xlsx". The file must contain the two columns *agreement_number* and *cim_dim*.}

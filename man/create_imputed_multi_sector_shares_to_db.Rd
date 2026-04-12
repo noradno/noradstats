@@ -4,10 +4,7 @@
 \alias{create_imputed_multi_sector_shares_to_db}
 \title{Import and save imputed multilateral sector shares data into DuckDB database}
 \usage{
-create_imputed_multi_sector_shares_to_db(
-  filepath =
-    "C:/Users/aaw262/Documents/R/norfund_climate/imputed_multi_sector_shares.xlsx"
-)
+create_imputed_multi_sector_shares_to_db(filepath)
 }
 \arguments{
 \item{filepath}{A string. The path to the Excel file containing the imputed multilateral sector shares data. 

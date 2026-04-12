@@ -18,7 +18,7 @@
 #' @importFrom DBI dbConnect dbWriteTable dbDisconnect
 #' @importFrom duckdb duckdb
 #' @export
-create_imputed_norfund_climate_share_to_db <- function(cap_dim_filepath = "agreement_number_norfund_dim_capitalisation.xlsx") {
+create_imputed_norfund_climate_share_to_db <- function(cap_dim_filepath) {
   
   # Step 1: Import capitalisation data from Excel
   df_capitalisation <- import_norfund_capitalisation(cap_dim_filepath)

@@ -4,9 +4,7 @@
 \alias{create_imputed_norfund_climate_share_to_db}
 \title{Create and save a data frame of the imputed climate share of capitalisation of ordinary Norfund DIM and save the table in DuckDB database}
 \usage{
-create_imputed_norfund_climate_share_to_db(
-  cap_dim_filepath = "agreement_number_norfund_dim_capitalisation.xlsx"
-)
+create_imputed_norfund_climate_share_to_db(cap_dim_filepath)
 }
 \arguments{
 \item{cap_dim_filepath}{A string. The path to the Excel file containing the capitalisation agreements. The file must contain a column named 'agreement_number'.}

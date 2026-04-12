@@ -34,7 +34,7 @@
 #' create_norfund_dim_portfolio_climate_share_to_db("path/to/cim_file.xlsx")
 #' }
 #' @export
-create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath = "agreement_number_norfund_cim_portfolio.xlsx") {
+create_norfund_dim_portfolio_climate_share_to_db <- function(cim_filepath) {
   # Imports CIM agreements data from an Excel file.
   df_cim <- import_cim_data(cim_filepath)
   print(df_cim)
