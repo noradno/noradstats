@@ -44,7 +44,7 @@ build_anonymization_maps <- function(df_oda_disbursements, df_pta_disbursements,
   df_partner_map_oda <- df_oda_disbursements |>
     dplyr::filter(
       agreement_number %in% vec_oda_agreements,
-      type_of_agreement == "standard",
+      type_of_agreement == "Standardavtale",
       group_of_agreement_partner %in% rules$partner_groups
     ) |>
     dplyr::distinct(agreement_number, group_of_agreement_partner) |>
