@@ -206,7 +206,7 @@ build_aidresults_datasets <- function(lang = "en") {
       read_pta_agreement_totals() |>
       apply_anonymization_maps_agreement_totals(maps = maps) |>
       dplyr::select(dplyr::all_of(aidresults_cols_pta_agreement_totals)) |>
-      rename_to_official(dataset = "pta_agreement_totals", lang = lang)
+      rename_to_official(dataset = "pta_agreement_level", lang = lang)
   )
 }
 

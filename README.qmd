@@ -159,3 +159,22 @@ International ODA data from DAC-member countries to recipient countries and regi
 ```{r, eval=FALSE}
 df_dac <- read_donors(startyear = 2013, endyear = 2022)
 ```
+
+### Create files for bistandsresultater.no
+
+Run the function below to create the files:
+
+- pta_agreement_totals.xlsx
+
+- pta_disbursement_level.xlsx
+
+- statsys_aktiv.xlsx
+
+This will also apply the anonymization rules.
+
+```{r, eval=FALSE}
+filepath <- "path/to/where/you/want/the/files"
+
+export_aidresults_xlsx(path_dir = filepath, lang = "en")
+
+```
