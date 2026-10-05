@@ -1,0 +1,55 @@
+# Add UCDP organised violence variables (country-year observations) to ODA data frame (agreement-level observations) from 1989 and later. Source: UCDP Georeferenced Event Dataset (GED) and UCDP Candidates dataset (for 2023)
+
+Add UCDP organised violence variables (country-year observations) to ODA
+data frame (agreement-level observations) from 1989 and later. Source:
+UCDP Georeferenced Event Dataset (GED) and UCDP Candidates dataset (for
+2023)
+
+## Usage
+
+``` r
+add_cols_violence(data)
+```
+
+## Arguments
+
+- data:
+
+  Input dataframe of Norwegian development assistance
+
+## Value
+
+Returns filtered data frame (Year \>= 1989) with additional conflict
+columns:
+
+- violence_fatality_max: Numerical variable of number of fatalities from
+  the larges conflict-id in country-year. Should not be used for
+  summarisation in the agreement-level ODA data frame as the number is
+  at country-level.
+
+- violence_fatality_sum: Numerical variable of number of fatalities from
+  all conflict-ids in country-year. Should not be used for summarisation
+  in the agreement-level ODA data frame as the number is at
+  country-level.
+
+- violence_intensity: Categorical variable of intensity in fatalities of
+  the largest conflict-id in country-year. "war" \>= 1000, "major" \>
+  150 & \<= 999, "minor" \<= 150. Non-conflicts are NA. The 150 fatality
+  treshold is based on the World bank methodology, but also includes
+  non-state violence and the 150 treshold is applied to the largest (not
+  the sum) of conflict-ids in a country-year, and the WB methodology is
+  not clear on that issue.
+  https://thedocs.worldbank.org/en/doc/fb0f93e8e3375803bce211ab1218ef2a-0090082023/original/Classification-of-Fragility-and-Conflict-Situations-FY24.pdf
+
+- violence_150: Logical variable of war/major conflict (maximum
+  conflict-id over 150 fatalities in country-year). Based on the
+  violence_intensity variable.
+
+- violence_25: Logical variable of UCDP conflict (maximum conflict-id
+  over 25 fatalities in country-year)
+
+## Examples
+
+``` r
+?add_cols_violence()
+```

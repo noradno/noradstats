@@ -1,0 +1,442 @@
+# noradstats
+
+## Overview
+
+Easily import Norwegian and international development finance data into
+R using the `read_*()` functions or `access_*()` functions. Add extra
+columns using the `add_cols*()`. The data is stored in databases. Some
+functions use user-specified CSV files as data source.
+
+- Use the `read_*()` functions for importing all existing data from a
+  specific database table or CSV into the R environment.
+
+  - [`read_oda()`](https://noradno.github.io/noradstats/reference/read_oda.md)
+    to import all Norwegian ODA data from the database
+
+  - [`read_statsys()`](https://noradno.github.io/noradstats/reference/read_statsys.md)
+    to import all Norwegian ODA, OOF and PF data from the database
+
+  - [`read_international_crs()`](https://noradno.github.io/noradstats/reference/read_international_crs.md)
+    to import all international CRS data from the database
+
+  - [`read_donors()`](https://noradno.github.io/noradstats/reference/read_donors.md)
+    to import DAC donors ODA by recipient countries and regions from an
+    OECD database
+
+  - [`read_imputed_countries()`](https://noradno.github.io/noradstats/reference/read_imputed_countries.md)
+    to import Norwegian imputed multilateral ODA by recipient countries
+    and regions from the OECD database
+
+  - [`read_imputed_sectors()`](https://noradno.github.io/noradstats/reference/read_imputed_sectors.md)
+    to import Norwegian imputed multilateral ODA by sectors from the
+    OECD database
+
+  - [`read_statsys_from_csv()`](https://noradno.github.io/noradstats/reference/read_statsys_from_csv.md)
+    to import all Norwegian ODA, OOF and PF data from a user-specified
+    CSV
+
+  - [`read_aidresults_from_csv()`](https://noradno.github.io/noradstats/reference/read_aidresults_from_csv.md)
+    to import data from a user-specified CSV downloaded from
+    aidresults.no
+
+- Use the `access_*()` functions for creating a proxy data frame linked
+  to a specific database table. This allows for using dplyr operations
+  for querying directly on the database before retrieving the resulting
+  data into memory.
+
+  - [`access_oda()`](https://noradno.github.io/noradstats/reference/access_oda.md)
+    to access Norwegian ODA data in the database
+
+  - [`access_statsys()`](https://noradno.github.io/noradstats/reference/access_statsys.md)
+    to access Norwegian ODA, OOF and PF data in the database
+
+  - [`access_international_crs()`](https://noradno.github.io/noradstats/reference/access_international_crs.md)
+    to access all international CRS data in the database
+
+- \[Under development\] Use the `add_cols_*` functions to add extra
+  column to an existing data of produced by
+  [`read_oda()`](https://noradno.github.io/noradstats/reference/read_oda.md),
+  [`read_statsys()`](https://noradno.github.io/noradstats/reference/read_statsys.md),
+  [`read_statsys_from_csv()`](https://noradno.github.io/noradstats/reference/read_statsys_from_csv.md)
+  and the `access_*()`-equivalents.
+  [`add_cols_basic()`](https://noradno.github.io/noradstats/reference/add_cols_basic.md)
+  columns are already included as columns in the data frames produced by
+  [`read_oda()`](https://noradno.github.io/noradstats/reference/read_oda.md),
+  [`read_statsys()`](https://noradno.github.io/noradstats/reference/read_statsys.md)
+  and `access_*()`-equvalents.
+
+  - [`add_cols_basic()`](https://noradno.github.io/noradstats/reference/add_cols_basic.md)
+    adds columns of
+
+  - `add_cols_climate()` add climate relevant columns
+
+  - `add_cols_climate_clean()` add climate relevant columns
+
+  - [`add_cols_countrycode()`](https://noradno.github.io/noradstats/reference/add_cols_countrycode.md)
+    add iso3c country codes using the countrycodes package
+
+  - [`add_cols_violence()`](https://noradno.github.io/noradstats/reference/add_cols_violence.md)
+    add conflict relevant columns using UCDP conflict data
+
+## Installation
+
+``` r
+
+remotes::install_github("noradno/noradstats")
+```
+
+## Usage
+
+### Prerequisites
+
+Several of the functions in the noradstats package conntects to a DuckDB
+database file. The DuckDB database file is located on Norads Microsoft
+Sharepoint site and is expected to be synced via Microsoft Teams to to
+the users local directory: *C:\[userid\]-Avd-Kunnskap - Statistikk og
+analyse\06. Statistikkdatabaser\3. Databasefiler.*
+
+### Loading packages
+
+In addition to `noradstats`, for the examples below we use the packages
+`dplyr`, `DBI` and `duckplyr`. `dplyr` provides a wide range of data
+manipulation functions for data frames, `DBI` helps connecting R to
+databases, and the `duckplyr` package handles the under-the-hood
+translation of dplyr operations to SQL queries, optimized for DuckDB
+databases (compared to the more general `dbplyr` package). The packages
+`DBI` and `duckplyr` are only necessary when using the `access_*`
+functions, as these functions retrieve data from a database.
+
+``` r
+
+library(noradstats)
+library(dplyr)
+library(DBI)
+library(duckplyr)
+```
+
+### Norwegian ODA data
+
+#### Read Norwegian ODA data to a tibble
+
+The function
+[`read_oda()`](https://noradno.github.io/noradstats/reference/read_oda.md)
+imports all Norwegian ODA data from the DuckDB database into R.
+
+In the example below we find the sector allocation of Norwegian ODA in
+the most recent year.
+
+``` r
+
+df_oda <- read_oda()
+
+df_oda |> 
+  filter(year == max(year)) |> 
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok))
+```
+
+#### Access database of Norwegian ODA
+
+Instead of loading all the data of Norwegian ODA data into the R
+environment (in-memory), we can use the `access_*()` functions to create
+a proxy data frame linked to the DuckDB database.
+
+The functiokn
+[`access_oda()`](https://noradno.github.io/noradstats/reference/access_oda.md)
+creates a proxy tibble connected to the Statsys table in the DuckDB
+database, and filters the proxy tibble to only include Norwegian
+Official Development (ODA). Frame agreement level data is excluded. The
+data covers 1960 to recent year.
+
+The proxy data frame can be manipulated using `dplyr` operations
+(through `duckplyr` translation to SQL queries), executed directly on
+the database. Use
+[`collect()`](https://dplyr.tidyverse.org/reference/compute.html) to
+return the query results in the R environment. This approach is more
+efficient for handling large datasets by reducing memory usage and
+faster data processing than loading all data into memory. However, the
+Norwegian ODA data is relatively small, so the difference in performance
+is not as noticeable as with larger datasets.
+
+In the example below we find the sector allocation of Norwegian ODA in
+the most recent year.
+
+``` r
+
+df_proxy_oda <- access_oda()
+
+df_proxy_oda |> 
+  filter(year == max(year)) |> 
+  summarise(disbursed_mill_nok = sum(disbursed_mill_nok, na.rm = T), .by = target_area) |> 
+  arrange(desc(disbursed_mill_nok)) |> 
+  collect()
+```
+
+### Norwegian imputed multilateral data
+
+Import Norwegian imputed multilateral ODA to countries and regions from
+the OECD SDMX Database API, returning a tibble. Provide start and end
+years as arguments.
+
+``` r
+
+df_imputed_countries <- read_imputed_countries(startyear = 2020, endyear = 2022)
+```
+
+Read Norwegian imputed multilateral ODA to sectors from the OECD SDMX
+Database API, returning a tibble. Provide start and end years as
+arguments.
+
+``` r
+
+df_imputed_sectors <- read_imputed_sectors(startyear = 2015, endyear = 2022)
+```
+
+### International CRS data
+
+Read international ODA data into R, returning a tibble data frame. It is
+over 5 million rows. This can take a while, but should be less than a
+minute.
+
+``` r
+
+df_crs <- read_international_crs()
+
+df_crs |> 
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10)
+```
+
+Instead of loading all the data of international CRS data into the R
+environment (in-memory), we can use the
+[`access_international_crs()`](https://noradno.github.io/noradstats/reference/access_international_crs.md)
+function to create a proxy data frame linked to the DuckDB database
+table containing the international CRS data.
+
+As mentioned above, the proxy data frame can be manipulated using
+`dplyr` operations (through `duckplyr` translation to SQL queries),
+executed directly on the database. Use
+[`collect()`](https://dplyr.tidyverse.org/reference/compute.html) to
+return the query results in the R environment. This approach is more
+efficient for handling large datasets by reducing memory usage and
+faster data processing than loading all data into memory.
+
+In this example we find the topten ODA donors (bilateral donors or
+multilateral donors) in the most recent year. This is much faster than
+in the example above where we started by importing all the 5 million
+rows.
+
+``` r
+
+df_proxy_crs <- access_international_crs()
+
+df_proxy_crs |> 
+  filter(year == max(year),
+         category == 10) |> 
+  summarise(usd_disbursement = sum(usd_disbursement, na.rm = T), .by = donor_name) |> 
+  slice_max(usd_disbursement, n = 10) |> 
+  collect()
+```
+
+### International ODA data from DAC-countries to countries and regions
+
+International ODA data from DAC-member countries to recipient countries
+and regions. Provide start and end years as arguments.
+
+``` r
+
+df_dac <- read_donors(startyear = 2013, endyear = 2022)
+```
+
+### Create files for bistandsresultater.no
+
+The `noradstats` package includes functions for preparing the main data
+files used in data loads to bistandsresultater.no.
+
+The workflow is:
+
+**PTA / Statsys → CSV → DuckDB → `noradstats` → processed and anonymised
+Excel files**
+
+Raw extracts from PTA and Statsys are first loaded into DuckDB using:
+
+``` r
+
+create_pta_agreement_totals_to_db()
+create_pta_disbursement_level_to_db()
+create_statsys_data_to_db()
+```
+
+The final files are then created with:
+
+``` r
+
+filepath <- "path/to/where/you/want/the/files"
+
+export_aidresults_xlsx(
+  path_dir = filepath,
+  lang = "en"
+)
+```
+
+This creates the three main files:
+
+- `pta_agreements_total.xlsx`
+- `pta_disbursement_level_BCD_actual.xlsx`
+- `statsys_aktiv.xlsx`
+
+The export function applies the required processing and anonymisation
+rules.
+
+See the vignette **Preparing a data load for bistandsresultater.no** for
+the full procedure, including how to extract the source data from PTA
+and Statsys and load it into DuckDB.
+
+# Package index
+
+## All functions
+
+- [`access_international_crs()`](https://noradno.github.io/noradstats/reference/access_international_crs.md)
+  : Access database of international CRS data from R
+- [`access_oda()`](https://noradno.github.io/noradstats/reference/access_oda.md)
+  : Access database of Norwegian ODA data from R
+- [`access_statsys()`](https://noradno.github.io/noradstats/reference/access_statsys.md)
+  : Access database of Statsys data from R
+- [`add_cols_basic()`](https://noradno.github.io/noradstats/reference/add_cols_basic.md)
+  : Add basic columns to dataframe
+- [`add_cols_basic_clean()`](https://noradno.github.io/noradstats/reference/add_cols_basic_clean.md)
+  : Add basic columns to data frame of Norwegian development assistance
+- [`add_cols_climate_finance()`](https://noradno.github.io/noradstats/reference/add_cols_climate_finance.md)
+  : Add public climate finance columns to an existing statsys data frame
+- [`add_cols_climate_oda()`](https://noradno.github.io/noradstats/reference/add_cols_climate_oda.md)
+  : Add public climate oda columns to an existing statsys data frame
+- [`add_cols_countrycode()`](https://noradno.github.io/noradstats/reference/add_cols_countrycode.md)
+  : Add ISO3 country code columns to dataframe
+- [`add_cols_education()`](https://noradno.github.io/noradstats/reference/add_cols_education.md)
+  : Add education columns to an existing oda data frame
+- [`add_cols_food()`](https://noradno.github.io/noradstats/reference/add_cols_food.md)
+  : Add food columns to an existing oda data frame
+- [`add_cols_health()`](https://noradno.github.io/noradstats/reference/add_cols_health.md)
+  : Add health columns to an existing oda data frame
+- [`add_cols_hum()`](https://noradno.github.io/noradstats/reference/add_cols_hum.md)
+  : Add humanitarian (hum) columns to an existing oda data frame
+- [`add_cols_ldcs()`](https://noradno.github.io/noradstats/reference/add_cols_ldcs.md)
+  : Add LDCs columns to an existing oda data frame
+- [`add_cols_srhr()`](https://noradno.github.io/noradstats/reference/add_cols_srhr.md)
+  : Add srhr columns to an existing oda data frame
+- [`add_cols_violence()`](https://noradno.github.io/noradstats/reference/add_cols_violence.md)
+  : Add UCDP organised violence variables (country-year observations) to
+  ODA data frame (agreement-level observations) from 1989 and later.
+  Source: UCDP Georeferenced Event Dataset (GED) and UCDP Candidates
+  dataset (for 2023)
+- [`anonymization_rules()`](https://noradno.github.io/noradstats/reference/anonymization_rules.md)
+  : Anonymization rules for aid results publication
+- [`available_official_datasets()`](https://noradno.github.io/noradstats/reference/available_official_datasets.md)
+  : List available dataset keys for official column names
+- [`build_aidresults_datasets()`](https://noradno.github.io/noradstats/reference/build_aidresults_datasets.md)
+  : Build all aidresults datasets
+- [`calculate_climate_share()`](https://noradno.github.io/noradstats/reference/calculate_climate_share.md)
+  : Calculate Climate Mitigation Share for Norfund DIM (internal
+  function)
+- [`create_crs_data_to_db()`](https://noradno.github.io/noradstats/reference/create_crs_data_to_db.md)
+  : Function to save and overwrite CRS data to DuckDB Database
+- [`create_imputed_multi_org_incomegroup_shares_to_db()`](https://noradno.github.io/noradstats/reference/create_imputed_multi_org_incomegroup_shares_to_db.md)
+  : Import and save imputed multilateral to income group shares by
+  organisation into DuckDB database
+- [`create_imputed_multi_sector_shares_to_db()`](https://noradno.github.io/noradstats/reference/create_imputed_multi_sector_shares_to_db.md)
+  : Import and save imputed multilateral sector shares data into DuckDB
+  database
+- [`create_imputed_multi_shares_to_db()`](https://noradno.github.io/noradstats/reference/create_imputed_multi_shares_to_db.md)
+  : Import and save imputed multilateral shares data into DuckDB
+  database
+- [`create_imputed_norfund_climate_share_to_db()`](https://noradno.github.io/noradstats/reference/create_imputed_norfund_climate_share_to_db.md)
+  : Create and save a data frame of the imputed climate share of
+  capitalisation of ordinary Norfund DIM and save the table in DuckDB
+  database
+- [`create_norfund_dim_portfolio_climate_share_to_db()`](https://noradno.github.io/noradstats/reference/create_norfund_dim_portfolio_climate_share_to_db.md)
+  : Create a table of the Norfund DIM Portfolio Climate Share and store
+  it in the DuckDB database
+- [`create_pta_agreement_totals_to_db()`](https://noradno.github.io/noradstats/reference/create_pta_agreement_totals_to_db.md)
+  : Function to import, save and overwrite PTA Agreement totals data to
+  DuckDB Database
+- [`create_pta_disbursement_level_to_db()`](https://noradno.github.io/noradstats/reference/create_pta_disbursement_level_to_db.md)
+  : Function to import, save and overwrite PTA Disbursement level data
+  to DuckDB Database
+- [`create_sharepoint_results_to_db()`](https://noradno.github.io/noradstats/reference/create_sharepoint_results_to_db.md)
+  : Create SharePoint results datasets and write them to DuckDB
+- [`create_statsys_data_to_db()`](https://noradno.github.io/noradstats/reference/create_statsys_data_to_db.md)
+  : Function to import, save and overwrite Statsys Data to DuckDB
+  Database
+- [`export_aidresults_xlsx()`](https://noradno.github.io/noradstats/reference/export_aidresults_xlsx.md)
+  : Export aidresults datasets to Excel files
+- [`get_duckdb_path()`](https://noradno.github.io/noradstats/reference/get_duckdb_path.md)
+  : Get the local path to the DuckDB database file
+- [`import_cim_data()`](https://noradno.github.io/noradstats/reference/import_cim_data.md)
+  : Import CIM Data from Excel (internal function)
+- [`import_norfund_capitalisation()`](https://noradno.github.io/noradstats/reference/import_norfund_capitalisation.md)
+  : Import Norfund Capitalisation Data (Internal Function)
+- [`official_colname_map()`](https://noradno.github.io/noradstats/reference/official_colname_map.md)
+  : Official column name mapping (internal -\> official)
+- [`prep_aidresults_oda()`](https://noradno.github.io/noradstats/reference/prep_aidresults_oda.md)
+  : Prepare ODA dataset for aidresults
+- [`prep_aidresults_pta_agreement_totals()`](https://noradno.github.io/noradstats/reference/prep_aidresults_pta_agreement_totals.md)
+  : Prepare PTA agreement totals dataset for aidresults
+- [`prep_aidresults_pta_disbursements()`](https://noradno.github.io/noradstats/reference/prep_aidresults_pta_disbursements.md)
+  : Prepare PTA disbursement-level dataset for aidresults
+- [`prepare_norfund_dim_data()`](https://noradno.github.io/noradstats/reference/prepare_norfund_dim_data.md)
+  : Prepare Norfund DIM Data (internal function)
+- [`read_aidresults_anonymised()`](https://noradno.github.io/noradstats/reference/read_aidresults_anonymised.md)
+  : Read anonymised datasets for aid results publication
+- [`read_aidresults_from_csv()`](https://noradno.github.io/noradstats/reference/read_aidresults_from_csv.md)
+  : Read aidresults.no data into R from user-specified CSV file
+- [`read_donors()`](https://noradno.github.io/noradstats/reference/read_donors.md)
+  : Read international ODA data from OECD/DAC donors to countries and
+  regions into R
+- [`read_imputed_countries()`](https://noradno.github.io/noradstats/reference/read_imputed_countries.md)
+  : Read Norwegian imputed multilateral ODA to countries and regions
+  data into R
+- [`read_imputed_multi_org_incomegroup_shares()`](https://noradno.github.io/noradstats/reference/read_imputed_multi_org_incomegroup_shares.md)
+  : Read Imputed Multilateral Income Group Shares by oganisation data
+  into R
+- [`read_imputed_multi_sector_shares()`](https://noradno.github.io/noradstats/reference/read_imputed_multi_sector_shares.md)
+  : Read Imputed Multilateral Sector Shares data into R
+- [`read_imputed_multi_shares()`](https://noradno.github.io/noradstats/reference/read_imputed_multi_shares.md)
+  : Read Imputed Multilateral Shares data into R
+- [`read_imputed_norfund_climate_shares()`](https://noradno.github.io/noradstats/reference/read_imputed_norfund_climate_shares.md)
+  : Read Imputed Norfund Climate Shares data into R
+- [`read_imputed_sectors()`](https://noradno.github.io/noradstats/reference/read_imputed_sectors.md)
+  : Read Norwegian imputed multilateral ODA to sectors data into R
+- [`read_international_crs()`](https://noradno.github.io/noradstats/reference/read_international_crs.md)
+  : Read international CRS data into R
+- [`read_norfund_dim_portfolio_climate_share()`](https://noradno.github.io/noradstats/reference/read_norfund_dim_portfolio_climate_share.md)
+  : Read Norfund DIM Portfolio Climate Share data into R
+- [`read_oda()`](https://noradno.github.io/noradstats/reference/read_oda.md)
+  : Read Norwegian ODA data into R
+- [`read_pta_agreement_totals()`](https://noradno.github.io/noradstats/reference/read_pta_agreement_totals.md)
+  : Read PTA Agreement Totals data table from DuckDB into R
+- [`read_pta_agreement_totals_from_csv()`](https://noradno.github.io/noradstats/reference/read_pta_agreement_totals_from_csv.md)
+  : Read PTA Agreement totals report into R from user-specified CSV file
+- [`read_pta_disbursement_level()`](https://noradno.github.io/noradstats/reference/read_pta_disbursement_level.md)
+  : Read PTA Disbursement level data table from DuckDB into R
+- [`read_pta_disbursement_level_from_csv()`](https://noradno.github.io/noradstats/reference/read_pta_disbursement_level_from_csv.md)
+  : Read PTA Disbursement level report into R from user-specified CSV
+  file
+- [`read_sharepoint_results()`](https://noradno.github.io/noradstats/reference/read_sharepoint_results.md)
+  : Read SharePoint results datasets from DuckDB
+- [`read_statsys()`](https://noradno.github.io/noradstats/reference/read_statsys.md)
+  : Read Statsys data into R
+- [`read_statsys_from_csv()`](https://noradno.github.io/noradstats/reference/read_statsys_from_csv.md)
+  : Read Statsys data into R from user-specified CSV file
+- [`rename_to_official()`](https://noradno.github.io/noradstats/reference/rename_to_official.md)
+  : Rename columns to official (public) labels
+- [`save_climate_share_to_db()`](https://noradno.github.io/noradstats/reference/save_climate_share_to_db.md)
+  : Save Climate Mitigation Share Data to DuckDB (internal function)
+
+# Articles
+
+### All vignettes
+
+- [Preparing a data load for
+  bistandsresultater.no](https://noradno.github.io/noradstats/articles/bistandsresultater-data-load.md):

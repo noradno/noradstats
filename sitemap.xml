@@ -1,15 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://noradno.github.io/noradstats/vignettes/bistandsresultater-data-load.html</loc>
-    <lastmod>2026-10-05T12:04:22.666Z</lastmod>
-  </url>
-  <url>
-    <loc>https://noradno.github.io/noradstats/index.html</loc>
-    <lastmod>2026-10-05T12:00:21.683Z</lastmod>
-  </url>
-  <url>
-    <loc>https://noradno.github.io/noradstats/LICENSE.html</loc>
-    <lastmod>2026-10-05T12:02:15.963Z</lastmod>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://noradno.github.io/noradstats/404.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/LICENSE-text.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/LICENSE.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/articles/bistandsresultater-data-load.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/articles/index.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/authors.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/index.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/access_international_crs.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/access_oda.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/access_statsys.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_basic.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_basic_clean.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_climate_finance.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_climate_oda.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_countrycode.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_education.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_food.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_health.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_hum.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_ldcs.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_srhr.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/add_cols_violence.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/anonymization_rules.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/apply_anonymization_maps_agreement_totals.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/apply_anonymization_maps_oda.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/apply_anonymization_maps_pta_disbursements.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/available_official_datasets.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/build_aidresults_datasets.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/build_anonymization_maps.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/calculate_climate_share.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_crs_data_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_imputed_multi_org_incomegroup_shares_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_imputed_multi_sector_shares_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_imputed_multi_shares_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_imputed_norfund_climate_share_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_norfund_dim_portfolio_climate_share_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_pta_agreement_totals_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_pta_disbursement_level_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_sharepoint_results_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/create_statsys_data_to_db.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/export_aidresults_xlsx.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/get_duckdb_path.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/import_cim_data.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/import_norfund_capitalisation.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/index.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/official_colname_map.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/pipe.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/prep_aidresults_oda.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/prep_aidresults_pta_agreement_totals.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/prep_aidresults_pta_disbursements.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/prepare_norfund_dim_data.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_aidresults_anonymised.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_aidresults_from_csv.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_donors.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_countries.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_multi_org_incomegroup_shares.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_multi_sector_shares.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_multi_shares.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_norfund_climate_shares.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_imputed_sectors.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_international_crs.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_norfund_dim_portfolio_climate_share.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_oda.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_official_colname_map.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_pta_agreement_totals.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_pta_agreement_totals_from_csv.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_pta_disbursement_level.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_pta_disbursement_level_from_csv.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_sharepoint_results.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_statsys.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/read_statsys_from_csv.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/rename_to_official.html</loc></url>
+<url><loc>https://noradno.github.io/noradstats/reference/save_climate_share_to_db.html</loc></url>
 </urlset>
+

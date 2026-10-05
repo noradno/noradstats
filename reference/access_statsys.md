@@ -1,0 +1,36 @@
+# Access database of Statsys data from R
+
+This function creates a proxy tibble connected to the Statsys data table
+in the DuckDB database. This data includes Norwegian official
+development assistance (ODA), ODA frame agreement level data, Other
+official flows(OOF), export credits and private flows. The data covers
+1960 to recent year. The DuckDB database file is located on Norads
+Microsoft Sharepoint site and is expected to be synced via Microsoft
+Teams to to the users local directory. Use DBI::dbDisconnect(con,
+shutdown=TRUE) to close connection to database.
+
+## Usage
+
+``` r
+access_statsys(version = "statsys_official")
+```
+
+## Arguments
+
+- version:
+
+  A character string specifying which table to connect to. If
+  "statsys_official", the function connects to the "statsys_official"
+  table. If "statsys_active", the function connects to the
+  "statsys_active" table. Defaults to "statsys_official".
+
+## Value
+
+Returns a proxy tibble connected to a Statsys table in the DuckDB
+database.
+
+## Examples
+
+``` r
+?access_statsys()
+```

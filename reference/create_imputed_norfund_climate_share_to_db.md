@@ -1,0 +1,34 @@
+# Create and save a data frame of the imputed climate share of capitalisation of ordinary Norfund DIM and save the table in DuckDB database
+
+This is the exported main function that calls internal helper functions
+to create the data frame of the imputed climate share of capitalisation
+of ordinary Norfund DIM and save the table in DuckDB database.
+
+## Usage
+
+``` r
+create_imputed_norfund_climate_share_to_db(cap_dim_filepath)
+```
+
+## Arguments
+
+- cap_dim_filepath:
+
+  A string. The path to the Excel file containing the capitalisation
+  agreements. The file must contain a column named 'agreement_number'.
+
+## Value
+
+A data frame containing 'agreement_number', 'year', and 'climate_share'
+for the imputed climate share of Norfund capitalisation agreements.
+
+## Details
+
+Steps: 1. Imports capitalisation agreements from MFA to ordinary Norfund
+(DIM) from an Excel spreadsheet
+("agreement_number_norfund_dim_capitalisation"). 2. Imports the annual
+climate mitigation share (2-year average) for the Norfund DIM portfolio
+from the DuckDB database. 3. Builds a data frame of the imputed climate
+share of the Norfund capitalisation agreements by year. 4. Saves the
+data frame into the DuckDB database under the table name
+'imputed_norfund_climate_share'.
