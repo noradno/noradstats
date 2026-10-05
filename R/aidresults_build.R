@@ -234,19 +234,19 @@ export_aidresults_xlsx <- function(path_dir, lang = "en") {
   
   writexl::write_xlsx(
     datasets$pta_disbursements,
-    file.path(path_dir, "pta_disbursement_level.xlsx")
+    file.path(path_dir, "pta_disbursement_level_BCD_actual.xlsx")
   )
   
   writexl::write_xlsx(
     datasets$pta_agreement_totals,
-    file.path(path_dir, "pta_agreement_totals.xlsx")
+    file.path(path_dir, "pta_agreements_total.xlsx")
   )
   
   message(
     "Aidresults files written to: ", normalizePath(path_dir),
     "\n- statsys_aktiv.xlsx",
-    "\n- pta_disbursement_level.xlsx",
-    "\n- pta_agreement_totals.xlsx"
+    "\n- pta_disbursement_level_BCD_actual.xlsx",
+    "\n- pta_agreements_total.xlsx"
   )
   
   invisible(datasets)
