@@ -162,19 +162,37 @@ df_dac <- read_donors(startyear = 2013, endyear = 2022)
 
 ### Create files for bistandsresultater.no
 
-Run the function below to create the files:
+The `noradstats` package includes functions for preparing the main data files used in data loads to bistandsresultater.no.
 
-- pta_agreement_totals.xlsx
+The workflow is:
 
-- pta_disbursement_level.xlsx
+**PTA / Statsys → CSV → DuckDB → `noradstats` → processed and anonymised Excel files**
 
-- statsys_aktiv.xlsx
+Raw extracts from PTA and Statsys are first loaded into DuckDB using:
 
-This will also apply the anonymization rules.
+```{r, eval=FALSE}
+create_pta_agreement_totals_to_db()
+create_pta_disbursement_level_to_db()
+create_statsys_data_to_db()
+```
+
+The final files are then created with:
 
 ```{r, eval=FALSE}
 filepath <- "path/to/where/you/want/the/files"
 
-export_aidresults_xlsx(path_dir = filepath, lang = "en")
-
+export_aidresults_xlsx(
+  path_dir = filepath,
+  lang = "en"
+)
 ```
+
+This creates the three main files:
+
+- `pta_agreements_total.xlsx`
+- `pta_disbursement_level_BCD_actual.xlsx`
+- `statsys_aktiv.xlsx`
+
+The export function applies the required processing and anonymisation rules.
+
+See the vignette **Preparing a data load for bistandsresultater.no** for the full procedure, including how to extract the source data from PTA and Statsys and load it into DuckDB.
