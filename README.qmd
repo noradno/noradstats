@@ -1,7 +1,7 @@
 ---
 title: "noradstats"
 format: gfm
-editor: visual
+editor: source
 ---
 
 ## Overview
