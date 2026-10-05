@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>license – noradstats</title>
+<title>Preparing a data load for bistandsresultater.no – noradstats</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -79,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">noradstats</span>
     </a>
   </div>
@@ -90,11 +125,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./vignettes/bistandsresultater-data-load.html"> 
+    <a class="nav-link active" href="../vignettes/bistandsresultater-data-load.html" aria-current="page"> 
 <span class="menu-text">Bistandsresultater data load</span></a>
   </li>  
 </ul>
@@ -113,22 +148,187 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#mit-license" id="toc-mit-license" class="nav-link active" data-scroll-target="#mit-license">MIT License</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#create-a-folder-for-the-data-load" id="toc-create-a-folder-for-the-data-load" class="nav-link" data-scroll-target="#create-a-folder-for-the-data-load">1. Create a folder for the data load</a></li>
+  <li><a href="#download-agreement-totals-from-pta" id="toc-download-agreement-totals-from-pta" class="nav-link" data-scroll-target="#download-agreement-totals-from-pta">2. Download Agreement totals from PTA</a>
+  <ul class="collapse">
+  <li><a href="#advanced-criteria" id="toc-advanced-criteria" class="nav-link" data-scroll-target="#advanced-criteria">Advanced criteria</a></li>
+  <li><a href="#layout" id="toc-layout" class="nav-link" data-scroll-target="#layout">Layout</a></li>
+  </ul></li>
+  <li><a href="#download-disbursement-level-from-pta" id="toc-download-disbursement-level-from-pta" class="nav-link" data-scroll-target="#download-disbursement-level-from-pta">3. Download Disbursement level from PTA</a>
+  <ul class="collapse">
+  <li><a href="#advanced-criteria-1" id="toc-advanced-criteria-1" class="nav-link" data-scroll-target="#advanced-criteria-1">Advanced criteria</a></li>
+  <li><a href="#layout-1" id="toc-layout-1" class="nav-link" data-scroll-target="#layout-1">Layout</a></li>
+  </ul></li>
+  <li><a href="#extract-the-latest-official-statsys-data" id="toc-extract-the-latest-official-statsys-data" class="nav-link" data-scroll-target="#extract-the-latest-official-statsys-data">4. Extract the latest official Statsys data</a></li>
+  <li><a href="#load-the-source-files-into-duckdb" id="toc-load-the-source-files-into-duckdb" class="nav-link" data-scroll-target="#load-the-source-files-into-duckdb">5. Load the source files into DuckDB</a></li>
+  <li><a href="#generate-the-final-files" id="toc-generate-the-final-files" class="nav-link" data-scroll-target="#generate-the-final-files">6. Generate the final files</a></li>
+  <li><a href="#check-supplementary-files" id="toc-check-supplementary-files" class="nav-link" data-scroll-target="#check-supplementary-files">7. Check supplementary files</a></li>
+  <li><a href="#prepare-the-upload-folder" id="toc-prepare-the-upload-folder" class="nav-link" data-scroll-target="#prepare-the-upload-folder">8. Prepare the upload folder</a></li>
+  <li><a href="#share-the-files-for-upload" id="toc-share-the-files-for-upload" class="nav-link" data-scroll-target="#share-the-files-for-upload">9. Share the files for upload</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Preparing a data load for bistandsresultater.no</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="mit-license" class="level1">
-<h1>MIT License</h1>
-<p>Copyright (c) 2024 Norad</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>This vignette describes how to prepare the main data files for a data load to bistandsresultater.no.</p>
+<p>The data load is based on three main datasets:</p>
+<ol type="1">
+<li>Official aid statistics from Statsys</li>
+<li>Agreement totals from PTA</li>
+<li>Disbursement-level data from PTA</li>
+</ol>
+<p>The workflow is:</p>
+<p><strong>PTA / Statsys → CSV → DuckDB → <code>noradstats</code> → processed and anonymised Excel files</strong></p>
+<p>The raw extracts from PTA and Statsys are loaded into the DuckDB database used by <code>noradstats</code>. The final files are then generated from the database using functions in the package.</p>
+<p>In addition to the three main files, a data load may include supplementary register tables and supporting datasets. These normally change less frequently and should mainly be reviewed when a new statistical year is first published, usually in May. Later data loads during the year are normally revisions of the same statistical year.</p>
+</section>
+<section id="create-a-folder-for-the-data-load" class="level1">
+<h1>1. Create a folder for the data load</h1>
+<p>Create a new folder under:</p>
+<p><code>Norad-Avd-Kunnskap - Statistikk og analyse/10. Formidling - ekstern og intern/06. Bistandsresultater/</code></p>
+<p>Use the previous data load as a template for the folder and file structure.</p>
+<p>Create a <code>data_raw</code> subfolder for the source files downloaded from PTA and Statsys.</p>
+</section>
+<section id="download-agreement-totals-from-pta" class="level1">
+<h1>2. Download Agreement totals from PTA</h1>
+<p>In PTA, select the report <strong>Agreement totals</strong>.</p>
+<section id="advanced-criteria" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-criteria">Advanced criteria</h2>
+<ul>
+<li>Phase: B, C, D</li>
+<li>Signed after: 01.01.1960</li>
+<li>Programme area: 03, 12</li>
+</ul>
+</section>
+<section id="layout" class="level2">
+<h2 class="anchored" data-anchor-id="layout">Layout</h2>
+<ul>
+<li>Remove <strong>Responsible unit</strong></li>
+<li>Add <strong>Public use</strong></li>
+<li>Flexi column: <strong>Agreement period</strong></li>
+</ul>
+<p>Click <strong>View</strong> and export the report to Excel.</p>
+<p>Open the Excel file and save it as a CSV UTF-8 file without changing the file name.</p>
+<p>Save the CSV file in the <code>data_raw</code> folder for the current data load.</p>
+</section>
+</section>
+<section id="download-disbursement-level-from-pta" class="level1">
+<h1>3. Download Disbursement level from PTA</h1>
+<p>In PTA, select the report <strong>Disbursement level</strong>.</p>
+<section id="advanced-criteria-1" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-criteria-1">Advanced criteria</h2>
+<ul>
+<li>Year: the year after the latest official statistical year in Statsys</li>
+<li>Agreement phase: B, C, D</li>
+<li>Programme area: 03, 12</li>
+<li>Disbursement status: A</li>
+</ul>
+<p>For example, if 2025 is the latest official statistical year, select 2026.</p>
+</section>
+<section id="layout-1" class="level2">
+<h2 class="anchored" data-anchor-id="layout-1">Layout</h2>
+<p>Include:</p>
+<ul>
+<li>Statistics</li>
+<li>Agreement description</li>
+<li>For public use</li>
+<li>Show miscellaneous income</li>
+<li>Show AIGO</li>
+</ul>
+<p>Click <strong>View</strong> and export the report to Excel.</p>
+<p>Open the Excel file and save it as a CSV UTF-8 file without changing the file name.</p>
+<p>Save the CSV file in the <code>data_raw</code> folder.</p>
+</section>
+</section>
+<section id="extract-the-latest-official-statsys-data" class="level1">
+<h1>4. Extract the latest official Statsys data</h1>
+<p>Open Statsys and run the SQL query used to extract the latest official statistics.</p>
+<p>Update the final year in the query to the latest official statistical year.</p>
+<p>For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> [vOppsummering_2026 <span class="dv">07</span> DAC<span class="op">/</span>CRS<span class="op">-</span>rapportering]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> [<span class="dt">Year</span>] <span class="kw">between</span> <span class="dv">1960</span> <span class="kw">and</span> <span class="dv">2025</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Export the result as CSV and save it in the <code>data_raw</code> folder.</p>
+</section>
+<section id="load-the-source-files-into-duckdb" class="level1">
+<h1>5. Load the source files into DuckDB</h1>
+<p>Load the PTA Agreement totals file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>noradstats<span class="sc">::</span><span class="fu">create_pta_agreement_totals_to_db</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"path/to/Agreement totals.csv"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Load the PTA Disbursement level file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>noradstats<span class="sc">::</span><span class="fu">create_pta_disbursement_level_to_db</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"path/to/Disbursement level.csv"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Load the latest official Statsys extract:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>noradstats<span class="sc">::</span><span class="fu">create_statsys_data_to_db</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"path/to/Statsys_extract.csv"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"statsys_official"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These functions update the corresponding tables in the DuckDB database used by <code>noradstats</code>.</p>
+<p>After this step, the source data needed for the data load are available through DuckDB and do not need to be read directly from the CSV files during the remaining processing.</p>
+</section>
+<section id="generate-the-final-files" class="level1">
+<h1>6. Generate the final files</h1>
+<p>Use <code>export_aidresults_xlsx()</code> to produce the three main files for bistandsresultater.no.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>filepath <span class="ot">&lt;-</span> <span class="st">"path/to/where/you/want/the/files"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>noradstats<span class="sc">::</span><span class="fu">export_aidresults_xlsx</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">path_dir =</span> filepath,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">lang =</span> <span class="st">"en"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This creates:</p>
+<ul>
+<li><code>pta_agreements_total.xlsx</code></li>
+<li><code>pta_disbursement_level_BCD_actual.xlsx</code></li>
+<li><code>statsys_aktiv.xlsx</code></li>
+</ul>
+<p>The function retrieves the relevant data from DuckDB, applies the required processing and anonymisation rules, and writes the final Excel files to the selected folder.</p>
+<p>Check that all three files have been created successfully.</p>
+</section>
+<section id="check-supplementary-files" class="level1">
+<h1>7. Check supplementary files</h1>
+<p>The upload folder may also contain supplementary datasets and register tables, for example:</p>
+<ul>
+<li>imputed multilateral data</li>
+<li>Norfund-related data</li>
+<li>bridge and register tables</li>
+</ul>
+<p>These normally do not need to be updated for every data load.</p>
+<p>As a general rule, they should be reviewed when a new statistical year is first published, usually in May. Later data loads during the year are primarily revisions of the already published statistical year.</p>
+<p>Update supplementary files outside the annual publication cycle only when there has been a relevant change.</p>
+</section>
+<section id="prepare-the-upload-folder" class="level1">
+<h1>8. Prepare the upload folder</h1>
+<p>Place the three generated Excel files and any required supplementary files in the data load folder.</p>
+<p>Compare the contents with the previous data load to make sure that all required files are included.</p>
+</section>
+<section id="share-the-files-for-upload" class="level1">
+<h1>9. Share the files for upload</h1>
+<p>Share the completed data load folder with Sopra Steria through OneDrive/SharePoint for upload to bistandsresultater.no.</p>
 
 
 </section>
