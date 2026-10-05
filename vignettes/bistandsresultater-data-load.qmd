@@ -1,7 +1,6 @@
 ---
 title: "Preparing a data load for bistandsresultater.no"
-format: gfm
-editor: visual
+editor: source
 ---
 
 # Overview

@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "vignettes/bistandsresultater-data-load.html",
+    "href": "vignettes/bistandsresultater-data-load.html",
+    "title": "Preparing a data load for bistandsresultater.no",
+    "section": "",
+    "text": "This vignette describes how to prepare the main data files for a data load to bistandsresultater.no.\nThe data load is based on three main datasets:\n\nOfficial aid statistics from Statsys\nAgreement totals from PTA\nDisbursement-level data from PTA\n\nThe workflow is:\nPTA / Statsys → CSV → DuckDB → noradstats → processed and anonymised Excel files\nThe raw extracts from PTA and Statsys are loaded into the DuckDB database used by noradstats. The final files are then generated from the database using functions in the package.\nIn addition to the three main files, a data load may include supplementary register tables and supporting datasets. These normally change less frequently and should mainly be reviewed when a new statistical year is first published, usually in May. Later data loads during the year are normally revisions of the same statistical year."
+  },
+  {
+    "objectID": "vignettes/bistandsresultater-data-load.html#advanced-criteria",
+    "href": "vignettes/bistandsresultater-data-load.html#advanced-criteria",
+    "title": "Preparing a data load for bistandsresultater.no",
+    "section": "Advanced criteria",
+    "text": "Advanced criteria\n\nPhase: B, C, D\nSigned after: 01.01.1960\nProgramme area: 03, 12"
+  },
+  {
+    "objectID": "vignettes/bistandsresultater-data-load.html#layout",
+    "href": "vignettes/bistandsresultater-data-load.html#layout",
+    "title": "Preparing a data load for bistandsresultater.no",
+    "section": "Layout",
+    "text": "Layout\n\nRemove Responsible unit\nAdd Public use\nFlexi column: Agreement period\n\nClick View and export the report to Excel.\nOpen the Excel file and save it as a CSV UTF-8 file without changing the file name.\nSave the CSV file in the data_raw folder for the current data load."
+  },
+  {
+    "objectID": "vignettes/bistandsresultater-data-load.html#advanced-criteria-1",
+    "href": "vignettes/bistandsresultater-data-load.html#advanced-criteria-1",
+    "title": "Preparing a data load for bistandsresultater.no",
+    "section": "Advanced criteria",
+    "text": "Advanced criteria\n\nYear: the year after the latest official statistical year in Statsys\nAgreement phase: B, C, D\nProgramme area: 03, 12\nDisbursement status: A\n\nFor example, if 2025 is the latest official statistical year, select 2026."
+  },
+  {
+    "objectID": "vignettes/bistandsresultater-data-load.html#layout-1",
+    "href": "vignettes/bistandsresultater-data-load.html#layout-1",
+    "title": "Preparing a data load for bistandsresultater.no",
+    "section": "Layout",
+    "text": "Layout\nInclude:\n\nStatistics\nAgreement description\nFor public use\nShow miscellaneous income\nShow AIGO\n\nClick View and export the report to Excel.\nOpen the Excel file and save it as a CSV UTF-8 file without changing the file name.\nSave the CSV file in the data_raw folder."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "noradstats",
+    "section": "",
+    "text": "R package for accessing and processing Norwegian and international development finance data."
+  },
+  {
+    "objectID": "index.html#documentation",
+    "href": "index.html#documentation",
+    "title": "noradstats",
+    "section": "Documentation",
+    "text": "Documentation\n\nPreparing a data load for bistandsresultater.no"
+  },
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "MIT License",
+    "section": "",
+    "text": "MIT License\nCopyright (c) 2024 Norad\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\nTHE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+  }
+]

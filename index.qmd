@@ -1,0 +1,9 @@
+---
+title: "noradstats"
+---
+
+R package for accessing and processing Norwegian and international development finance data.
+
+## Documentation
+
+- [Preparing a data load for bistandsresultater.no](vignettes/bistandsresultater-data-load.qmd)
